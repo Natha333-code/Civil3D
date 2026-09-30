@@ -14,6 +14,7 @@ Rotinas AutoLISP para uso no AutoCAD Civil 3D.
 |--------------|-----------|
 | `SOMACOMP`   | Soma o comprimento de linhas, polilinhas (2D/3D), arcos, circulos, splines e elipses selecionados. |
 | `ANOTACOORD` | Clique em pontos e insere um MTEXT com as coordenadas E, N e Z (em WCS). |
+| `VOLXLS`     | (`lisp/volumes_csv.lsp`) Igual ao `VOLCSV`, mas gera uma planilha Excel `.xlsx` formatada. |
 | `VOLCSV`     | (`lisp/volumes_csv.lsp`) Selecione superficies de volume (TIN Volume Surface) e exporte um `.csv` com Corte, Aterro e Liquido de cada uma, mais o TOTAL. |
 
 ### Observacoes sobre o `VOLCSV`
@@ -22,3 +23,12 @@ Rotinas AutoLISP para uso no AutoCAD Civil 3D.
 - Os volumes sao os **nao ajustados** (sem fatores de empolamento/contracao do Volumes Dashboard).
 - Se a superficie estiver desatualizada (*Out of date*), faca **Rebuild** antes de exportar.
 - Superficies que nao sao de volume sao ignoradas automaticamente.
+
+### `VOLXLS` - planilha Excel formatada
+
+Mesmo arquivo (`lisp/volumes_csv.lsp`). Gera um `.xlsx` com titulo, nome do desenho e data,
+cabecalho colorido, linhas alternadas, bordas, numeros formatados, liquido negativo em
+vermelho e linha TOTAL com formulas `=SOMA(...)`. Ao final pergunta se deseja abrir a planilha.
+
+- **Requer o Microsoft Excel instalado** (a LISP controla o Excel via COM).
+- As cores ficam nas variaveis `*volxls-cor-...*` no arquivo, em formato `(R G B)`.
