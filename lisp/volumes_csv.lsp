@@ -235,17 +235,34 @@
            (cons (strcat nome ": " (vl-catch-all-error-message r)) *volxls-avisos*)))
 )
 
-;;; Salva como .xlsx tentando formas diferentes de chamar o SaveAs
+;;; Valor "parametro omitido" do COM (DISP_E_PARAMNOTFOUND). Usado para
+;;; preencher parametros opcionais que o Visual LISP as vezes exige.
+(defun volxls:omitido ()
+  (vlax-make-variant -2147352572 vlax-vbError)
+)
+
+;;; Lista com n parametros omitidos
+(defun volxls:omitidos (n / l)
+  (repeat n (setq l (cons (volxls:omitido) l)))
+  l
+)
+
+;;; Salva como .xlsx tentando formas diferentes de chamar o SaveAs.
+;;; Workbook.SaveAs tem 12 parametros (51 = formato .xlsx).
 (defun volxls:salvar (wb arq / tentativas r ok)
-  (setq tentativas (list (list arq 51)                                  ; 51 = xlsx
-                         (list arq 51 "" "" :vlax-false :vlax-false 1)))
+  (setq tentativas (list (append (list arq 51) (volxls:omitidos 10))
+                         (list arq 51)
+                         (append (list arq) (volxls:omitidos 11))
+                         (list arq)))
   (while (and tentativas (not ok))
     (setq r (vl-catch-all-apply 'vlax-invoke-method
                                 (append (list wb 'SaveAs) (car tentativas))))
-    (if (not (vl-catch-all-error-p r)) (setq ok T))
+    (if (vl-catch-all-error-p r)
+      (setq *volxls-erro-salvar* (vl-catch-all-error-message r))
+      (setq ok T))
     (setq tentativas (cdr tentativas)))
-  ;; ultima tentativa (so o nome; pasta nova ja e .xlsx por padrao)
-  (if (not ok) (vlax-invoke-method wb 'SaveAs arq))
+  (if (not ok)
+    (vlax-invoke-method wb 'SaveAs arq))   ; gera o erro real para o relatorio
 )
 
 ;;; Monta e salva a planilha. Retorna o objeto Workbook.
@@ -340,7 +357,8 @@
                    (list ws "A:A" 28))
 
   ;; Salvar
-  (setq *volxls-etapa* "salvar arquivo")
+  (setq *volxls-etapa* "salvar arquivo"
+        *volxls-wb*    wb)
   (volxls:salvar wb arq)
   (vlax-release-object ws)
   (vlax-release-object wbs)
@@ -366,14 +384,25 @@
      (setq lista     (car dados)
            ignoradas (cadr dados))
      (princ "\nGerando planilha no Excel...")
-     (setq *volxls-etapa* "" *volxls-avisos* nil)
+     (setq *volxls-etapa* "" *volxls-avisos* nil *volxls-wb* nil)
      (setq res (vl-catch-all-apply 'volxls:gerar (list xl lista arq)))
      (if (vl-catch-all-error-p res)
        (progn
          (princ (strcat "\nErro ao gerar a planilha (etapa: " *volxls-etapa* "): "
-                        (vl-catch-all-error-message res)
-                        "\n(Se o arquivo ja existe, verifique se ele nao esta aberto no Excel.)"))
-         (vl-catch-all-apply 'vlax-invoke-method (list xl 'Quit)))
+                        (vl-catch-all-error-message res)))
+         (if *volxls-wb*
+           ;; A planilha foi montada; so nao salvou. Mostra o Excel
+           ;; para o usuario salvar manualmente (Ctrl+S).
+           (progn
+             (princ "\nA planilha foi montada, mas nao foi possivel salva-la automaticamente.")
+             (princ "\nO Excel sera aberto com a planilha pronta: salve manualmente (Ctrl+S).")
+             (vl-catch-all-apply 'vlax-put-property (list xl 'DisplayAlerts :vlax-true))
+             (vl-catch-all-apply 'vlax-put-property (list xl 'Visible :vlax-true))
+             (vl-catch-all-apply 'vlax-put-property (list xl 'UserControl :vlax-true))
+             (vl-catch-all-apply 'vlax-release-object (list *volxls-wb*)))
+           (progn
+             (princ "\n(Se o arquivo ja existe, verifique se ele nao esta aberto no Excel.)")
+             (vl-catch-all-apply 'vlax-invoke-method (list xl 'Quit)))))
        (progn
          (princ (strcat "\nSuperficies exportadas: " (itoa (length lista))))
          (if (> ignoradas 0)
@@ -389,7 +418,10 @@
              (vlax-put-property xl 'Visible :vlax-true)
              (vlax-put-property xl 'UserControl :vlax-true))
            (progn
-             (vl-catch-all-apply 'vlax-invoke-method (list res 'Close :vlax-false))
+             (if (vl-catch-all-error-p
+                   (vl-catch-all-apply 'vlax-invoke-method (list res 'Close :vlax-false)))
+               (vl-catch-all-apply 'vlax-invoke-method
+                                   (append (list res 'Close :vlax-false) (volxls:omitidos 2))))
              (vl-catch-all-apply 'vlax-invoke-method (list xl 'Quit))))
          (vlax-release-object res)))
      (vlax-release-object xl)
