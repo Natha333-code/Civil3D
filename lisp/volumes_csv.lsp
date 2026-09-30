@@ -137,12 +137,48 @@
 ;;; codificacao do arquivo .lsp): 179 = "3" sobrescrito, 237 = "i" agudo
 (defun volxls:m3 () (strcat " (m" (chr 179) ")"))
 
-;;; Formato numerico do Excel conforme *volcsv-casas*
-(defun volxls:formato ( / s n)
-  (setq s "#,##0" n *volcsv-casas*)
-  (if (> n 0) (setq s (strcat s ".")))
+;;; Formato numerico do Excel conforme *volcsv-casas*.
+;;; mil = separador de milhar, dec = separador decimal
+(defun volxls:formato (mil dec / s n)
+  (setq s (strcat "#" mil "##0") n *volcsv-casas*)
+  (if (> n 0) (setq s (strcat s dec)))
   (repeat n (setq s (strcat s "0")))
   s
+)
+
+;;; Formatos candidatos. O Excel pode interpretar o formato no padrao
+;;; americano ("#,##0.000" / [Red]) ou no padrao do Windows em
+;;; portugues ("#.##0,000" / [Vermelho]); tentamos os dois.
+;;; vermelho = T -> negativos em vermelho
+(defun volxls:formatos (vermelho / en pt res)
+  (setq en (volxls:formato "," ".")
+        pt (volxls:formato "." ","))
+  (if vermelho
+    (setq res (list (strcat en ";[Red]-" en)
+                    (strcat pt ";[Vermelho]-" pt))))
+  (append res (list en pt))
+)
+
+;;; Tenta aplicar (propriedade . valor) em ordem ate um funcionar.
+;;; Retorna T se algum funcionou.
+(defun volxls:tentar (ws endereco pares / r ok)
+  (setq r (vlax-get-property ws 'Range endereco))
+  (while (and pares (not ok))
+    (if (not (vl-catch-all-error-p
+               (vl-catch-all-apply 'vlax-put-property
+                                   (list r (caar pares) (cdar pares)))))
+      (setq ok T))
+    (setq pares (cdr pares)))
+  (vlax-release-object r)
+  ok
+)
+
+;;; Aplica o primeiro formato numerico aceito pelo Excel
+(defun volxls:numero (ws endereco vermelho / pares)
+  (foreach prop '(NumberFormat NumberFormatLocal)
+    (foreach f (volxls:formatos vermelho)
+      (setq pares (cons (cons prop f) pares))))
+  (volxls:tentar ws endereco (reverse pares))
 )
 
 ;;; Aplica propriedades a um sub-objeto (Font, Interior, Borders)
@@ -192,12 +228,11 @@
 )
 
 ;;; Monta e salva a planilha. Retorna o objeto Workbook.
-(defun volxls:gerar (xl lista arq / wbs wb ws ini lin n tot fmt)
+(defun volxls:gerar (xl lista arq / wbs wb ws ini lin n tot)
   (vlax-put-property xl 'DisplayAlerts :vlax-false)
   (setq wbs (vlax-get-property xl 'Workbooks)
         wb  (vlax-invoke-method wbs 'Add)
-        ws  (vlax-get-property wb 'ActiveSheet)
-        fmt (volxls:formato))
+        ws  (vlax-get-property wb 'ActiveSheet))
   (vlax-put-property ws 'Name "Volumes")
 
   ;; Titulo e informacoes
@@ -232,8 +267,8 @@
 
   ;; Dados
   (setq ini 6 lin ini)
-  (volxls:cel ws (strcat "A" (itoa ini) ":A" (itoa (+ ini (length lista) -1)))
-              (list (cons 'NumberFormat "@")) nil nil nil)    ; nome como texto
+  (volxls:tentar ws (strcat "A" (itoa ini) ":A" (itoa (+ ini (length lista) -1)))
+                 (list (cons 'NumberFormat "@")))            ; nome como texto
   (foreach d lista
     (setq n (itoa lin))
     (volxls:cel ws (strcat "A" n) (list (cons 'Value2 (car d)))   nil nil nil)
@@ -260,9 +295,8 @@
               (list (cons 'Color (volxls:cor *volxls-cor-total*)))
               nil)
   ;; Formatos numericos (liquido negativo em vermelho)
-  (volxls:cel ws (strcat "B" (itoa ini) ":C" tot) (list (cons 'NumberFormat fmt)) nil nil nil)
-  (volxls:cel ws (strcat "D" (itoa ini) ":D" tot)
-              (list (cons 'NumberFormat (strcat fmt ";[Red]-" fmt))) nil nil nil)
+  (volxls:numero ws (strcat "B" (itoa ini) ":C" tot) nil)
+  (volxls:numero ws (strcat "D" (itoa ini) ":D" tot) T)
 
   ;; Bordas finas na tabela inteira + borda dupla acima do TOTAL
   (volxls:cel ws (strcat "A5:D" tot) nil nil nil
