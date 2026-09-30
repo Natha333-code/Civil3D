@@ -6,9 +6,10 @@
 ;;;   VOLCSV - Selecione as superficies de volume; gera um .csv
 ;;;            com Corte, Aterro e Liquido de cada superficie e
 ;;;            o TOTAL (somatorio) no final.
-;;;   VOLXLS - Mesma selecao, mas gera uma planilha Excel (.xlsx)
-;;;            formatada (cores, bordas, totais com formula).
-;;;            Requer o Microsoft Excel instalado.
+;;;   VOLXLS - Mesma selecao, mas gera uma planilha formatada
+;;;            (cores, bordas, totais com formula) no formato
+;;;            "Planilha XML 2003" (.xml), que o Excel abre direto.
+;;;            Nao precisa do Excel para gerar o arquivo.
 ;;;
 ;;; Formato do CSV: separador ";" e decimal "," (padrao do Excel
 ;;; em portugues). Para mudar, altere as variaveis abaixo.
@@ -117,7 +118,10 @@
 )
 
 ;;; ============================================================
-;;; VOLXLS - exporta para Excel (.xlsx) com formatacao
+;;; VOLXLS - planilha formatada (Planilha XML 2003 / SpreadsheetML)
+;;;
+;;; A LISP grava o arquivo diretamente (sem automacao do Excel).
+;;; O Excel abre o .xml ja com cores, bordas, formatos e formulas.
 ;;; ============================================================
 
 ;;; Cores (R G B) - altere aqui para personalizar
@@ -128,244 +132,190 @@
       *volxls-cor-total*     '(255 242 204)  ; fundo da linha TOTAL
       *volxls-cor-borda*     '(166 166 166)) ; bordas da tabela
 
-;;; (R G B) -> cor do Excel (inteiro BGR)
-(defun volxls:cor (rgb)
-  (+ (car rgb) (* 256 (cadr rgb)) (* 65536 (caddr rgb)))
+;;; (R G B) -> "#RRGGBB"
+(defun volxml:hex (rgb / d)
+  (setq d "0123456789ABCDEF")
+  (apply 'strcat
+         (cons "#"
+               (mapcar '(lambda (n)
+                          (strcat (substr d (1+ (/ n 16)) 1)
+                                  (substr d (1+ (rem n 16)) 1)))
+                       rgb)))
 )
 
-;;; Texto com acentos via codigo de caractere (evita problemas de
-;;; codificacao do arquivo .lsp): 179 = "3" sobrescrito, 237 = "i" agudo
-(defun volxls:m3 () (strcat " (m" (chr 179) ")"))
+;;; Escapa texto para XML. Caracteres acentuados viram &#codigo;
+;;; (assim o arquivo fica 100% ASCII e nao ha problema de codificacao)
+(defun volxml:esc (s / r)
+  (setq r "")
+  (foreach c (vl-string->list s)
+    (setq r (strcat r
+                    (cond ((= c 38) "&amp;")
+                          ((= c 60) "&lt;")
+                          ((= c 62) "&gt;")
+                          ((= c 34) "&quot;")
+                          ((> c 127) (strcat "&#" (itoa c) ";"))
+                          (T (chr c))))))
+  r
+)
 
-;;; Formato numerico do Excel conforme *volcsv-casas*.
-;;; mil = separador de milhar, dec = separador decimal
-(defun volxls:formato (mil dec / s n)
-  (setq s (strcat "#" mil "##0") n *volcsv-casas*)
-  (if (> n 0) (setq s (strcat s dec)))
+;;; Numero para o XML (sempre com ponto decimal)
+(defun volxml:num (x) (rtos x 2 6))
+
+;;; Formato numerico do Excel (padrao interno, com ponto decimal;
+;;; o Excel exibe conforme o idioma do Windows, ex.: 1.520,350)
+(defun volxml:formato ( / s n)
+  (setq s "#,##0" n *volcsv-casas*)
+  (if (> n 0) (setq s (strcat s ".")))
   (repeat n (setq s (strcat s "0")))
   s
 )
 
-;;; Formatos candidatos. O Excel pode interpretar o formato no padrao
-;;; americano ("#,##0.000" / [Red]) ou no padrao do Windows em
-;;; portugues ("#.##0,000" / [Vermelho]); tentamos os dois.
-;;; vermelho = T -> negativos em vermelho
-(defun volxls:formatos (vermelho / en pt res)
-  (setq en (volxls:formato "," ".")
-        pt (volxls:formato "." ","))
-  (if vermelho
-    (setq res (list (strcat en ";[Red]-" en)
-                    (strcat pt ";[Vermelho]-" pt))))
-  (append res (list en pt))
+;;; <Borders> com as 4 bordas finas; topo duplo se duplo = T
+(defun volxml:bordas (duplo / cor)
+  (setq cor (volxml:hex *volxls-cor-borda*))
+  (strcat "<Borders>"
+          "<Border ss:Position=\"Bottom\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\" ss:Color=\"" cor "\"/>"
+          "<Border ss:Position=\"Left\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\" ss:Color=\"" cor "\"/>"
+          "<Border ss:Position=\"Right\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\" ss:Color=\"" cor "\"/>"
+          (if duplo
+            (strcat "<Border ss:Position=\"Top\" ss:LineStyle=\"Double\" ss:Weight=\"3\" ss:Color=\""
+                    (volxml:hex *volxls-cor-titulo*) "\"/>")
+            (strcat "<Border ss:Position=\"Top\" ss:LineStyle=\"Continuous\" ss:Weight=\"1\" ss:Color=\"" cor "\"/>"))
+          "</Borders>")
 )
 
-;;; Tenta aplicar (propriedade . valor) em ordem ate um funcionar.
-;;; Retorna T se algum funcionou.
-(defun volxls:tentar (ws endereco pares / r ok)
-  (setq r (vlax-get-property ws 'Range endereco))
-  (while (and pares (not ok))
-    (if (not (vl-catch-all-error-p
-               (vl-catch-all-apply 'vlax-put-property
-                                   (list r (caar pares) (cdar pares)))))
-      (setq ok T))
-    (setq pares (cdr pares)))
-  (vlax-release-object r)
-  ok
+;;; Estilo de celula da tabela
+;;;   id: nome do estilo | fundo: (R G B) ou nil | negrito: T/nil
+;;;   fmt: formato numerico ou nil | duplo: borda dupla em cima
+(defun volxml:estilo (id fundo negrito fmt duplo)
+  (strcat "<Style ss:ID=\"" id "\">"
+          (volxml:bordas duplo)
+          (if negrito "<Font ss:Bold=\"1\"/>" "")
+          (if fundo
+            (strcat "<Interior ss:Color=\"" (volxml:hex fundo) "\" ss:Pattern=\"Solid\"/>")
+            "")
+          (if fmt (strcat "<NumberFormat ss:Format=\"" fmt "\"/>") "")
+          "</Style>")
 )
 
-;;; Aplica o primeiro formato numerico aceito pelo Excel
-(defun volxls:numero (ws endereco vermelho / pares)
-  (foreach prop '(NumberFormat NumberFormatLocal)
-    (foreach f (volxls:formatos vermelho)
-      (setq pares (cons (cons prop f) pares))))
-  (volxls:tentar ws endereco (reverse pares))
+;;; <Cell> com estilo, tipo ("String"/"Number"), valor e formula opcional
+(defun volxml:cel (estilo tipo valor formula)
+  (strcat "<Cell ss:StyleID=\"" estilo "\""
+          (if formula (strcat " ss:Formula=\"" formula "\"") "")
+          "><Data ss:Type=\"" tipo "\">" valor "</Data></Cell>")
 )
 
-;;; Aplica propriedades a um sub-objeto (Font, Interior, Borders)
-(defun volxls:sub (obj prop pares / o)
-  (setq o (vlax-get-property obj prop))
-  (foreach p pares (vlax-put-property o (car p) (cdr p)))
-  (vlax-release-object o)
-)
-
-;;; Formata um intervalo: props do Range, da Fonte, do Fundo e das Bordas
-(defun volxls:cel (ws endereco props fonte fundo bordas / r)
-  (setq r (vlax-get-property ws 'Range endereco))
-  (foreach p props (vlax-put-property r (car p) (cdr p)))
-  (if fonte  (volxls:sub r 'Font fonte))
-  (if fundo  (volxls:sub r 'Interior fundo))
-  (if bordas (volxls:sub r 'Borders bordas))
-  (vlax-release-object r)
-)
-
-;;; Ajusta a largura das colunas de um intervalo
-(defun volxls:autoajuste (ws endereco / r c)
-  (setq r (vlax-get-property ws 'Range endereco)
-        c (vlax-get-property r 'Columns))
-  (vlax-invoke-method c 'AutoFit)
-  (vlax-release-object c)
-  (vlax-release-object r)
-)
-
-;;; Formata uma borda especifica (8 = superior) de um intervalo
-(defun volxls:borda (ws endereco lado pares / r bs b)
-  (setq r  (vlax-get-property ws 'Range endereco)
-        bs (vlax-get-property r 'Borders)
-        b  (vlax-get-property bs 'Item lado))
-  (foreach p pares (vlax-put-property b (car p) (cdr p)))
-  (vlax-release-object b)
-  (vlax-release-object bs)
-  (vlax-release-object r)
-)
-
-;;; Garante largura minima de uma coluna
-(defun volxls:largura-min (ws endereco minimo / r w)
-  (setq r (vlax-get-property ws 'Range endereco)
-        w (vlax-get-property r 'ColumnWidth))
-  (if (= (type w) 'VARIANT) (setq w (vlax-variant-value w)))
-  (if (< w minimo) (vlax-put-property r 'ColumnWidth minimo))
-  (vlax-release-object r)
-)
-
-;;; Executa uma etapa de acabamento; se falhar, guarda um aviso e segue
-(defun volxls:opcional (nome fn args / r)
-  (setq r (vl-catch-all-apply fn args))
-  (if (vl-catch-all-error-p r)
-    (setq *volxls-avisos*
-           (cons (strcat nome ": " (vl-catch-all-error-message r)) *volxls-avisos*)))
-)
-
-;;; Valor "parametro omitido" do COM (DISP_E_PARAMNOTFOUND). Usado para
-;;; preencher parametros opcionais que o Visual LISP as vezes exige.
-(defun volxls:omitido ()
-  (vlax-make-variant -2147352572 vlax-vbError)
-)
-
-;;; Lista com n parametros omitidos
-(defun volxls:omitidos (n / l)
-  (repeat n (setq l (cons (volxls:omitido) l)))
-  l
-)
-
-;;; Salva como .xlsx tentando formas diferentes de chamar o SaveAs.
-;;; Workbook.SaveAs tem 12 parametros (51 = formato .xlsx).
-(defun volxls:salvar (wb arq / tentativas r ok)
-  (setq tentativas (list (append (list arq 51) (volxls:omitidos 10))
-                         (list arq 51)
-                         (append (list arq) (volxls:omitidos 11))
-                         (list arq)))
-  (while (and tentativas (not ok))
-    (setq r (vl-catch-all-apply 'vlax-invoke-method
-                                (append (list wb 'SaveAs) (car tentativas))))
-    (if (vl-catch-all-error-p r)
-      (setq *volxls-erro-salvar* (vl-catch-all-error-message r))
-      (setq ok T))
-    (setq tentativas (cdr tentativas)))
-  (if (not ok)
-    (vlax-invoke-method wb 'SaveAs arq))   ; gera o erro real para o relatorio
-)
-
-;;; Monta e salva a planilha. Retorna o objeto Workbook.
-(defun volxls:gerar (xl lista arq / wbs wb ws ini lin n tot)
-  (setq *volxls-etapa* "criar pasta de trabalho")
-  (vlax-put-property xl 'DisplayAlerts :vlax-false)
-  (setq wbs (vlax-get-property xl 'Workbooks)
-        wb  (vlax-invoke-method wbs 'Add)
-        ws  (vlax-get-property wb 'ActiveSheet))
-  (vlax-put-property ws 'Name "Volumes")
-
-  ;; Titulo e informacoes
-  (setq *volxls-etapa* "titulo")
-  (volxls:cel ws "A1" (list (cons 'Value2 "Quadro de Volumes - Corte e Aterro"))
-              (list (cons 'Bold :vlax-true) (cons 'Size 14)
-                    (cons 'Color (volxls:cor *volxls-cor-titulo*)))
-              nil nil)
-  (volxls:cel ws "A2" (list (cons 'Value2 (strcat "Desenho: " (getvar "DWGNAME"))))
-              (list (cons 'Italic :vlax-true) (cons 'Color (volxls:cor '(89 89 89))))
-              nil nil)
-  (volxls:cel ws "A3" (list (cons 'Value2
-                                  (strcat "Data: "
-                                          (menucmd "M=$(edtime,$(getvar,date),DD/MO/YYYY HH:MM)"))))
-              (list (cons 'Italic :vlax-true) (cons 'Color (volxls:cor '(89 89 89))))
-              nil nil)
-  (foreach a '("A1:D1" "A2:D2" "A3:D3")
-    (volxls:cel ws a (list (cons 'MergeCells :vlax-true)) nil nil nil))
-
-  ;; Cabecalho (linha 5)
-  (setq *volxls-etapa* "cabecalho")
-  (volxls:cel ws "A5" (list (cons 'Value2 (strcat "Superf" (chr 237) "cie"))) nil nil nil)
-  (volxls:cel ws "B5" (list (cons 'Value2 (strcat "Corte" (volxls:m3)))) nil nil nil)
-  (volxls:cel ws "C5" (list (cons 'Value2 (strcat "Aterro" (volxls:m3)))) nil nil nil)
-  (volxls:cel ws "D5" (list (cons 'Value2 (strcat "L" (chr 237) "quido Aterro-Corte" (volxls:m3))))
-              nil nil nil)
-  (volxls:cel ws "A5:D5"
-              (list (cons 'HorizontalAlignment -4108) (cons 'RowHeight 22)
-                    (cons 'VerticalAlignment -4108))
-              (list (cons 'Bold :vlax-true)
-                    (cons 'Color (volxls:cor *volxls-cor-cab-texto*)))
-              (list (cons 'Color (volxls:cor *volxls-cor-cabecalho*)))
-              nil)
-
-  ;; Dados
-  (setq *volxls-etapa* "dados")
-  (setq ini 6 lin ini)
-  (volxls:tentar ws (strcat "A" (itoa ini) ":A" (itoa (+ ini (length lista) -1)))
-                 (list (cons 'NumberFormat "@")))            ; nome como texto
+;;; Grava a planilha XML
+(defun volxml:gravar (f lista / fmt fmtneg zebra nomemax n z liq totC totA
+                               m3 cabecalho)
+  (setq fmt    (volxml:formato)
+        fmtneg (strcat fmt ";[Red]\\-" fmt)
+        zebra  *volxls-cor-zebra*
+        m3     " (m&#179;)"
+        totC   0.0
+        totA   0.0
+        nomemax 10)
   (foreach d lista
-    (setq n (itoa lin))
-    (volxls:cel ws (strcat "A" n) (list (cons 'Value2 (car d)))   nil nil nil)
-    (volxls:cel ws (strcat "B" n) (list (cons 'Value2 (cadr d)))  nil nil nil)
-    (volxls:cel ws (strcat "C" n) (list (cons 'Value2 (caddr d))) nil nil nil)
-    (volxls:cel ws (strcat "D" n) (list (cons 'Formula (strcat "=C" n "-B" n))) nil nil nil)
-    (if (= (rem (- lin ini) 2) 1)
-      (volxls:cel ws (strcat "A" n ":D" n) nil nil
-                  (list (cons 'Color (volxls:cor *volxls-cor-zebra*))) nil))
-    (setq lin (1+ lin)))
+    (setq nomemax (max nomemax (strlen (car d)))))
 
-  ;; Linha TOTAL (com formulas)
-  (setq *volxls-etapa* "linha total")
-  (setq tot (itoa lin)
-        n   (itoa (1- lin)))
-  (volxls:cel ws (strcat "A" tot) (list (cons 'Value2 "TOTAL")) nil nil nil)
-  (volxls:cel ws (strcat "B" tot)
-              (list (cons 'Formula (strcat "=SUM(B" (itoa ini) ":B" n ")"))) nil nil nil)
-  (volxls:cel ws (strcat "C" tot)
-              (list (cons 'Formula (strcat "=SUM(C" (itoa ini) ":C" n ")"))) nil nil nil)
-  (volxls:cel ws (strcat "D" tot)
-              (list (cons 'Formula (strcat "=C" tot "-B" tot))) nil nil nil)
-  (volxls:cel ws (strcat "A" tot ":D" tot) nil
-              (list (cons 'Bold :vlax-true))
-              (list (cons 'Color (volxls:cor *volxls-cor-total*)))
-              nil)
-  (setq *volxls-etapa* "formato dos numeros")
-  ;; Formatos numericos (liquido negativo em vermelho)
-  (volxls:numero ws (strcat "B" (itoa ini) ":C" tot) nil)
-  (volxls:numero ws (strcat "D" (itoa ini) ":D" tot) T)
+  ;; Cabecalho do arquivo
+  (foreach l
+    (list "<?xml version=\"1.0\"?>"
+          "<?mso-application progid=\"Excel.Sheet\"?>"
+          "<Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\""
+          " xmlns:o=\"urn:schemas-microsoft-com:office:office\""
+          " xmlns:x=\"urn:schemas-microsoft-com:office:excel\""
+          " xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\""
+          " xmlns:html=\"http://www.w3.org/TR/REC-html40\">"
+          "<Styles>"
+          "<Style ss:ID=\"Default\" ss:Name=\"Normal\"><Alignment ss:Vertical=\"Center\"/><Font ss:FontName=\"Calibri\" ss:Size=\"11\"/></Style>"
+          (strcat "<Style ss:ID=\"titulo\"><Font ss:FontName=\"Calibri\" ss:Size=\"14\" ss:Bold=\"1\" ss:Color=\""
+                  (volxml:hex *volxls-cor-titulo*) "\"/></Style>")
+          "<Style ss:ID=\"info\"><Font ss:FontName=\"Calibri\" ss:Size=\"11\" ss:Italic=\"1\" ss:Color=\"#595959\"/></Style>"
+          (strcat "<Style ss:ID=\"cab\"><Alignment ss:Horizontal=\"Center\" ss:Vertical=\"Center\" ss:WrapText=\"1\"/>"
+                  (volxml:bordas nil)
+                  "<Font ss:FontName=\"Calibri\" ss:Size=\"11\" ss:Bold=\"1\" ss:Color=\""
+                  (volxml:hex *volxls-cor-cab-texto*) "\"/>"
+                  "<Interior ss:Color=\"" (volxml:hex *volxls-cor-cabecalho*) "\" ss:Pattern=\"Solid\"/></Style>")
+          (volxml:estilo "t"  nil   nil nil    nil)
+          (volxml:estilo "tz" zebra nil nil    nil)
+          (volxml:estilo "n"  nil   nil fmt    nil)
+          (volxml:estilo "nz" zebra nil fmt    nil)
+          (volxml:estilo "l"  nil   nil fmtneg nil)
+          (volxml:estilo "lz" zebra nil fmtneg nil)
+          (volxml:estilo "Tt" *volxls-cor-total* T nil    T)
+          (volxml:estilo "Tn" *volxls-cor-total* T fmt    T)
+          (volxml:estilo "Tl" *volxls-cor-total* T fmtneg T)
+          "</Styles>"
+          "<Worksheet ss:Name=\"Volumes\">"
+          "<Table>"
+          (strcat "<Column ss:Width=\"" (itoa (max 160 (+ 20 (* 7 nomemax)))) "\"/>")
+          "<Column ss:Width=\"115\"/>"
+          "<Column ss:Width=\"115\"/>"
+          "<Column ss:Width=\"175\"/>"
+          ;; Titulo e informacoes
+          "<Row ss:Height=\"21\"><Cell ss:MergeAcross=\"3\" ss:StyleID=\"titulo\"><Data ss:Type=\"String\">Quadro de Volumes - Corte e Aterro</Data></Cell></Row>"
+          (strcat "<Row><Cell ss:MergeAcross=\"3\" ss:StyleID=\"info\"><Data ss:Type=\"String\">Desenho: "
+                  (volxml:esc (getvar "DWGNAME")) "</Data></Cell></Row>")
+          (strcat "<Row><Cell ss:MergeAcross=\"3\" ss:StyleID=\"info\"><Data ss:Type=\"String\">Data: "
+                  (menucmd "M=$(edtime,$(getvar,date),DD/MO/YYYY HH:MM)") "</Data></Cell></Row>")
+          "<Row/>"
+          ;; Cabecalho da tabela
+          (strcat "<Row ss:Height=\"24\">"
+                  (volxml:cel "cab" "String" "Superf&#237;cie" nil)
+                  (volxml:cel "cab" "String" (strcat "Corte" m3) nil)
+                  (volxml:cel "cab" "String" (strcat "Aterro" m3) nil)
+                  (volxml:cel "cab" "String" (strcat "L&#237;quido Aterro-Corte" m3) nil)
+                  "</Row>"))
+    (write-line l f))
 
-  ;; Acabamento (se alguma etapa falhar, a planilha e gerada mesmo assim)
-  (volxls:opcional "bordas" 'volxls:cel
-                   (list ws (strcat "A5:D" tot) nil nil nil
-                         (list (cons 'LineStyle 1) (cons 'Weight 2)
-                               (cons 'Color (volxls:cor *volxls-cor-borda*)))))
-  (volxls:opcional "borda do total" 'volxls:borda
-                   (list ws (strcat "A" tot ":D" tot) 8          ; xlEdgeTop
-                         (list (cons 'LineStyle -4119)             ; xlDouble
-                               (cons 'Color (volxls:cor *volxls-cor-titulo*)))))
-  (volxls:opcional "ajuste de colunas" 'volxls:autoajuste
-                   (list ws (strcat "A5:D" tot)))
-  (volxls:opcional "largura da coluna A" 'volxls:largura-min
-                   (list ws "A:A" 28))
+  ;; Linhas de dados (liquido = formula Aterro - Corte)
+  (setq n 0)
+  (foreach d lista
+    (setq z   (if (= (rem n 2) 1) "z" "")
+          liq (- (caddr d) (cadr d))
+          totC (+ totC (cadr d))
+          totA (+ totA (caddr d)))
+    (write-line
+      (strcat "<Row>"
+              (volxml:cel (strcat "t" z) "String" (volxml:esc (car d)) nil)
+              (volxml:cel (strcat "n" z) "Number" (volxml:num (cadr d)) nil)
+              (volxml:cel (strcat "n" z) "Number" (volxml:num (caddr d)) nil)
+              (volxml:cel (strcat "l" z) "Number" (volxml:num liq) "=RC[-1]-RC[-2]")
+              "</Row>")
+      f)
+    (setq n (1+ n)))
 
-  ;; Salvar
-  (setq *volxls-etapa* "salvar arquivo"
-        *volxls-wb*    wb)
-  (volxls:salvar wb arq)
-  (vlax-release-object ws)
-  (vlax-release-object wbs)
-  wb
+  ;; Linha TOTAL (formulas de soma; valores ja calculados como reserva)
+  (write-line
+    (strcat "<Row ss:Height=\"18\">"
+            (volxml:cel "Tt" "String" "TOTAL" nil)
+            (volxml:cel "Tn" "Number" (volxml:num totC)
+                        (strcat "=SUM(R[-" (itoa n) "]C:R[-1]C)"))
+            (volxml:cel "Tn" "Number" (volxml:num totA)
+                        (strcat "=SUM(R[-" (itoa n) "]C:R[-1]C)"))
+            (volxml:cel "Tl" "Number" (volxml:num (- totA totC)) "=RC[-1]-RC[-2]")
+            "</Row>")
+    f)
+
+  ;; Fim: impressao em A4 paisagem, 1 pagina de largura; congela ate o cabecalho
+  (foreach l
+    (list "</Table>"
+          "<WorksheetOptions xmlns=\"urn:schemas-microsoft-com:office:excel\">"
+          "<PageSetup><Layout x:Orientation=\"Landscape\" x:CenterHorizontal=\"1\"/></PageSetup>"
+          "<FitToPage/>"
+          "<Print><FitHeight>0</FitHeight><ValidPrinterInfo/><PaperSizeIndex>9</PaperSizeIndex></Print>"
+          "<FreezePanes/><FrozenNoSplit/>"
+          "<SplitHorizontal>5</SplitHorizontal><TopRowBottomPane>5</TopRowBottomPane>"
+          "<ActivePane>2</ActivePane>"
+          "</WorksheetOptions>"
+          "</Worksheet>"
+          "</Workbook>")
+    (write-line l f))
+  (list totC totA)
 )
 
-(defun c:VOLXLS ( / ss dados lista ignoradas arq xl res abrir)
+(defun c:VOLXLS ( / ss dados lista ignoradas arq f tot abrir)
   (princ "\nSelecione as superficies de volume: ")
   (setq ss (ssget '((0 . "AECC_*SURFACE*"))))
   (cond
@@ -373,59 +323,29 @@
      (princ "\nNenhuma superficie selecionada."))
     ((not (car (setq dados (volcsv:coletar ss))))
      (princ "\nNenhuma das superficies selecionadas e de volume."))
-    ((not (setq arq (getfiled "Salvar planilha de volumes"
+    ((not (setq arq (getfiled "Salvar planilha de volumes (abre no Excel)"
                               (strcat (getvar "DWGPREFIX")
-                                      (vl-filename-base (getvar "DWGNAME")) "_volumes.xlsx")
-                              "xlsx" 1)))
+                                      (vl-filename-base (getvar "DWGNAME")) "_volumes.xml")
+                              "xml" 1)))
      (princ "\nCancelado."))
-    ((not (setq xl (vlax-create-object "Excel.Application")))
-     (princ "\nNao foi possivel iniciar o Excel. Ele esta instalado? Use VOLCSV como alternativa."))
+    ((not (setq f (open arq "w")))
+     (princ (strcat "\nNao foi possivel gravar: " arq
+                    " (o arquivo esta aberto no Excel?)")))
     (T
      (setq lista     (car dados)
-           ignoradas (cadr dados))
-     (princ "\nGerando planilha no Excel...")
-     (setq *volxls-etapa* "" *volxls-avisos* nil *volxls-wb* nil)
-     (setq res (vl-catch-all-apply 'volxls:gerar (list xl lista arq)))
-     (if (vl-catch-all-error-p res)
-       (progn
-         (princ (strcat "\nErro ao gerar a planilha (etapa: " *volxls-etapa* "): "
-                        (vl-catch-all-error-message res)))
-         (if *volxls-wb*
-           ;; A planilha foi montada; so nao salvou. Mostra o Excel
-           ;; para o usuario salvar manualmente (Ctrl+S).
-           (progn
-             (princ "\nA planilha foi montada, mas nao foi possivel salva-la automaticamente.")
-             (princ "\nO Excel sera aberto com a planilha pronta: salve manualmente (Ctrl+S).")
-             (vl-catch-all-apply 'vlax-put-property (list xl 'DisplayAlerts :vlax-true))
-             (vl-catch-all-apply 'vlax-put-property (list xl 'Visible :vlax-true))
-             (vl-catch-all-apply 'vlax-put-property (list xl 'UserControl :vlax-true))
-             (vl-catch-all-apply 'vlax-release-object (list *volxls-wb*)))
-           (progn
-             (princ "\n(Se o arquivo ja existe, verifique se ele nao esta aberto no Excel.)")
-             (vl-catch-all-apply 'vlax-invoke-method (list xl 'Quit)))))
-       (progn
-         (princ (strcat "\nSuperficies exportadas: " (itoa (length lista))))
-         (if (> ignoradas 0)
-           (princ (strcat "  |  Ignoradas (nao sao de volume): " (itoa ignoradas))))
-         (princ (strcat "\nArquivo: " arq))
-         (foreach a (reverse *volxls-avisos*)
-           (princ (strcat "\n  Aviso - formatacao nao aplicada (" a ")")))
-         (initget "Sim Nao")
-         (setq abrir (getkword "\nAbrir a planilha agora? [Sim/Nao] <Sim>: "))
-         (if (/= abrir "Nao")
-           (progn
-             (vlax-put-property xl 'DisplayAlerts :vlax-true)
-             (vlax-put-property xl 'Visible :vlax-true)
-             (vlax-put-property xl 'UserControl :vlax-true))
-           (progn
-             (if (vl-catch-all-error-p
-                   (vl-catch-all-apply 'vlax-invoke-method (list res 'Close :vlax-false)))
-               (vl-catch-all-apply 'vlax-invoke-method
-                                   (append (list res 'Close :vlax-false) (volxls:omitidos 2))))
-             (vl-catch-all-apply 'vlax-invoke-method (list xl 'Quit))))
-         (vlax-release-object res)))
-     (vlax-release-object xl)
-     (gc)))
+           ignoradas (cadr dados)
+           tot       (volxml:gravar f lista))
+     (close f)
+     (princ (strcat "\nSuperficies exportadas: " (itoa (length lista))))
+     (if (> ignoradas 0)
+       (princ (strcat "  |  Ignoradas (nao sao de volume): " (itoa ignoradas))))
+     (princ (strcat "\nCorte total:  " (rtos (car tot) 2 *volcsv-casas*)
+                    "\nAterro total: " (rtos (cadr tot) 2 *volcsv-casas*)
+                    "\nArquivo: " arq))
+     (initget "Sim Nao")
+     (setq abrir (getkword "\nAbrir a planilha agora? [Sim/Nao] <Sim>: "))
+     (if (/= abrir "Nao")
+       (startapp "explorer" (strcat "\"" arq "\"")))))
   (princ)
 )
 

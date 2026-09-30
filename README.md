@@ -14,7 +14,7 @@ Rotinas AutoLISP para uso no AutoCAD Civil 3D.
 |--------------|-----------|
 | `SOMACOMP`   | Soma o comprimento de linhas, polilinhas (2D/3D), arcos, circulos, splines e elipses selecionados. |
 | `ANOTACOORD` | Clique em pontos e insere um MTEXT com as coordenadas E, N e Z (em WCS). |
-| `VOLXLS`     | (`lisp/volumes_csv.lsp`) Igual ao `VOLCSV`, mas gera uma planilha Excel `.xlsx` formatada. |
+| `VOLXLS`     | (`lisp/volumes_csv.lsp`) Igual ao `VOLCSV`, mas gera uma planilha formatada (`.xml`, abre no Excel). |
 | `VOLCSV`     | (`lisp/volumes_csv.lsp`) Selecione superficies de volume (TIN Volume Surface) e exporte um `.csv` com Corte, Aterro e Liquido de cada uma, mais o TOTAL. |
 
 ### Observacoes sobre o `VOLCSV`
@@ -24,11 +24,19 @@ Rotinas AutoLISP para uso no AutoCAD Civil 3D.
 - Se a superficie estiver desatualizada (*Out of date*), faca **Rebuild** antes de exportar.
 - Superficies que nao sao de volume sao ignoradas automaticamente.
 
-### `VOLXLS` - planilha Excel formatada
+### `VOLXLS` - planilha formatada
 
-Mesmo arquivo (`lisp/volumes_csv.lsp`). Gera um `.xlsx` com titulo, nome do desenho e data,
-cabecalho colorido, linhas alternadas, bordas, numeros formatados, liquido negativo em
-vermelho e linha TOTAL com formulas `=SOMA(...)`. Ao final pergunta se deseja abrir a planilha.
+Mesmo arquivo (`lisp/volumes_csv.lsp`). Gera uma planilha no formato **Planilha XML 2003**
+(`.xml`), que o Excel abre direto com dois cliques, ja formatada:
 
-- **Requer o Microsoft Excel instalado** (a LISP controla o Excel via COM).
-- As cores ficam nas variaveis `*volxls-cor-...*` no arquivo, em formato `(R G B)`.
+- titulo, nome do desenho e data;
+- cabecalho colorido, linhas alternadas e bordas;
+- numeros com separador de milhar (exibidos conforme o idioma do Windows, ex.: `1.520,350`);
+- liquido negativo em vermelho;
+- linha TOTAL com formulas de soma;
+- cabecalho congelado e impressao em A4 paisagem com 1 pagina de largura.
+
+A LISP grava o arquivo sozinha: **nao usa automacao do Excel** e nao depende dele para gerar
+o arquivo. Para ter um `.xlsx`, abra no Excel e use *Salvar como > Pasta de Trabalho do Excel*.
+
+As cores ficam nas variaveis `*volxls-cor-...*` no arquivo, em formato `(R G B)`.
