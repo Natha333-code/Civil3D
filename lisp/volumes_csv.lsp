@@ -227,8 +227,30 @@
   (vlax-release-object r)
 )
 
+;;; Executa uma etapa de acabamento; se falhar, guarda um aviso e segue
+(defun volxls:opcional (nome fn args / r)
+  (setq r (vl-catch-all-apply fn args))
+  (if (vl-catch-all-error-p r)
+    (setq *volxls-avisos*
+           (cons (strcat nome ": " (vl-catch-all-error-message r)) *volxls-avisos*)))
+)
+
+;;; Salva como .xlsx tentando formas diferentes de chamar o SaveAs
+(defun volxls:salvar (wb arq / tentativas r ok)
+  (setq tentativas (list (list arq 51)                                  ; 51 = xlsx
+                         (list arq 51 "" "" :vlax-false :vlax-false 1)))
+  (while (and tentativas (not ok))
+    (setq r (vl-catch-all-apply 'vlax-invoke-method
+                                (append (list wb 'SaveAs) (car tentativas))))
+    (if (not (vl-catch-all-error-p r)) (setq ok T))
+    (setq tentativas (cdr tentativas)))
+  ;; ultima tentativa (so o nome; pasta nova ja e .xlsx por padrao)
+  (if (not ok) (vlax-invoke-method wb 'SaveAs arq))
+)
+
 ;;; Monta e salva a planilha. Retorna o objeto Workbook.
 (defun volxls:gerar (xl lista arq / wbs wb ws ini lin n tot)
+  (setq *volxls-etapa* "criar pasta de trabalho")
   (vlax-put-property xl 'DisplayAlerts :vlax-false)
   (setq wbs (vlax-get-property xl 'Workbooks)
         wb  (vlax-invoke-method wbs 'Add)
@@ -236,6 +258,7 @@
   (vlax-put-property ws 'Name "Volumes")
 
   ;; Titulo e informacoes
+  (setq *volxls-etapa* "titulo")
   (volxls:cel ws "A1" (list (cons 'Value2 "Quadro de Volumes - Corte e Aterro"))
               (list (cons 'Bold :vlax-true) (cons 'Size 14)
                     (cons 'Color (volxls:cor *volxls-cor-titulo*)))
@@ -252,6 +275,7 @@
     (volxls:cel ws a (list (cons 'MergeCells :vlax-true)) nil nil nil))
 
   ;; Cabecalho (linha 5)
+  (setq *volxls-etapa* "cabecalho")
   (volxls:cel ws "A5" (list (cons 'Value2 (strcat "Superf" (chr 237) "cie"))) nil nil nil)
   (volxls:cel ws "B5" (list (cons 'Value2 (strcat "Corte" (volxls:m3)))) nil nil nil)
   (volxls:cel ws "C5" (list (cons 'Value2 (strcat "Aterro" (volxls:m3)))) nil nil nil)
@@ -266,6 +290,7 @@
               nil)
 
   ;; Dados
+  (setq *volxls-etapa* "dados")
   (setq ini 6 lin ini)
   (volxls:tentar ws (strcat "A" (itoa ini) ":A" (itoa (+ ini (length lista) -1)))
                  (list (cons 'NumberFormat "@")))            ; nome como texto
@@ -281,6 +306,7 @@
     (setq lin (1+ lin)))
 
   ;; Linha TOTAL (com formulas)
+  (setq *volxls-etapa* "linha total")
   (setq tot (itoa lin)
         n   (itoa (1- lin)))
   (volxls:cel ws (strcat "A" tot) (list (cons 'Value2 "TOTAL")) nil nil nil)
@@ -294,25 +320,28 @@
               (list (cons 'Bold :vlax-true))
               (list (cons 'Color (volxls:cor *volxls-cor-total*)))
               nil)
+  (setq *volxls-etapa* "formato dos numeros")
   ;; Formatos numericos (liquido negativo em vermelho)
   (volxls:numero ws (strcat "B" (itoa ini) ":C" tot) nil)
   (volxls:numero ws (strcat "D" (itoa ini) ":D" tot) T)
 
-  ;; Bordas finas na tabela inteira + borda dupla acima do TOTAL
-  (volxls:cel ws (strcat "A5:D" tot) nil nil nil
-              (list (cons 'LineStyle 1) (cons 'Weight 2)
-                    (cons 'Color (volxls:cor *volxls-cor-borda*))))
-  (volxls:borda ws (strcat "A" tot ":D" tot) 8               ; xlEdgeTop
-                 (list (cons 'LineStyle -4119)                   ; xlDouble
-                       (cons 'Color (volxls:cor *volxls-cor-titulo*))))
+  ;; Acabamento (se alguma etapa falhar, a planilha e gerada mesmo assim)
+  (volxls:opcional "bordas" 'volxls:cel
+                   (list ws (strcat "A5:D" tot) nil nil nil
+                         (list (cons 'LineStyle 1) (cons 'Weight 2)
+                               (cons 'Color (volxls:cor *volxls-cor-borda*)))))
+  (volxls:opcional "borda do total" 'volxls:borda
+                   (list ws (strcat "A" tot ":D" tot) 8          ; xlEdgeTop
+                         (list (cons 'LineStyle -4119)             ; xlDouble
+                               (cons 'Color (volxls:cor *volxls-cor-titulo*)))))
+  (volxls:opcional "ajuste de colunas" 'volxls:autoajuste
+                   (list ws (strcat "A5:D" tot)))
+  (volxls:opcional "largura da coluna A" 'volxls:largura-min
+                   (list ws "A:A" 28))
 
-
-  ;; Largura das colunas
-  (volxls:autoajuste ws (strcat "A5:D" tot))
-  (volxls:largura-min ws "A:A" 28)
-
-  ;; Salvar (.xlsx = 51)
-  (vlax-invoke-method wb 'SaveAs arq 51)
+  ;; Salvar
+  (setq *volxls-etapa* "salvar arquivo")
+  (volxls:salvar wb arq)
   (vlax-release-object ws)
   (vlax-release-object wbs)
   wb
@@ -337,10 +366,12 @@
      (setq lista     (car dados)
            ignoradas (cadr dados))
      (princ "\nGerando planilha no Excel...")
+     (setq *volxls-etapa* "" *volxls-avisos* nil)
      (setq res (vl-catch-all-apply 'volxls:gerar (list xl lista arq)))
      (if (vl-catch-all-error-p res)
        (progn
-         (princ (strcat "\nErro ao gerar a planilha: " (vl-catch-all-error-message res)
+         (princ (strcat "\nErro ao gerar a planilha (etapa: " *volxls-etapa* "): "
+                        (vl-catch-all-error-message res)
                         "\n(Se o arquivo ja existe, verifique se ele nao esta aberto no Excel.)"))
          (vl-catch-all-apply 'vlax-invoke-method (list xl 'Quit)))
        (progn
@@ -348,6 +379,8 @@
          (if (> ignoradas 0)
            (princ (strcat "  |  Ignoradas (nao sao de volume): " (itoa ignoradas))))
          (princ (strcat "\nArquivo: " arq))
+         (foreach a (reverse *volxls-avisos*)
+           (princ (strcat "\n  Aviso - formatacao nao aplicada (" a ")")))
          (initget "Sim Nao")
          (setq abrir (getkword "\nAbrir a planilha agora? [Sim/Nao] <Sim>: "))
          (if (/= abrir "Nao")
@@ -356,8 +389,8 @@
              (vlax-put-property xl 'Visible :vlax-true)
              (vlax-put-property xl 'UserControl :vlax-true))
            (progn
-             (vlax-invoke-method res 'Close :vlax-false)
-             (vlax-invoke-method xl 'Quit)))
+             (vl-catch-all-apply 'vlax-invoke-method (list res 'Close :vlax-false))
+             (vl-catch-all-apply 'vlax-invoke-method (list xl 'Quit))))
          (vlax-release-object res)))
      (vlax-release-object xl)
      (gc)))
