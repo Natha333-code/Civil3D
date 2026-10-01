@@ -1,6 +1,6 @@
-# Civil3D - Rotinas LISP
+# Civil3D - Rotinas LISP e Dynamo
 
-Rotinas AutoLISP para uso no AutoCAD Civil 3D.
+Rotinas AutoLISP e Dynamo para uso no AutoCAD Civil 3D.
 
 ## Como carregar
 
@@ -32,3 +32,44 @@ vermelho e linha TOTAL com formulas `=SOMA(...)`. Ao final pergunta se deseja ab
 
 - **Requer o Microsoft Excel instalado** (a LISP controla o Excel via COM).
 - As cores ficam nas variaveis `*volxls-cor-...*` no arquivo, em formato `(R G B)`.
+
+---
+
+## Rotinas Dynamo (Civil 3D 2021)
+
+Ficam em `dynamo/`. Os `.dyn` sao gerados a partir do codigo Python em `dynamo/src/`
+(`python3 dynamo/build_dyn.py`), entao para alterar uma rotina edite o `.py` e gere de novo.
+Compativeis com Dynamo 2.5/2.6 (IronPython 2.7), que acompanha o Civil 3D 2021.
+
+### `EixoEntreLinhas.dyn` - alinhamento no eixo de duas linhas + perfil longitudinal
+
+1. Selecione duas **linhas** (`LINE`) e um alinhamento e criado no **centro** entre elas.
+2. A **superficie** escolhida e amostrada no alinhamento (perfil de superficie `TN - <superficie>`).
+3. O **perfil longitudinal** (Profile View `PL - <alinhamento>`) e criado ja com esse perfil.
+
+**Como usar**
+
+- Abra o desenho, va em **Manage > Dynamo** (ou **Dynamo Player**) e abra `dynamo/EixoEntreLinhas.dyn`.
+- Preencha as entradas e coloque **Executar = True**. No Dynamo, clique em **Run** (o grafico esta em modo *Manual*).
+- Responda aos prompts na linha de comando do Civil 3D:
+  primeira linha, segunda linha, superficie (se o nome nao foi informado) e ponto de insercao
+  do perfil longitudinal (**Enter** = posicao automatica a direita do alinhamento).
+- O no **Resultado** mostra o que foi criado ou a mensagem de erro.
+
+| Entrada | Padrao | Observacao |
+|---|---|---|
+| Executar | `False` | So roda com `True` (evita rodar sem querer). |
+| Nome do alinhamento | `EIXO` | Se ja existir, vira `EIXO (1)`, `EIXO (2)`... |
+| Nome da superficie | vazio | Vazio = clicar na superficie no desenho. |
+| Estilo do alinhamento / do perfil / do perfil longitudinal | vazio | Nome do estilo; vazio ou inexistente = primeiro estilo do desenho. |
+| Band set do perfil longitudinal | vazio | Idem. |
+| Inverter sentido | `False` | Inverte o sentido do estaqueamento. |
+
+**Observacoes**
+
+- O eixo liga o ponto medio dos inicios ao ponto medio dos fins das linhas (a segunda linha e
+  orientada automaticamente no mesmo sentido da primeira). Funciona com linhas paralelas ou nao,
+  de comprimentos iguais ou diferentes.
+- O alinhamento e criado sem site (*siteless*), no layer corrente, e com o primeiro label set.
+- O estaqueamento segue o sentido da primeira linha selecionada (use *Inverter sentido* para trocar).
+- Se o Dynamo estiver em primeiro plano, clique no desenho antes de responder aos prompts.

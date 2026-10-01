@@ -1,0 +1,531 @@
+{
+  "Uuid": "f1361e49-1b64-43ee-b798-47fa61c008a7",
+  "IsCustomNode": false,
+  "Description": "Seleciona duas linhas, cria um alinhamento no eixo entre elas, o perfil da superficie escolhida e o perfil longitudinal.",
+  "Name": "EixoEntreLinhas",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "d60d0cf36c474c4486a2b235b5b4fcd1",
+      "Name": "Executar",
+      "Type": "boolean",
+      "Value": "false",
+      "Description": "Ative para rodar a rotina."
+    },
+    {
+      "Id": "ca13249771d945aaac6aaa2a0b9d2fd3",
+      "Name": "Nome do alinhamento",
+      "Type": "string",
+      "Value": "EIXO",
+      "Description": "Nome base do alinhamento (sufixo automatico se ja existir)."
+    },
+    {
+      "Id": "d85d9470d9f948cfb027c56ef566503d",
+      "Name": "Nome da superficie",
+      "Type": "string",
+      "Value": "",
+      "Description": "Vazio = clicar na superficie no desenho."
+    },
+    {
+      "Id": "f3d23f6b288241309f235bffdbc3344b",
+      "Name": "Estilo do alinhamento",
+      "Type": "string",
+      "Value": "",
+      "Description": "Vazio = primeiro estilo do desenho."
+    },
+    {
+      "Id": "02049ec061d743668eb544692542052e",
+      "Name": "Estilo do perfil",
+      "Type": "string",
+      "Value": "",
+      "Description": "Vazio = primeiro estilo do desenho."
+    },
+    {
+      "Id": "715c3017159448b5835193301619dde7",
+      "Name": "Estilo do perfil longitudinal",
+      "Type": "string",
+      "Value": "",
+      "Description": "Profile View Style. Vazio = primeiro estilo."
+    },
+    {
+      "Id": "0597245cd8a54b9093b3b28ebb1d5fd4",
+      "Name": "Band set do perfil longitudinal",
+      "Type": "string",
+      "Value": "",
+      "Description": "Vazio = primeiro band set."
+    },
+    {
+      "Id": "2970310eaabf471fbbbb0414b06e821b",
+      "Name": "Inverter sentido",
+      "Type": "boolean",
+      "Value": "false",
+      "Description": "Inverte o sentido do estaqueamento."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "d60d0cf36c474c4486a2b235b5b4fcd1",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "437623056cde465983c0d0fe97b9f2bf",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "EIXO",
+      "Id": "ca13249771d945aaac6aaa2a0b9d2fd3",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "bd65fded239d498da42bb00da9b5dd44",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "d85d9470d9f948cfb027c56ef566503d",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d17c79cda5df4217bb9279f35ebaac9b",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "f3d23f6b288241309f235bffdbc3344b",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9d0a470e2fd642038138d910d1bc0e79",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "02049ec061d743668eb544692542052e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b7d75d85e0bc4459ab026e118844c87a",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "715c3017159448b5835193301619dde7",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9e6e7d509b1b4880aa4b487aaad05710",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "0597245cd8a54b9093b3b28ebb1d5fd4",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4c4e4e101a504bbdab4edac3144d3d4f",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "2970310eaabf471fbbbb0414b06e821b",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c749ee5772dd4cec96a60889532c583a",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# ============================================================\n# eixo_entre_linhas.py - codigo do no Python de EixoEntreLinhas.dyn\n#\n# Civil 3D 2021 / Dynamo 2.5-2.6 / IronPython 2.7\n#\n# 1. Pede no desenho duas LINHAS (LINE).\n# 2. Cria um alinhamento no eixo (centro) entre elas.\n# 3. Pede a superficie (ou usa o nome informado) e cria o perfil\n#    da superficie (Surface Profile) nesse alinhamento.\n# 4. Pede o ponto de insercao e cria o perfil longitudinal\n#    (Profile View) ja com o perfil da superficie.\n#\n# Entradas (IN):\n#   IN[0] Executar (bool)          - so roda quando True\n#   IN[1] Nome do alinhamento      - ex. \"EIXO\" (sufixo automatico se ja existir)\n#   IN[2] Nome da superficie       - vazio = clicar na superficie no desenho\n#   IN[3] Estilo do alinhamento    - vazio = primeiro estilo do desenho\n#   IN[4] Estilo do perfil         - vazio = primeiro estilo do desenho\n#   IN[5] Estilo do perfil long.   - (Profile View Style) vazio = primeiro\n#   IN[6] Band set do perfil long. - vazio = primeiro\n#   IN[7] Inverter sentido (bool)  - inverte o sentido do estaqueamento\n#\n# Este arquivo e a fonte; o .dyn e gerado por dynamo/build_dyn.py.\n# (Strings sem acento para evitar problemas de codificacao.)\n# ============================================================\n\nimport clr\nimport traceback\n\nclr.AddReference('AcMgd')\nclr.AddReference('AcCoreMgd')\nclr.AddReference('AcDbMgd')\nclr.AddReference('AecBaseMgd')\nclr.AddReference('AeccDbMgd')\n\nfrom Autodesk.AutoCAD.ApplicationServices import Application\nfrom Autodesk.AutoCAD.EditorInput import (PromptEntityOptions,\n                                          PromptPointOptions, PromptStatus)\nfrom Autodesk.AutoCAD.DatabaseServices import (Line, OpenMode, ObjectId)\nfrom Autodesk.AutoCAD.Geometry import Point3d\nfrom Autodesk.Civil.ApplicationServices import CivilApplication\nfrom Autodesk.Civil.DatabaseServices import (Alignment, Profile, ProfileView,\n                                             Surface)\n\n\ndef texto(v):\n    \"\"\"Normaliza entrada de texto do Dynamo (None -> '').\"\"\"\n    if v is None:\n        return ''\n    return str(v).strip()\n\n\ndef ponto_medio(p, q):\n    return Point3d((p.X + q.X) / 2.0, (p.Y + q.Y) / 2.0, 0.0)\n\n\ndef eixo_entre(a1, b1, a2, b2):\n    \"\"\"Retorna (inicio, fim) do eixo entre os segmentos a1-b1 e a2-b2.\n\n    A segunda linha e orientada no mesmo sentido da primeira (se os\n    vetores apontam para lados opostos, inverte-se a2/b2), e o eixo liga\n    o ponto medio dos inicios ao ponto medio dos fins.\n    \"\"\"\n    d1x, d1y = b1.X - a1.X, b1.Y - a1.Y\n    d2x, d2y = b2.X - a2.X, b2.Y - a2.Y\n    if d1x * d2x + d1y * d2y < 0:\n        a2, b2 = b2, a2\n    return ponto_medio(a1, a2), ponto_medio(b1, b2)\n\n\ndef estilo(colecao, nome):\n    \"\"\"Estilo pelo nome; se vazio ou inexistente, o primeiro da colecao.\"\"\"\n    if nome and colecao.Contains(nome):\n        return colecao[nome]\n    if colecao.Count == 0:\n        raise Exception('O desenho nao possui estilos do tipo necessario.')\n    return colecao[0]\n\n\ndef pedir_entidade(ed, msg, rejeicao, classe, exata):\n    opt = PromptEntityOptions(msg)\n    opt.SetRejectMessage(rejeicao)\n    opt.AddAllowedClass(clr.GetClrType(classe), exata)\n    res = ed.GetEntity(opt)\n    if res.Status != PromptStatus.OK:\n        return None\n    return res.ObjectId\n\n\ndef nomes_alinhamentos(civdoc, t):\n    ids = list(civdoc.GetAlignmentIds())\n    try:\n        ids += list(civdoc.GetSitelessAlignmentIds())\n    except Exception:\n        pass\n    nomes = set()\n    for i in ids:\n        nomes.add(t.GetObject(i, OpenMode.ForRead).Name)\n    return nomes\n\n\ndef nome_unico(base, existentes):\n    if base not in existentes:\n        return base\n    n = 1\n    while True:\n        cand = '%s (%d)' % (base, n)\n        if cand not in existentes:\n            return cand\n        n += 1\n\n\ndef superficie_por_nome(civdoc, t, nome):\n    for i in civdoc.GetSurfaceIds():\n        if t.GetObject(i, OpenMode.ForRead).Name == nome:\n            return i\n    return None\n\n\ndef executar(executa, nome_alin, nome_sup, est_alin, est_perfil,\n             est_pv, band_set, inverter):\n    if not executa:\n        return 'Defina \"Executar\" = True e rode o grafico.'\n\n    adoc = Application.DocumentManager.MdiActiveDocument\n    ed = adoc.Editor\n    db = adoc.Database\n    civdoc = CivilApplication.ActiveDocument\n\n    nome_alin = nome_alin or 'EIXO'\n\n    # Leva o foco para o desenho para responder aos prompts\n    try:\n        from Autodesk.AutoCAD.Internal import Utils\n        Utils.SetFocusToDwgView()\n    except Exception:\n        pass\n\n    # ---- 1. selecao das linhas (fora do lock/transacao) ----\n    rej = '\\nObjeto invalido: selecione uma LINE.'\n    id1 = pedir_entidade(ed, '\\nSelecione a PRIMEIRA linha: ', rej, Line, True)\n    if id1 is None:\n        return 'Cancelado: primeira linha nao selecionada.'\n    id2 = pedir_entidade(ed, '\\nSelecione a SEGUNDA linha: ', rej, Line, True)\n    if id2 is None:\n        return 'Cancelado: segunda linha nao selecionada.'\n    if id1 == id2:\n        return 'Erro: a mesma linha foi selecionada duas vezes.'\n\n    # ---- 2. superficie ----\n    sup_id = None\n    if not nome_sup:\n        sup_id = pedir_entidade(ed, '\\nSelecione a SUPERFICIE: ',\n                                '\\nObjeto invalido: selecione uma superficie.',\n                                Surface, False)\n        if sup_id is None:\n            return 'Cancelado: superficie nao selecionada.'\n\n    # ---- 3. ponto de insercao do perfil longitudinal ----\n    popt = PromptPointOptions(\n        '\\nPonto de insercao do perfil longitudinal <automatico>: ')\n    popt.AllowNone = True\n    pres = ed.GetPoint(popt)\n    ponto_pv = pres.Value if pres.Status == PromptStatus.OK else None\n\n    with adoc.LockDocument():\n        t = db.TransactionManager.StartTransaction()\n        try:\n            l1 = t.GetObject(id1, OpenMode.ForRead)\n            l2 = t.GetObject(id2, OpenMode.ForRead)\n\n            if nome_sup:\n                sup_id = superficie_por_nome(civdoc, t, nome_sup)\n                if sup_id is None:\n                    t.Abort()\n                    return 'Erro: superficie \"%s\" nao encontrada.' % nome_sup\n            sup = t.GetObject(sup_id, OpenMode.ForRead)\n\n            ini, fim = eixo_entre(l1.StartPoint, l1.EndPoint,\n                                  l2.StartPoint, l2.EndPoint)\n            if inverter:\n                ini, fim = fim, ini\n            if ini.DistanceTo(fim) < 1e-6:\n                t.Abort()\n                return 'Erro: o eixo resultante tem comprimento zero.'\n\n            # ---- alinhamento ----\n            styles = civdoc.Styles\n            nome_final = nome_unico(nome_alin, nomes_alinhamentos(civdoc, t))\n            alin_id = Alignment.Create(\n                civdoc, nome_final, ObjectId.Null, db.Clayer,\n                estilo(styles.AlignmentStyles, est_alin),\n                estilo(styles.LabelSetStyles.AlignmentLabelSetStyles, ''))\n            alin = t.GetObject(alin_id, OpenMode.ForWrite)\n            alin.Entities.AddFixedLine(ini, fim)\n\n            # ---- perfil da superficie ----\n            nome_perfil = 'TN - %s' % sup.Name\n            Profile.CreateFromSurface(\n                nome_perfil, alin_id, sup_id, db.Clayer,\n                estilo(styles.ProfileStyles, est_perfil),\n                estilo(styles.LabelSetStyles.ProfileLabelSetStyles, ''))\n\n            # ---- perfil longitudinal (Profile View) ----\n            if ponto_pv is None:\n                ext = alin.GeometricExtents\n                folga = max(ext.MaxPoint.X - ext.MinPoint.X,\n                            ext.MaxPoint.Y - ext.MinPoint.Y, 10.0) * 0.2\n                ponto_pv = Point3d(ext.MaxPoint.X + folga, ext.MinPoint.Y, 0.0)\n            ProfileView.Create(\n                alin_id, ponto_pv, 'PL - %s' % nome_final,\n                estilo(styles.ProfileViewBandSetStyles, band_set),\n                estilo(styles.ProfileViewStyles, est_pv))\n\n            t.Commit()\n        except Exception:\n            t.Abort()\n            raise\n        finally:\n            t.Dispose()\n\n    ed.WriteMessage('\\nAlinhamento \"%s\" criado (%.3f m) com perfil \"%s\".\\n'\n                    % (nome_final, ini.DistanceTo(fim), nome_perfil))\n    return ['Alinhamento: %s' % nome_final,\n            'Comprimento: %.3f' % ini.DistanceTo(fim),\n            'Perfil: %s' % nome_perfil,\n            'Perfil longitudinal: PL - %s' % nome_final]\n\n\ntry:\n    OUT = executar(IN[0], texto(IN[1]), texto(IN[2]), texto(IN[3]),\n                   texto(IN[4]), texto(IN[5]), texto(IN[6]), bool(IN[7]))\nexcept Exception:\n    OUT = 'ERRO:\\n' + traceback.format_exc()\n",
+      "VariableInputPorts": true,
+      "Id": "9e4ff72e82cb41d3946766655845bcfe",
+      "Inputs": [
+        {
+          "Id": "4e8b2ba48bfa4cf0bf73c1abd38078dd",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0f2fd854618d4c00bb4682b86d800136",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2755722ad5b44d4aa0a3471d15172506",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b6ef0c1be7d74aea9d10b0ebc71f55bf",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1860aa5ad12d46c2859b9578c275e354",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f7854271ccc449bc971e13420b065c92",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fb36a9b791ed4e3a9507c7275e108f0b",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f8d98ad481be45618f4ec0ac4cc76a9c",
+          "Name": "IN[7]",
+          "Description": "Input #7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b87824da605f46f4973a76855fd69505",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "88edabf1908543368e80d8068b096816",
+      "Inputs": [
+        {
+          "Id": "f344d5b0314549dd937da4f2d81f2173",
+          "Name": "",
+          "Description": "Node to show output from",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6c01fb95876c4f2688fb6abcbb3bfb04",
+          "Name": "",
+          "Description": "Node output",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "437623056cde465983c0d0fe97b9f2bf",
+      "End": "4e8b2ba48bfa4cf0bf73c1abd38078dd",
+      "Id": "83013d08a7b44286976176bb1846bf03"
+    },
+    {
+      "Start": "bd65fded239d498da42bb00da9b5dd44",
+      "End": "0f2fd854618d4c00bb4682b86d800136",
+      "Id": "c8b4acf0bd9845aa933e1e727bedf869"
+    },
+    {
+      "Start": "d17c79cda5df4217bb9279f35ebaac9b",
+      "End": "2755722ad5b44d4aa0a3471d15172506",
+      "Id": "7338f1a16d6541e48b4202f02aec6d00"
+    },
+    {
+      "Start": "9d0a470e2fd642038138d910d1bc0e79",
+      "End": "b6ef0c1be7d74aea9d10b0ebc71f55bf",
+      "Id": "762dc5ef61614af88ae3cc2ed60ea28e"
+    },
+    {
+      "Start": "b7d75d85e0bc4459ab026e118844c87a",
+      "End": "1860aa5ad12d46c2859b9578c275e354",
+      "Id": "5e83377c90a44361ac4a92234db76dc7"
+    },
+    {
+      "Start": "9e6e7d509b1b4880aa4b487aaad05710",
+      "End": "f7854271ccc449bc971e13420b065c92",
+      "Id": "c1d5b1a3e1e0475a93ab17edda4ffa66"
+    },
+    {
+      "Start": "4c4e4e101a504bbdab4edac3144d3d4f",
+      "End": "fb36a9b791ed4e3a9507c7275e108f0b",
+      "Id": "7186955499714502aea622566b6ae844"
+    },
+    {
+      "Start": "c749ee5772dd4cec96a60889532c583a",
+      "End": "f8d98ad481be45618f4ec0ac4cc76a9c",
+      "Id": "24fba866c09a4e3cb6a3b755f94de66a"
+    },
+    {
+      "Start": "b87824da605f46f4973a76855fd69505",
+      "End": "f344d5b0314549dd937da4f2d81f2173",
+      "Id": "47eb51d728604550b0122dc01558954d"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.5.0.7460",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "Id": "d60d0cf36c474c4486a2b235b5b4fcd1",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Executar",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 0.0
+      },
+      {
+        "Id": "ca13249771d945aaac6aaa2a0b9d2fd3",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Nome do alinhamento",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 110.0
+      },
+      {
+        "Id": "d85d9470d9f948cfb027c56ef566503d",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Nome da superficie",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 220.0
+      },
+      {
+        "Id": "f3d23f6b288241309f235bffdbc3344b",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Estilo do alinhamento",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 330.0
+      },
+      {
+        "Id": "02049ec061d743668eb544692542052e",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Estilo do perfil",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 440.0
+      },
+      {
+        "Id": "715c3017159448b5835193301619dde7",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Estilo do perfil longitudinal",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 550.0
+      },
+      {
+        "Id": "0597245cd8a54b9093b3b28ebb1d5fd4",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Band set do perfil longitudinal",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 660.0
+      },
+      {
+        "Id": "2970310eaabf471fbbbb0414b06e821b",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Inverter sentido",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 770.0
+      },
+      {
+        "Id": "9e4ff72e82cb41d3946766655845bcfe",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "EixoEntreLinhas",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 450.0,
+        "Y": 385.0
+      },
+      {
+        "Id": "88edabf1908543368e80d8068b096816",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Name": "Resultado",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 750.0,
+        "Y": 385.0
+      }
+    ],
+    "Annotations": [],
+    "X": 60.0,
+    "Y": 60.0,
+    "Zoom": 0.8
+  }
+}
