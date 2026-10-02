@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Gera os arquivos .dyn a partir do codigo em dynamo/src/.
 
-Cada grafico = nos de entrada (String / Boolean, marcados como entrada do
+Cada grafico = nos de entrada (String / Boolean / Number, marcados como entrada do
 Dynamo Player) -> um no Python Script (IronPython) -> um no Watch.
 Formato compativel com Dynamo 2.5+ (Civil 3D 2021).
 
@@ -40,6 +40,17 @@ def no_bool(valor):
             "Description": "Selection between a true and false."}
 
 
+def no_numero(valor):
+    return {"ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+            "NodeType": "NumberInputNode", "NumberType": "Double",
+            "InputValue": valor, "Id": gid(),
+            "Inputs": [], "Outputs": [porta("", "Double")],
+            "Replication": "Disabled", "Description": "Creates a number."}
+
+
+NOS_ENTRADA = {"string": no_string, "boolean": no_bool, "number": no_numero}
+
+
 def no_python(codigo, n_entradas):
     return {"ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
             "NodeType": "PythonScriptNode", "Code": codigo,
@@ -61,7 +72,8 @@ def no_watch():
 
 
 def gerar(nome, descricao, arquivo_py, entradas, saida_dyn):
-    """entradas: lista de (rotulo, tipo 'string'|'boolean', valor, descricao)."""
+    """entradas: lista de (rotulo, tipo, valor, descricao);
+    tipo = 'string' | 'boolean' | 'number'."""
     with open(os.path.join(AQUI, "src", arquivo_py), encoding="utf-8") as f:
         codigo = f.read()
 
@@ -70,16 +82,19 @@ def gerar(nome, descricao, arquivo_py, entradas, saida_dyn):
     watch = no_watch()
 
     for i, (rotulo, tipo, valor, desc) in enumerate(entradas):
-        no = no_string(valor) if tipo == "string" else no_bool(valor)
+        no = NOS_ENTRADA[tipo](valor)
         nos.append(no)
         views.append({"Id": no["Id"], "IsSetAsInput": True,
                       "IsSetAsOutput": False, "Name": rotulo,
                       "ShowGeometry": True, "Excluded": False,
                       "X": 0.0, "Y": 110.0 * i})
-        inputs.append({"Id": no["Id"], "Name": rotulo, "Type": tipo,
-                       "Value": (str(valor).lower() if tipo == "boolean"
-                                 else valor),
-                       "Description": desc})
+        entrada = {"Id": no["Id"], "Name": rotulo, "Type": tipo,
+                   "Value": (str(valor).lower() if tipo == "boolean"
+                             else str(valor)),
+                   "Description": desc}
+        if tipo == "number":
+            entrada["NumberType"] = "Double"
+        inputs.append(entrada)
         conectores.append({"Start": no["Outputs"][0]["Id"],
                            "End": py["Inputs"][i]["Id"], "Id": gid()})
 
@@ -124,7 +139,8 @@ def gerar(nome, descricao, arquivo_py, entradas, saida_dyn):
 if __name__ == "__main__":
     gerar(
         "EixoEntreLinhas",
-        "Seleciona duas linhas, cria um alinhamento no eixo entre elas, "
+        "Seleciona duas linhas/polilinhas (retas ou curvas), cria um "
+        "alinhamento no eixo entre elas, "
         "o perfil da superficie escolhida e o perfil longitudinal.",
         "eixo_entre_linhas.py",
         [
@@ -143,6 +159,8 @@ if __name__ == "__main__":
              "Vazio = primeiro band set."),
             ("Inverter sentido", "boolean", False,
              "Inverte o sentido do estaqueamento."),
+            ("Tolerancia (m)", "number", 0.01,
+             "Desvio maximo do alinhamento em relacao ao eixo calculado."),
         ],
         "EixoEntreLinhas.dyn",
     )

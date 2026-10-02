@@ -1,67 +1,75 @@
 {
-  "Uuid": "f1361e49-1b64-43ee-b798-47fa61c008a7",
+  "Uuid": "a2c03c2f-3531-42af-a2c8-2ea37adcfc81",
   "IsCustomNode": false,
-  "Description": "Seleciona duas linhas, cria um alinhamento no eixo entre elas, o perfil da superficie escolhida e o perfil longitudinal.",
+  "Description": "Seleciona duas linhas/polilinhas (retas ou curvas), cria um alinhamento no eixo entre elas, o perfil da superficie escolhida e o perfil longitudinal.",
   "Name": "EixoEntreLinhas",
   "ElementResolver": {
     "ResolutionMap": {}
   },
   "Inputs": [
     {
-      "Id": "d60d0cf36c474c4486a2b235b5b4fcd1",
+      "Id": "9a5483cb53f942cabd9a32d48d3531a9",
       "Name": "Executar",
       "Type": "boolean",
       "Value": "false",
       "Description": "Ative para rodar a rotina."
     },
     {
-      "Id": "ca13249771d945aaac6aaa2a0b9d2fd3",
+      "Id": "6d5bf22bb2384b15a77aa1c6bab918d5",
       "Name": "Nome do alinhamento",
       "Type": "string",
       "Value": "EIXO",
       "Description": "Nome base do alinhamento (sufixo automatico se ja existir)."
     },
     {
-      "Id": "d85d9470d9f948cfb027c56ef566503d",
+      "Id": "0a8320ec15a9476ca74d2690c6a07cad",
       "Name": "Nome da superficie",
       "Type": "string",
       "Value": "",
       "Description": "Vazio = clicar na superficie no desenho."
     },
     {
-      "Id": "f3d23f6b288241309f235bffdbc3344b",
+      "Id": "884bf8e03fb04e658503b285707fe5da",
       "Name": "Estilo do alinhamento",
       "Type": "string",
       "Value": "",
       "Description": "Vazio = primeiro estilo do desenho."
     },
     {
-      "Id": "02049ec061d743668eb544692542052e",
+      "Id": "0659efafdd9843d8849186fd3e6adc28",
       "Name": "Estilo do perfil",
       "Type": "string",
       "Value": "",
       "Description": "Vazio = primeiro estilo do desenho."
     },
     {
-      "Id": "715c3017159448b5835193301619dde7",
+      "Id": "60c89b95d1d74d2aa9f01ad70169058a",
       "Name": "Estilo do perfil longitudinal",
       "Type": "string",
       "Value": "",
       "Description": "Profile View Style. Vazio = primeiro estilo."
     },
     {
-      "Id": "0597245cd8a54b9093b3b28ebb1d5fd4",
+      "Id": "183dde9ea7984b76895fc81a492332a7",
       "Name": "Band set do perfil longitudinal",
       "Type": "string",
       "Value": "",
       "Description": "Vazio = primeiro band set."
     },
     {
-      "Id": "2970310eaabf471fbbbb0414b06e821b",
+      "Id": "c20ba6a5d8f94f9ca29608465b4c1b66",
       "Name": "Inverter sentido",
       "Type": "boolean",
       "Value": "false",
       "Description": "Inverte o sentido do estaqueamento."
+    },
+    {
+      "Id": "10bb3b99eb0a4762932b4fc8bd212244",
+      "Name": "Tolerancia (m)",
+      "Type": "number",
+      "Value": "0.01",
+      "Description": "Desvio maximo do alinhamento em relacao ao eixo calculado.",
+      "NumberType": "Double"
     }
   ],
   "Outputs": [],
@@ -70,11 +78,11 @@
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
       "InputValue": false,
-      "Id": "d60d0cf36c474c4486a2b235b5b4fcd1",
+      "Id": "9a5483cb53f942cabd9a32d48d3531a9",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "437623056cde465983c0d0fe97b9f2bf",
+          "Id": "76f8d336a2f348f3b702b46fa8efd35f",
           "Name": "",
           "Description": "Boolean",
           "UsingDefaultValue": false,
@@ -90,11 +98,11 @@
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "EIXO",
-      "Id": "ca13249771d945aaac6aaa2a0b9d2fd3",
+      "Id": "6d5bf22bb2384b15a77aa1c6bab918d5",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "bd65fded239d498da42bb00da9b5dd44",
+          "Id": "51d978700add4639b89eeccf3ce6f489",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -110,11 +118,11 @@
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "",
-      "Id": "d85d9470d9f948cfb027c56ef566503d",
+      "Id": "0a8320ec15a9476ca74d2690c6a07cad",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "d17c79cda5df4217bb9279f35ebaac9b",
+          "Id": "7a68b5c5c7ca4df591b2a1c0710c921a",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -130,11 +138,11 @@
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "",
-      "Id": "f3d23f6b288241309f235bffdbc3344b",
+      "Id": "884bf8e03fb04e658503b285707fe5da",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "9d0a470e2fd642038138d910d1bc0e79",
+          "Id": "1683e1a213ce4b1a8657fe035fc3545c",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -150,11 +158,11 @@
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "",
-      "Id": "02049ec061d743668eb544692542052e",
+      "Id": "0659efafdd9843d8849186fd3e6adc28",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "b7d75d85e0bc4459ab026e118844c87a",
+          "Id": "58abee6ca0a440f4b53209e504df31cf",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -170,11 +178,11 @@
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "",
-      "Id": "715c3017159448b5835193301619dde7",
+      "Id": "60c89b95d1d74d2aa9f01ad70169058a",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "9e6e7d509b1b4880aa4b487aaad05710",
+          "Id": "ff2bd59eaea444a4a2b65eae0c2be12b",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -190,11 +198,11 @@
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "",
-      "Id": "0597245cd8a54b9093b3b28ebb1d5fd4",
+      "Id": "183dde9ea7984b76895fc81a492332a7",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "4c4e4e101a504bbdab4edac3144d3d4f",
+          "Id": "088c8570e37f4823a6770803b6c10671",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -210,11 +218,11 @@
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
       "InputValue": false,
-      "Id": "2970310eaabf471fbbbb0414b06e821b",
+      "Id": "c20ba6a5d8f94f9ca29608465b4c1b66",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "c749ee5772dd4cec96a60889532c583a",
+          "Id": "90fddec8e8c14e95827dfd16a24e6e94",
           "Name": "",
           "Description": "Boolean",
           "UsingDefaultValue": false,
@@ -227,14 +235,35 @@
       "Description": "Selection between a true and false."
     },
     {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 0.01,
+      "Id": "10bb3b99eb0a4762932b4fc8bd212244",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3ee834e155df480692ea85df36326355",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "NodeType": "PythonScriptNode",
-      "Code": "# ============================================================\n# eixo_entre_linhas.py - codigo do no Python de EixoEntreLinhas.dyn\n#\n# Civil 3D 2021 / Dynamo 2.5-2.6 / IronPython 2.7\n#\n# 1. Pede no desenho duas LINHAS (LINE).\n# 2. Cria um alinhamento no eixo (centro) entre elas.\n# 3. Pede a superficie (ou usa o nome informado) e cria o perfil\n#    da superficie (Surface Profile) nesse alinhamento.\n# 4. Pede o ponto de insercao e cria o perfil longitudinal\n#    (Profile View) ja com o perfil da superficie.\n#\n# Entradas (IN):\n#   IN[0] Executar (bool)          - so roda quando True\n#   IN[1] Nome do alinhamento      - ex. \"EIXO\" (sufixo automatico se ja existir)\n#   IN[2] Nome da superficie       - vazio = clicar na superficie no desenho\n#   IN[3] Estilo do alinhamento    - vazio = primeiro estilo do desenho\n#   IN[4] Estilo do perfil         - vazio = primeiro estilo do desenho\n#   IN[5] Estilo do perfil long.   - (Profile View Style) vazio = primeiro\n#   IN[6] Band set do perfil long. - vazio = primeiro\n#   IN[7] Inverter sentido (bool)  - inverte o sentido do estaqueamento\n#\n# Este arquivo e a fonte; o .dyn e gerado por dynamo/build_dyn.py.\n# (Strings sem acento para evitar problemas de codificacao.)\n# ============================================================\n\nimport clr\nimport traceback\n\nclr.AddReference('AcMgd')\nclr.AddReference('AcCoreMgd')\nclr.AddReference('AcDbMgd')\nclr.AddReference('AecBaseMgd')\nclr.AddReference('AeccDbMgd')\n\nfrom Autodesk.AutoCAD.ApplicationServices import Application\nfrom Autodesk.AutoCAD.EditorInput import (PromptEntityOptions,\n                                          PromptPointOptions, PromptStatus)\nfrom Autodesk.AutoCAD.DatabaseServices import (Line, OpenMode, ObjectId)\nfrom Autodesk.AutoCAD.Geometry import Point3d\nfrom Autodesk.Civil.ApplicationServices import CivilApplication\nfrom Autodesk.Civil.DatabaseServices import (Alignment, Profile, ProfileView,\n                                             Surface)\n\n\ndef texto(v):\n    \"\"\"Normaliza entrada de texto do Dynamo (None -> '').\"\"\"\n    if v is None:\n        return ''\n    return str(v).strip()\n\n\ndef ponto_medio(p, q):\n    return Point3d((p.X + q.X) / 2.0, (p.Y + q.Y) / 2.0, 0.0)\n\n\ndef eixo_entre(a1, b1, a2, b2):\n    \"\"\"Retorna (inicio, fim) do eixo entre os segmentos a1-b1 e a2-b2.\n\n    A segunda linha e orientada no mesmo sentido da primeira (se os\n    vetores apontam para lados opostos, inverte-se a2/b2), e o eixo liga\n    o ponto medio dos inicios ao ponto medio dos fins.\n    \"\"\"\n    d1x, d1y = b1.X - a1.X, b1.Y - a1.Y\n    d2x, d2y = b2.X - a2.X, b2.Y - a2.Y\n    if d1x * d2x + d1y * d2y < 0:\n        a2, b2 = b2, a2\n    return ponto_medio(a1, a2), ponto_medio(b1, b2)\n\n\ndef estilo(colecao, nome):\n    \"\"\"Estilo pelo nome; se vazio ou inexistente, o primeiro da colecao.\"\"\"\n    if nome and colecao.Contains(nome):\n        return colecao[nome]\n    if colecao.Count == 0:\n        raise Exception('O desenho nao possui estilos do tipo necessario.')\n    return colecao[0]\n\n\ndef pedir_entidade(ed, msg, rejeicao, classe, exata):\n    opt = PromptEntityOptions(msg)\n    opt.SetRejectMessage(rejeicao)\n    opt.AddAllowedClass(clr.GetClrType(classe), exata)\n    res = ed.GetEntity(opt)\n    if res.Status != PromptStatus.OK:\n        return None\n    return res.ObjectId\n\n\ndef nomes_alinhamentos(civdoc, t):\n    ids = list(civdoc.GetAlignmentIds())\n    try:\n        ids += list(civdoc.GetSitelessAlignmentIds())\n    except Exception:\n        pass\n    nomes = set()\n    for i in ids:\n        nomes.add(t.GetObject(i, OpenMode.ForRead).Name)\n    return nomes\n\n\ndef nome_unico(base, existentes):\n    if base not in existentes:\n        return base\n    n = 1\n    while True:\n        cand = '%s (%d)' % (base, n)\n        if cand not in existentes:\n            return cand\n        n += 1\n\n\ndef superficie_por_nome(civdoc, t, nome):\n    for i in civdoc.GetSurfaceIds():\n        if t.GetObject(i, OpenMode.ForRead).Name == nome:\n            return i\n    return None\n\n\ndef executar(executa, nome_alin, nome_sup, est_alin, est_perfil,\n             est_pv, band_set, inverter):\n    if not executa:\n        return 'Defina \"Executar\" = True e rode o grafico.'\n\n    adoc = Application.DocumentManager.MdiActiveDocument\n    ed = adoc.Editor\n    db = adoc.Database\n    civdoc = CivilApplication.ActiveDocument\n\n    nome_alin = nome_alin or 'EIXO'\n\n    # Leva o foco para o desenho para responder aos prompts\n    try:\n        from Autodesk.AutoCAD.Internal import Utils\n        Utils.SetFocusToDwgView()\n    except Exception:\n        pass\n\n    # ---- 1. selecao das linhas (fora do lock/transacao) ----\n    rej = '\\nObjeto invalido: selecione uma LINE.'\n    id1 = pedir_entidade(ed, '\\nSelecione a PRIMEIRA linha: ', rej, Line, True)\n    if id1 is None:\n        return 'Cancelado: primeira linha nao selecionada.'\n    id2 = pedir_entidade(ed, '\\nSelecione a SEGUNDA linha: ', rej, Line, True)\n    if id2 is None:\n        return 'Cancelado: segunda linha nao selecionada.'\n    if id1 == id2:\n        return 'Erro: a mesma linha foi selecionada duas vezes.'\n\n    # ---- 2. superficie ----\n    sup_id = None\n    if not nome_sup:\n        sup_id = pedir_entidade(ed, '\\nSelecione a SUPERFICIE: ',\n                                '\\nObjeto invalido: selecione uma superficie.',\n                                Surface, False)\n        if sup_id is None:\n            return 'Cancelado: superficie nao selecionada.'\n\n    # ---- 3. ponto de insercao do perfil longitudinal ----\n    popt = PromptPointOptions(\n        '\\nPonto de insercao do perfil longitudinal <automatico>: ')\n    popt.AllowNone = True\n    pres = ed.GetPoint(popt)\n    ponto_pv = pres.Value if pres.Status == PromptStatus.OK else None\n\n    with adoc.LockDocument():\n        t = db.TransactionManager.StartTransaction()\n        try:\n            l1 = t.GetObject(id1, OpenMode.ForRead)\n            l2 = t.GetObject(id2, OpenMode.ForRead)\n\n            if nome_sup:\n                sup_id = superficie_por_nome(civdoc, t, nome_sup)\n                if sup_id is None:\n                    t.Abort()\n                    return 'Erro: superficie \"%s\" nao encontrada.' % nome_sup\n            sup = t.GetObject(sup_id, OpenMode.ForRead)\n\n            ini, fim = eixo_entre(l1.StartPoint, l1.EndPoint,\n                                  l2.StartPoint, l2.EndPoint)\n            if inverter:\n                ini, fim = fim, ini\n            if ini.DistanceTo(fim) < 1e-6:\n                t.Abort()\n                return 'Erro: o eixo resultante tem comprimento zero.'\n\n            # ---- alinhamento ----\n            styles = civdoc.Styles\n            nome_final = nome_unico(nome_alin, nomes_alinhamentos(civdoc, t))\n            alin_id = Alignment.Create(\n                civdoc, nome_final, ObjectId.Null, db.Clayer,\n                estilo(styles.AlignmentStyles, est_alin),\n                estilo(styles.LabelSetStyles.AlignmentLabelSetStyles, ''))\n            alin = t.GetObject(alin_id, OpenMode.ForWrite)\n            alin.Entities.AddFixedLine(ini, fim)\n\n            # ---- perfil da superficie ----\n            nome_perfil = 'TN - %s' % sup.Name\n            Profile.CreateFromSurface(\n                nome_perfil, alin_id, sup_id, db.Clayer,\n                estilo(styles.ProfileStyles, est_perfil),\n                estilo(styles.LabelSetStyles.ProfileLabelSetStyles, ''))\n\n            # ---- perfil longitudinal (Profile View) ----\n            if ponto_pv is None:\n                ext = alin.GeometricExtents\n                folga = max(ext.MaxPoint.X - ext.MinPoint.X,\n                            ext.MaxPoint.Y - ext.MinPoint.Y, 10.0) * 0.2\n                ponto_pv = Point3d(ext.MaxPoint.X + folga, ext.MinPoint.Y, 0.0)\n            ProfileView.Create(\n                alin_id, ponto_pv, 'PL - %s' % nome_final,\n                estilo(styles.ProfileViewBandSetStyles, band_set),\n                estilo(styles.ProfileViewStyles, est_pv))\n\n            t.Commit()\n        except Exception:\n            t.Abort()\n            raise\n        finally:\n            t.Dispose()\n\n    ed.WriteMessage('\\nAlinhamento \"%s\" criado (%.3f m) com perfil \"%s\".\\n'\n                    % (nome_final, ini.DistanceTo(fim), nome_perfil))\n    return ['Alinhamento: %s' % nome_final,\n            'Comprimento: %.3f' % ini.DistanceTo(fim),\n            'Perfil: %s' % nome_perfil,\n            'Perfil longitudinal: PL - %s' % nome_final]\n\n\ntry:\n    OUT = executar(IN[0], texto(IN[1]), texto(IN[2]), texto(IN[3]),\n                   texto(IN[4]), texto(IN[5]), texto(IN[6]), bool(IN[7]))\nexcept Exception:\n    OUT = 'ERRO:\\n' + traceback.format_exc()\n",
+      "Code": "# ============================================================\n# eixo_entre_linhas.py - codigo do no Python de EixoEntreLinhas.dyn\n#\n# Civil 3D 2021 / Dynamo 2.5-2.6 / IronPython 2.7\n#\n# 1. Pede no desenho duas curvas abertas: LINE, ARC, polilinha (2D/3D,\n#    com ou sem arcos) ou SPLINE.\n# 2. Calcula o eixo (centro) entre elas e cria um alinhamento com\n#    tangentes e curvas ajustadas a esse eixo.\n# 3. Pede a superficie (ou usa o nome informado) e cria o perfil\n#    da superficie (Surface Profile) nesse alinhamento.\n# 4. Pede o ponto de insercao e cria o perfil longitudinal\n#    (Profile View) ja com o perfil da superficie.\n#\n# Entradas (IN):\n#   IN[0] Executar (bool)          - so roda quando True\n#   IN[1] Nome do alinhamento      - ex. \"EIXO\" (sufixo automatico se ja existir)\n#   IN[2] Nome da superficie       - vazio = clicar na superficie no desenho\n#   IN[3] Estilo do alinhamento    - vazio = primeiro estilo do desenho\n#   IN[4] Estilo do perfil         - vazio = primeiro estilo do desenho\n#   IN[5] Estilo do perfil long.   - (Profile View Style) vazio = primeiro\n#   IN[6] Band set do perfil long. - vazio = primeiro\n#   IN[7] Inverter sentido (bool)  - inverte o sentido do estaqueamento\n#   IN[8] Tolerancia (m)           - desvio maximo do alinhamento em relacao\n#                                    ao eixo calculado (padrao 0.01)\n#\n# Este arquivo e a fonte; o .dyn e gerado por dynamo/build_dyn.py.\n# (Strings sem acento para evitar problemas de codificacao.)\n# ============================================================\n\nimport clr\nimport math\nimport traceback\n\nclr.AddReference('AcMgd')\nclr.AddReference('AcCoreMgd')\nclr.AddReference('AcDbMgd')\nclr.AddReference('AecBaseMgd')\nclr.AddReference('AeccDbMgd')\n\nfrom Autodesk.AutoCAD.ApplicationServices import Application\nfrom Autodesk.AutoCAD.EditorInput import (PromptEntityOptions,\n                                          PromptPointOptions, PromptStatus)\nfrom Autodesk.AutoCAD.DatabaseServices import (Curve,\n                                               OpenMode, ObjectId, Polyline,\n                                               Ray, Xline)\nfrom Autodesk.AutoCAD.Geometry import Point2d, Point3d, Vector3d\nfrom Autodesk.Civil.ApplicationServices import CivilApplication\nfrom Autodesk.Civil.DatabaseServices import (Alignment, PolylineOptions,\n                                             Profile, ProfileView, Surface)\n\nPASSO_AMOSTRA = 0.5     # espacamento (m) dos pontos de calculo do eixo\nMIN_AMOSTRAS = 16\nMAX_AMOSTRAS = 3000\nRAIO_MAXIMO = 100000.0  # acima disso o trecho e tratado como reta\n\n\ndef texto(v):\n    \"\"\"Normaliza entrada de texto do Dynamo (None -> '').\"\"\"\n    if v is None:\n        return ''\n    return str(v).strip()\n\n\n# ------------------------------------------------------------\n# Geometria pura (pontos como tuplas (x, y)) - independe do AutoCAD\n# ------------------------------------------------------------\ndef dist(a, b):\n    return math.hypot(b[0] - a[0], b[1] - a[1])\n\n\ndef media(a, b):\n    return ((a[0] + b[0]) / 2.0, (a[1] + b[1]) / 2.0)\n\n\ndef ponto_extremo(a, b, proximo1, proximo2):\n    \"\"\"Ponto do segmento a-b (que liga as pontas das curvas) equidistante\n    das duas curvas - mantem o eixo com o comprimento total das curvas.\"\"\"\n    def g(t):\n        p = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)\n        return dist(p, proximo1(p)) - dist(p, proximo2(p)), p\n    lo, hi = 0.0, 1.0\n    p = media(a, b)\n    if g(lo)[0] > 0 or g(hi)[0] < 0:\n        return p\n    for _ in range(50):\n        meio = (lo + hi) / 2.0\n        v, p = g(meio)\n        if abs(v) < 1e-7:\n            break\n        if v < 0:\n            lo = meio\n        else:\n            hi = meio\n    return p\n\n\ndef pontos_eixo(amostra1, amostra2, proximo1, proximo2, n, refinos=6):\n    \"\"\"Pontos do eixo entre duas curvas.\n\n    amostraK(f) -> ponto na fracao f (0..1) do comprimento da curva K\n    proximoK(p) -> ponto da curva K (prolongada nas pontas) mais proximo de p\n\n    Cada ponto interno parte da media dos pontos de mesma fracao das duas\n    curvas e e refinado para ficar equidistante delas; as extremidades\n    ficam sobre o segmento que liga as pontas das curvas.\n    \"\"\"\n    pts = []\n    for i in range(n + 1):\n        f = float(i) / n\n        a, b = amostra1(f), amostra2(f)\n        if i == 0 or i == n:\n            m = ponto_extremo(a, b, proximo1, proximo2)\n        else:\n            m = media(a, b)\n            for _ in range(refinos):\n                novo = media(proximo1(m), proximo2(m))\n                mudou = dist(novo, m)\n                m = novo\n                if mudou < 1e-6:\n                    break\n        if not pts or dist(pts[-1], m) > 1e-6:\n            pts.append(m)\n    return pts\n\n\ndef precisa_inverter(a1, b1, a2, b2):\n    \"\"\"True se a curva 2 esta desenhada no sentido contrario da curva 1.\"\"\"\n    return dist(a1, b2) + dist(b1, a2) < dist(a1, a2) + dist(b1, b2)\n\n\ndef desvio_reta(pts, i, j):\n    a, b = pts[i], pts[j]\n    L = dist(a, b)\n    if L < 1e-9:\n        return float('inf')\n    dx, dy = (b[0] - a[0]) / L, (b[1] - a[1]) / L\n    d = 0.0\n    for k in range(i + 1, j):\n        p = pts[k]\n        d = max(d, abs((p[0] - a[0]) * dy - (p[1] - a[1]) * dx))\n    return d\n\n\ndef circulo(a, b, c):\n    \"\"\"Centro e raio do circulo por 3 pontos (None se colineares).\"\"\"\n    d = 2.0 * (a[0] * (b[1] - c[1]) + b[0] * (c[1] - a[1]) +\n               c[0] * (a[1] - b[1]))\n    if abs(d) < 1e-12:\n        return None\n    a2 = a[0] ** 2 + a[1] ** 2\n    b2 = b[0] ** 2 + b[1] ** 2\n    c2 = c[0] ** 2 + c[1] ** 2\n    ux = (a2 * (b[1] - c[1]) + b2 * (c[1] - a[1]) + c2 * (a[1] - b[1])) / d\n    uy = (a2 * (c[0] - b[0]) + b2 * (a[0] - c[0]) + c2 * (b[0] - a[0])) / d\n    centro = (ux, uy)\n    return centro, dist(centro, a)\n\n\ndef bulge_arco(a, m, b):\n    \"\"\"Bulge da polilinha para o arco que vai de a ate b passando por m.\"\"\"\n    circ = circulo(a, m, b)\n    if circ is None:\n        return 0.0\n    c = circ[0]\n    ang_a = math.atan2(a[1] - c[1], a[0] - c[0])\n    ang_b = math.atan2(b[1] - c[1], b[0] - c[0])\n    giro = (m[0] - a[0]) * (b[1] - m[1]) - (m[1] - a[1]) * (b[0] - m[0])\n    if giro > 0:   # anti-horario\n        varredura = (ang_b - ang_a) % (2 * math.pi)\n    else:          # horario\n        varredura = -((ang_a - ang_b) % (2 * math.pi))\n    return math.tan(varredura / 4.0)\n\n\ndef desvio_arco(pts, i, j):\n    if j - i < 2:\n        return float('inf')\n    circ = circulo(pts[i], pts[(i + j) // 2], pts[j])\n    if circ is None or circ[1] > RAIO_MAXIMO:\n        return float('inf')\n    c, r = circ\n    if abs(bulge_arco(pts[i], pts[(i + j) // 2], pts[j])) > 0.98:\n        return float('inf')   # arco de quase 360 graus: nao e um trecho\n    d = 0.0\n    for k in range(i + 1, j):\n        d = max(d, abs(dist(c, pts[k]) - r))\n    return d\n\n\ndef maior_trecho(pts, i, desvio, tol, minimo):\n    \"\"\"Maior j tal que pts[i..j] cabe no trecho (busca exponencial+binaria).\"\"\"\n    n = len(pts) - 1\n    ok = i + minimo\n    if ok > n or desvio(pts, i, ok) > tol:\n        return None\n    passo = 1\n    while ok < n:\n        prox = min(n, ok + passo)\n        if desvio(pts, i, prox) <= tol:\n            ok = prox\n            passo *= 2\n        else:\n            lo, hi = ok, prox     # lo cabe, hi nao\n            while hi - lo > 1:\n                meio = (lo + hi) // 2\n                if desvio(pts, i, meio) <= tol:\n                    lo = meio\n                else:\n                    hi = meio\n            return lo\n    return ok\n\n\ndef ajustar_trechos(pts, tol):\n    \"\"\"Converte a sequencia de pontos em retas e arcos.\n\n    Retorna lista de vertices (ponto, bulge) no formato de polilinha; o\n    ultimo vertice tem bulge 0.\n    \"\"\"\n    vertices = []\n    i, n = 0, len(pts) - 1\n    while i < n:\n        j_reta = maior_trecho(pts, i, desvio_reta, tol, 1) or (i + 1)\n        j_arco = maior_trecho(pts, i, desvio_arco, tol, 2)\n        if j_arco is not None and j_arco > j_reta:\n            vertices.append((pts[i], bulge_arco(pts[i], pts[(i + j_arco) // 2],\n                                                pts[j_arco])))\n            i = j_arco\n        else:\n            vertices.append((pts[i], 0.0))\n            i = j_reta\n    vertices.append((pts[n], 0.0))\n    return vertices\n\n\n# ------------------------------------------------------------\n# Adaptadores AutoCAD\n# ------------------------------------------------------------\ndef comprimento(c):\n    return (c.GetDistanceAtParameter(c.EndParam) -\n            c.GetDistanceAtParameter(c.StartParam))\n\n\ndef funcoes_curva(c, inverter=False):\n    \"\"\"(amostra(f), proximo(p)) de uma curva, opcionalmente invertida.\"\"\"\n    d0 = c.GetDistanceAtParameter(c.StartParam)\n    L = comprimento(c)\n\n    def amostra(f):\n        if inverter:\n            f = 1.0 - f\n        if f <= 0.0:\n            p = c.StartPoint\n        elif f >= 1.0:\n            p = c.EndPoint\n        else:\n            p = c.GetPointAtDist(d0 + L * f)\n        return (p.X, p.Y)\n\n    estado = {'estender': True}\n\n    def proximo(pt):\n        # Projeta na vertical (funciona com curvas em qualquer elevacao) e\n        # considera a curva prolongada nas pontas, para que curvas de\n        # comprimentos diferentes nao \"puxem\" o eixo nas extremidades.\n        q = Point3d(pt[0], pt[1], 0.0)\n        if estado['estender']:\n            try:\n                p = c.GetClosestPointTo(q, Vector3d.ZAxis, True)\n                return (p.X, p.Y)\n            except Exception:\n                estado['estender'] = False   # ex.: splines\n        p = c.GetClosestPointTo(q, Vector3d.ZAxis, False)\n        return (p.X, p.Y)\n\n    return amostra, proximo\n\n\ndef xy(p):\n    return (p.X, p.Y)\n\n\ndef estilo(colecao, nome):\n    \"\"\"Estilo pelo nome; se vazio ou inexistente, o primeiro da colecao.\"\"\"\n    if nome and colecao.Contains(nome):\n        return colecao[nome]\n    if colecao.Count == 0:\n        raise Exception('O desenho nao possui estilos do tipo necessario.')\n    return colecao[0]\n\n\ndef pedir_entidade(ed, msg, rejeicao, classe, exata):\n    opt = PromptEntityOptions(msg)\n    opt.SetRejectMessage(rejeicao)\n    opt.AddAllowedClass(clr.GetClrType(classe), exata)\n    res = ed.GetEntity(opt)\n    if res.Status != PromptStatus.OK:\n        return None\n    return res.ObjectId\n\n\ndef nomes_alinhamentos(civdoc, t):\n    ids = list(civdoc.GetAlignmentIds())\n    try:\n        ids += list(civdoc.GetSitelessAlignmentIds())\n    except Exception:\n        pass\n    nomes = set()\n    for i in ids:\n        nomes.add(t.GetObject(i, OpenMode.ForRead).Name)\n    return nomes\n\n\ndef nome_unico(base, existentes):\n    if base not in existentes:\n        return base\n    n = 1\n    while True:\n        cand = '%s (%d)' % (base, n)\n        if cand not in existentes:\n            return cand\n        n += 1\n\n\ndef superficie_por_nome(civdoc, t, nome):\n    for i in civdoc.GetSurfaceIds():\n        if t.GetObject(i, OpenMode.ForRead).Name == nome:\n            return i\n    return None\n\n\ndef executar(executa, nome_alin, nome_sup, est_alin, est_perfil,\n             est_pv, band_set, inverter, tol):\n    if not executa:\n        return 'Defina \"Executar\" = True e rode o grafico.'\n\n    adoc = Application.DocumentManager.MdiActiveDocument\n    ed = adoc.Editor\n    db = adoc.Database\n    civdoc = CivilApplication.ActiveDocument\n\n    nome_alin = nome_alin or 'EIXO'\n    tol = tol if tol and tol > 0 else 0.01\n\n    # Leva o foco para o desenho para responder aos prompts\n    try:\n        from Autodesk.AutoCAD.Internal import Utils\n        Utils.SetFocusToDwgView()\n    except Exception:\n        pass\n\n    # ---- 1. selecao das curvas (fora do lock/transacao) ----\n    rej = '\\nObjeto invalido: selecione linha, arco, polilinha ou spline.'\n    id1 = pedir_entidade(ed, '\\nSelecione a PRIMEIRA linha/polilinha: ',\n                         rej, Curve, False)\n    if id1 is None:\n        return 'Cancelado: primeira linha nao selecionada.'\n    id2 = pedir_entidade(ed, '\\nSelecione a SEGUNDA linha/polilinha: ',\n                         rej, Curve, False)\n    if id2 is None:\n        return 'Cancelado: segunda linha nao selecionada.'\n    if id1 == id2:\n        return 'Erro: a mesma linha foi selecionada duas vezes.'\n\n    # ---- 2. superficie ----\n    sup_id = None\n    if not nome_sup:\n        sup_id = pedir_entidade(ed, '\\nSelecione a SUPERFICIE: ',\n                                '\\nObjeto invalido: selecione uma superficie.',\n                                Surface, False)\n        if sup_id is None:\n            return 'Cancelado: superficie nao selecionada.'\n\n    # ---- 3. ponto de insercao do perfil longitudinal ----\n    popt = PromptPointOptions(\n        '\\nPonto de insercao do perfil longitudinal <automatico>: ')\n    popt.AllowNone = True\n    pres = ed.GetPoint(popt)\n    ponto_pv = pres.Value if pres.Status == PromptStatus.OK else None\n\n    with adoc.LockDocument():\n        t = db.TransactionManager.StartTransaction()\n        try:\n            c1 = t.GetObject(id1, OpenMode.ForRead)\n            c2 = t.GetObject(id2, OpenMode.ForRead)\n            for c in (c1, c2):\n                if isinstance(c, (Xline, Ray)) or c.Closed:\n                    t.Abort()\n                    return ('Erro: use curvas abertas (sem XLINE/RAY, '\n                            'circulos ou polilinhas fechadas).')\n\n            if nome_sup:\n                sup_id = superficie_por_nome(civdoc, t, nome_sup)\n                if sup_id is None:\n                    t.Abort()\n                    return 'Erro: superficie \"%s\" nao encontrada.' % nome_sup\n            sup = t.GetObject(sup_id, OpenMode.ForRead)\n\n            # ---- eixo entre as curvas ----\n            inv2 = precisa_inverter(xy(c1.StartPoint), xy(c1.EndPoint),\n                                    xy(c2.StartPoint), xy(c2.EndPoint))\n            am1, px1 = funcoes_curva(c1)\n            am2, px2 = funcoes_curva(c2, inv2)\n            n = int(max(comprimento(c1), comprimento(c2)) / PASSO_AMOSTRA)\n            n = min(max(n, MIN_AMOSTRAS), MAX_AMOSTRAS)\n            pts = pontos_eixo(am1, am2, px1, px2, n)\n            if inverter:\n                pts.reverse()\n            if len(pts) < 2:\n                t.Abort()\n                return 'Erro: o eixo resultante tem comprimento zero.'\n            vertices = ajustar_trechos(pts, tol)\n\n            # polilinha temporaria com o eixo (convertida em alinhamento)\n            pl = Polyline()\n            for k, (p, b) in enumerate(vertices):\n                pl.AddVertexAt(k, Point2d(p[0], p[1]), b, 0.0, 0.0)\n            pl.Layer = c1.Layer\n            ms = t.GetObject(db.CurrentSpaceId, OpenMode.ForWrite)\n            ms.AppendEntity(pl)\n            t.AddNewlyCreatedDBObject(pl, True)\n            comp_eixo = pl.Length\n            n_curvas = len([v for v in vertices[:-1] if abs(v[1]) > 1e-9])\n            n_tang = len(vertices) - 1 - n_curvas\n\n            # ---- alinhamento ----\n            styles = civdoc.Styles\n            nome_final = nome_unico(nome_alin, nomes_alinhamentos(civdoc, t))\n            opts = PolylineOptions()\n            opts.PlineId = pl.ObjectId\n            opts.AddCurvesBetweenTangents = False\n            opts.EraseExistingEntities = True\n            alin_id = Alignment.Create(\n                civdoc, opts, nome_final, ObjectId.Null, db.Clayer,\n                estilo(styles.AlignmentStyles, est_alin),\n                estilo(styles.LabelSetStyles.AlignmentLabelSetStyles, ''))\n            alin = t.GetObject(alin_id, OpenMode.ForRead)\n\n            # ---- perfil da superficie ----\n            nome_perfil = 'TN - %s' % sup.Name\n            Profile.CreateFromSurface(\n                nome_perfil, alin_id, sup_id, db.Clayer,\n                estilo(styles.ProfileStyles, est_perfil),\n                estilo(styles.LabelSetStyles.ProfileLabelSetStyles, ''))\n\n            # ---- perfil longitudinal (Profile View) ----\n            if ponto_pv is None:\n                ext = alin.GeometricExtents\n                folga = max(ext.MaxPoint.X - ext.MinPoint.X,\n                            ext.MaxPoint.Y - ext.MinPoint.Y, 10.0) * 0.2\n                ponto_pv = Point3d(ext.MaxPoint.X + folga, ext.MinPoint.Y, 0.0)\n            ProfileView.Create(\n                alin_id, ponto_pv, 'PL - %s' % nome_final,\n                estilo(styles.ProfileViewBandSetStyles, band_set),\n                estilo(styles.ProfileViewStyles, est_pv))\n\n            t.Commit()\n        except Exception:\n            t.Abort()\n            raise\n        finally:\n            t.Dispose()\n\n    ed.WriteMessage('\\nAlinhamento \"%s\" criado (%.3f m) com perfil \"%s\".\\n'\n                    % (nome_final, comp_eixo, nome_perfil))\n    return ['Alinhamento: %s' % nome_final,\n            'Comprimento: %.3f' % comp_eixo,\n            'Tangentes: %d  |  Curvas: %d' % (n_tang, n_curvas),\n            'Perfil: %s' % nome_perfil,\n            'Perfil longitudinal: PL - %s' % nome_final]\n\n\ntry:\n    OUT = executar(IN[0], texto(IN[1]), texto(IN[2]), texto(IN[3]),\n                   texto(IN[4]), texto(IN[5]), texto(IN[6]), bool(IN[7]),\n                   float(IN[8] or 0))\nexcept Exception:\n    OUT = 'ERRO:\\n' + traceback.format_exc()\n",
       "VariableInputPorts": true,
-      "Id": "9e4ff72e82cb41d3946766655845bcfe",
+      "Id": "bc15c01b33404d61ba126afccca2812c",
       "Inputs": [
         {
-          "Id": "4e8b2ba48bfa4cf0bf73c1abd38078dd",
+          "Id": "d9acc50a3eb74e79941272bb70c0b88b",
           "Name": "IN[0]",
           "Description": "Input #0",
           "UsingDefaultValue": false,
@@ -243,7 +272,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "0f2fd854618d4c00bb4682b86d800136",
+          "Id": "302fe10e811343cab933c5842f9a602f",
           "Name": "IN[1]",
           "Description": "Input #1",
           "UsingDefaultValue": false,
@@ -252,7 +281,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "2755722ad5b44d4aa0a3471d15172506",
+          "Id": "2a3fe391efe44e3382698db39eee2029",
           "Name": "IN[2]",
           "Description": "Input #2",
           "UsingDefaultValue": false,
@@ -261,7 +290,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "b6ef0c1be7d74aea9d10b0ebc71f55bf",
+          "Id": "c01ad0ce60374cf4b448c5459051eb01",
           "Name": "IN[3]",
           "Description": "Input #3",
           "UsingDefaultValue": false,
@@ -270,7 +299,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "1860aa5ad12d46c2859b9578c275e354",
+          "Id": "e90485be247545ed9da0c603eedd78b9",
           "Name": "IN[4]",
           "Description": "Input #4",
           "UsingDefaultValue": false,
@@ -279,7 +308,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "f7854271ccc449bc971e13420b065c92",
+          "Id": "de2aab059c094c018ef3672b7cb4d02d",
           "Name": "IN[5]",
           "Description": "Input #5",
           "UsingDefaultValue": false,
@@ -288,7 +317,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "fb36a9b791ed4e3a9507c7275e108f0b",
+          "Id": "1cd1ff79049f42779a4b1b0dc0870635",
           "Name": "IN[6]",
           "Description": "Input #6",
           "UsingDefaultValue": false,
@@ -297,9 +326,18 @@
           "KeepListStructure": false
         },
         {
-          "Id": "f8d98ad481be45618f4ec0ac4cc76a9c",
+          "Id": "91d2fb77533a4f8daa4dcebcbde3eb22",
           "Name": "IN[7]",
           "Description": "Input #7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fe165c00b12d4a86b63a1b7ee687acb3",
+          "Name": "IN[8]",
+          "Description": "Input #8",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -308,7 +346,7 @@
       ],
       "Outputs": [
         {
-          "Id": "b87824da605f46f4973a76855fd69505",
+          "Id": "cddd88b77a3d4454a2d62e5c0eeaac66",
           "Name": "OUT",
           "Description": "Result of the python script",
           "UsingDefaultValue": false,
@@ -323,10 +361,10 @@
     {
       "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
       "NodeType": "ExtensionNode",
-      "Id": "88edabf1908543368e80d8068b096816",
+      "Id": "76e648e4077e48afa785e5a7af7ecf20",
       "Inputs": [
         {
-          "Id": "f344d5b0314549dd937da4f2d81f2173",
+          "Id": "22b3dc9bdb3740ebb50ce549c826c53d",
           "Name": "",
           "Description": "Node to show output from",
           "UsingDefaultValue": false,
@@ -337,7 +375,7 @@
       ],
       "Outputs": [
         {
-          "Id": "6c01fb95876c4f2688fb6abcbb3bfb04",
+          "Id": "14385d893dc142628724c2d26b7d7f5b",
           "Name": "",
           "Description": "Node output",
           "UsingDefaultValue": false,
@@ -352,49 +390,54 @@
   ],
   "Connectors": [
     {
-      "Start": "437623056cde465983c0d0fe97b9f2bf",
-      "End": "4e8b2ba48bfa4cf0bf73c1abd38078dd",
-      "Id": "83013d08a7b44286976176bb1846bf03"
+      "Start": "76f8d336a2f348f3b702b46fa8efd35f",
+      "End": "d9acc50a3eb74e79941272bb70c0b88b",
+      "Id": "366749b571fb482db3c13cb683497f38"
     },
     {
-      "Start": "bd65fded239d498da42bb00da9b5dd44",
-      "End": "0f2fd854618d4c00bb4682b86d800136",
-      "Id": "c8b4acf0bd9845aa933e1e727bedf869"
+      "Start": "51d978700add4639b89eeccf3ce6f489",
+      "End": "302fe10e811343cab933c5842f9a602f",
+      "Id": "e20ed7cfd7dd4697b683c9ca500971f8"
     },
     {
-      "Start": "d17c79cda5df4217bb9279f35ebaac9b",
-      "End": "2755722ad5b44d4aa0a3471d15172506",
-      "Id": "7338f1a16d6541e48b4202f02aec6d00"
+      "Start": "7a68b5c5c7ca4df591b2a1c0710c921a",
+      "End": "2a3fe391efe44e3382698db39eee2029",
+      "Id": "ea79c3d8ca0c4142bbc8da8fadda9571"
     },
     {
-      "Start": "9d0a470e2fd642038138d910d1bc0e79",
-      "End": "b6ef0c1be7d74aea9d10b0ebc71f55bf",
-      "Id": "762dc5ef61614af88ae3cc2ed60ea28e"
+      "Start": "1683e1a213ce4b1a8657fe035fc3545c",
+      "End": "c01ad0ce60374cf4b448c5459051eb01",
+      "Id": "f5d84e027db24cebaff5cdb4577c9af9"
     },
     {
-      "Start": "b7d75d85e0bc4459ab026e118844c87a",
-      "End": "1860aa5ad12d46c2859b9578c275e354",
-      "Id": "5e83377c90a44361ac4a92234db76dc7"
+      "Start": "58abee6ca0a440f4b53209e504df31cf",
+      "End": "e90485be247545ed9da0c603eedd78b9",
+      "Id": "317aacb003f3459f8517e564d9c51c3b"
     },
     {
-      "Start": "9e6e7d509b1b4880aa4b487aaad05710",
-      "End": "f7854271ccc449bc971e13420b065c92",
-      "Id": "c1d5b1a3e1e0475a93ab17edda4ffa66"
+      "Start": "ff2bd59eaea444a4a2b65eae0c2be12b",
+      "End": "de2aab059c094c018ef3672b7cb4d02d",
+      "Id": "931a6b057c054b58bbfbaffbf0be6a32"
     },
     {
-      "Start": "4c4e4e101a504bbdab4edac3144d3d4f",
-      "End": "fb36a9b791ed4e3a9507c7275e108f0b",
-      "Id": "7186955499714502aea622566b6ae844"
+      "Start": "088c8570e37f4823a6770803b6c10671",
+      "End": "1cd1ff79049f42779a4b1b0dc0870635",
+      "Id": "fd1cd350538b4ee58bd0ff2e1b1274de"
     },
     {
-      "Start": "c749ee5772dd4cec96a60889532c583a",
-      "End": "f8d98ad481be45618f4ec0ac4cc76a9c",
-      "Id": "24fba866c09a4e3cb6a3b755f94de66a"
+      "Start": "90fddec8e8c14e95827dfd16a24e6e94",
+      "End": "91d2fb77533a4f8daa4dcebcbde3eb22",
+      "Id": "1d9a0a143d134b89b610995aaea7c75f"
     },
     {
-      "Start": "b87824da605f46f4973a76855fd69505",
-      "End": "f344d5b0314549dd937da4f2d81f2173",
-      "Id": "47eb51d728604550b0122dc01558954d"
+      "Start": "3ee834e155df480692ea85df36326355",
+      "End": "fe165c00b12d4a86b63a1b7ee687acb3",
+      "Id": "7dde10996fe0417286554df6fbb73fef"
+    },
+    {
+      "Start": "cddd88b77a3d4454a2d62e5c0eeaac66",
+      "End": "22b3dc9bdb3740ebb50ce549c826c53d",
+      "Id": "3339f36cc8484643ab828e05d992915a"
     }
   ],
   "Dependencies": [],
@@ -423,7 +466,7 @@
     },
     "NodeViews": [
       {
-        "Id": "d60d0cf36c474c4486a2b235b5b4fcd1",
+        "Id": "9a5483cb53f942cabd9a32d48d3531a9",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Executar",
@@ -433,7 +476,7 @@
         "Y": 0.0
       },
       {
-        "Id": "ca13249771d945aaac6aaa2a0b9d2fd3",
+        "Id": "6d5bf22bb2384b15a77aa1c6bab918d5",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Nome do alinhamento",
@@ -443,7 +486,7 @@
         "Y": 110.0
       },
       {
-        "Id": "d85d9470d9f948cfb027c56ef566503d",
+        "Id": "0a8320ec15a9476ca74d2690c6a07cad",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Nome da superficie",
@@ -453,7 +496,7 @@
         "Y": 220.0
       },
       {
-        "Id": "f3d23f6b288241309f235bffdbc3344b",
+        "Id": "884bf8e03fb04e658503b285707fe5da",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Estilo do alinhamento",
@@ -463,7 +506,7 @@
         "Y": 330.0
       },
       {
-        "Id": "02049ec061d743668eb544692542052e",
+        "Id": "0659efafdd9843d8849186fd3e6adc28",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Estilo do perfil",
@@ -473,7 +516,7 @@
         "Y": 440.0
       },
       {
-        "Id": "715c3017159448b5835193301619dde7",
+        "Id": "60c89b95d1d74d2aa9f01ad70169058a",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Estilo do perfil longitudinal",
@@ -483,7 +526,7 @@
         "Y": 550.0
       },
       {
-        "Id": "0597245cd8a54b9093b3b28ebb1d5fd4",
+        "Id": "183dde9ea7984b76895fc81a492332a7",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Band set do perfil longitudinal",
@@ -493,7 +536,7 @@
         "Y": 660.0
       },
       {
-        "Id": "2970310eaabf471fbbbb0414b06e821b",
+        "Id": "c20ba6a5d8f94f9ca29608465b4c1b66",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Inverter sentido",
@@ -503,24 +546,34 @@
         "Y": 770.0
       },
       {
-        "Id": "9e4ff72e82cb41d3946766655845bcfe",
+        "Id": "10bb3b99eb0a4762932b4fc8bd212244",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Tolerancia (m)",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 880.0
+      },
+      {
+        "Id": "bc15c01b33404d61ba126afccca2812c",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Name": "EixoEntreLinhas",
         "ShowGeometry": true,
         "Excluded": false,
         "X": 450.0,
-        "Y": 385.0
+        "Y": 440.0
       },
       {
-        "Id": "88edabf1908543368e80d8068b096816",
+        "Id": "76e648e4077e48afa785e5a7af7ecf20",
         "IsSetAsInput": false,
         "IsSetAsOutput": true,
         "Name": "Resultado",
         "ShowGeometry": true,
         "Excluded": false,
         "X": 750.0,
-        "Y": 385.0
+        "Y": 440.0
       }
     ],
     "Annotations": [],

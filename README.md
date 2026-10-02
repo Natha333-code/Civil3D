@@ -43,7 +43,9 @@ Compativeis com Dynamo 2.5/2.6 (IronPython 2.7), que acompanha o Civil 3D 2021.
 
 ### `EixoEntreLinhas.dyn` - alinhamento no eixo de duas linhas + perfil longitudinal
 
-1. Selecione duas **linhas** (`LINE`) e um alinhamento e criado no **centro** entre elas.
+1. Selecione duas **linhas ou polilinhas** - retas ou curvas: `LINE`, `ARC`, polilinha 2D/3D
+   (com ou sem arcos) ou `SPLINE` - e um alinhamento e criado no **centro** entre elas,
+   com **tangentes e curvas**.
 2. A **superficie** escolhida e amostrada no alinhamento (perfil de superficie `TN - <superficie>`).
 3. O **perfil longitudinal** (Profile View `PL - <alinhamento>`) e criado ja com esse perfil.
 
@@ -52,7 +54,7 @@ Compativeis com Dynamo 2.5/2.6 (IronPython 2.7), que acompanha o Civil 3D 2021.
 - Abra o desenho, va em **Manage > Dynamo** (ou **Dynamo Player**) e abra `dynamo/EixoEntreLinhas.dyn`.
 - Preencha as entradas e coloque **Executar = True**. No Dynamo, clique em **Run** (o grafico esta em modo *Manual*).
 - Responda aos prompts na linha de comando do Civil 3D:
-  primeira linha, segunda linha, superficie (se o nome nao foi informado) e ponto de insercao
+  primeira linha/polilinha, segunda linha/polilinha, superficie (se o nome nao foi informado) e ponto de insercao
   do perfil longitudinal (**Enter** = posicao automatica a direita do alinhamento).
 - O no **Resultado** mostra o que foi criado ou a mensagem de erro.
 
@@ -64,12 +66,21 @@ Compativeis com Dynamo 2.5/2.6 (IronPython 2.7), que acompanha o Civil 3D 2021.
 | Estilo do alinhamento / do perfil / do perfil longitudinal | vazio | Nome do estilo; vazio ou inexistente = primeiro estilo do desenho. |
 | Band set do perfil longitudinal | vazio | Idem. |
 | Inverter sentido | `False` | Inverte o sentido do estaqueamento. |
+| Tolerancia (m) | `0.01` | Desvio maximo do alinhamento em relacao ao eixo calculado. Menor = mais fiel (mais trechos); maior = menos trechos. |
 
 **Observacoes**
 
-- O eixo liga o ponto medio dos inicios ao ponto medio dos fins das linhas (a segunda linha e
-  orientada automaticamente no mesmo sentido da primeira). Funciona com linhas paralelas ou nao,
-  de comprimentos iguais ou diferentes.
+- **Como o eixo e calculado:** a rotina gera pontos a cada ~0,5 m que ficam **equidistantes**
+  das duas curvas (curvas prolongadas nas pontas, entao bordos de comprimentos diferentes ou
+  desencontrados funcionam). Depois esses pontos sao convertidos em retas e arcos dentro da
+  tolerancia e viram o alinhamento. Ex.: dois bordos de pista com tangente-curva-tangente geram
+  um alinhamento tangente-curva-tangente com o raio medio.
+- A segunda curva e orientada automaticamente no mesmo sentido da primeira. As curvas podem ter
+  quantidade de vertices diferente.
+- As tangentes e curvas sao entidades fixas que seguem o eixo dentro da tolerancia; a
+  tangencia entre elas nao e imposta (um ponto de tangencia pode deslocar ~1 m com 0,01 m de
+  tolerancia). Em quinas vivas (polilinha sem arco), o eixo ganha uma curva pequena de concordancia.
+- Nao aceita curvas fechadas (circulos, polilinhas fechadas), `XLINE` ou `RAY`.
 - O alinhamento e criado sem site (*siteless*), no layer corrente, e com o primeiro label set.
 - O estaqueamento segue o sentido da primeira linha selecionada (use *Inverter sentido* para trocar).
 - Se o Dynamo estiver em primeiro plano, clique no desenho antes de responder aos prompts.
