@@ -84,3 +84,47 @@ Compativeis com Dynamo 2.5/2.6 (IronPython 2.7), que acompanha o Civil 3D 2021.
 - O alinhamento e criado sem site (*siteless*), no layer corrente, e com o primeiro label set.
 - O estaqueamento segue o sentido da primeira linha selecionada (use *Inverter sentido* para trocar).
 - Se o Dynamo estiver em primeiro plano, clique no desenho antes de responder aos prompts.
+
+### `LigacoesPrediais.dyn` - ligacoes perpendiculares a rede, na divisa mais baixa de cada lote
+
+Cria **uma linha magenta por lote** (parcel), perpendicular a rede (pipe network):
+
+- parte do **eixo do tubo** e termina **1 m antes** do limite do lote (*Recuo do lote*);
+- fica a **1,5 m da divisa lateral** com o lote vizinho (*Afastamento da divisa*);
+- usa sempre a **divisa de menor cota**, medida na superficie existente.
+
+**Como usar**
+
+- Abra `dynamo/LigacoesPrediais.dyn`, coloque **Executar = True** e clique em **Run**.
+- Na linha de comando: clique em **um tubo** da rede (todos os tubos dessa rede sao usados) e,
+  se o nome nao foi informado, na **superficie existente**.
+- O no **Resultado** lista cada ligacao (comprimento, divisa usada, vizinho e cotas das divisas)
+  e os lotes ignorados com o motivo.
+
+| Entrada | Padrao | Observacao |
+|---|---|---|
+| Executar | `False` | So roda com `True`. |
+| Nome da superficie | vazio | Vazio = clicar na superficie no desenho. |
+| Recuo do lote (m) | `1.0` | A linha termina esta distancia antes do lote. |
+| Afastamento da divisa (m) | `1.5` | Distancia entre a linha e a divisa lateral. |
+| Distancia maxima rede-lote (m) | `30` | Lotes mais distantes sao ignorados. |
+| Layer | `LIGACOES` | Criado em magenta se nao existir. As linhas tambem recebem cor magenta. |
+| Usar LINE | `False` | `False` = polilinha (LWPOLYLINE); `True` = LINE. |
+| Apagar linhas anteriores do layer | `False` | Use `True` para refazer sem duplicar (apaga LINE/polilinhas desse layer no espaco atual). |
+
+**Como funciona**
+
+1. Le os contornos de todos os parcels de todos os sites. Parcels **atravessados pela rede**
+   (rua / faixa de dominio, gleba) ficam de fora.
+2. Para cada lote, lanca raios perpendiculares a partir do eixo do tubo mais proximo, a cada
+   0,25 m. O trecho em que o raio atinge o lote sem cruzar outro lote e a **testada**; suas pontas
+   sao as **divisas laterais**. Lotes de fundo (sem testada para a rede) sao ignorados.
+3. Uma divisa so e considerada se houver **outro lote do outro lado** (em lote de esquina usa a
+   divisa com vizinho). A **cota da divisa** e a media de pontos da superficie ao longo dela, por
+   dentro do lote; a mais baixa e escolhida.
+4. Testada menor que 2x o afastamento: a ligacao vai no meio da testada.
+
+**Observacoes**
+
+- Tubos sao tratados como retos (do ponto inicial ao final). Linhas criadas em Z = 0.
+- Pontos fora da superficie sao desconsiderados no calculo da cota.

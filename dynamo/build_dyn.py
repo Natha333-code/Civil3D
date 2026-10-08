@@ -164,3 +164,28 @@ if __name__ == "__main__":
         ],
         "EixoEntreLinhas.dyn",
     )
+    gerar(
+        "LigacoesPrediais",
+        "Cria uma linha magenta por lote (parcel), perpendicular a rede "
+        "(pipe network), do eixo do tubo ate 1 m antes do lote, junto a "
+        "divisa de menor cota pela superficie existente.",
+        "ligacoes_prediais.py",
+        [
+            ("Executar", "boolean", False, "Ative para rodar a rotina."),
+            ("Nome da superficie", "string", "",
+             "Superficie existente. Vazio = clicar na superficie no desenho."),
+            ("Recuo do lote (m)", "number", 1.0,
+             "A linha termina esta distancia antes do limite do lote."),
+            ("Afastamento da divisa (m)", "number", 1.5,
+             "Distancia entre a linha e a divisa lateral escolhida."),
+            ("Distancia maxima rede-lote (m)", "number", 30.0,
+             "Lotes mais distantes da rede sao ignorados."),
+            ("Layer", "string", "LIGACOES",
+             "Layer das linhas (criado em magenta se nao existir)."),
+            ("Usar LINE", "boolean", False,
+             "True = LINE; False = polilinha (LWPOLYLINE)."),
+            ("Apagar linhas anteriores do layer", "boolean", False,
+             "Apaga linhas/polilinhas ja existentes no layer antes de criar."),
+        ],
+        "LigacoesPrediais.dyn",
+    )
