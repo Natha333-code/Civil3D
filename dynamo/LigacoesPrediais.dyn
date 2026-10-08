@@ -1,5 +1,5 @@
 {
-  "Uuid": "3ef862d8-5acc-44b6-933b-730d0c5896ef",
+  "Uuid": "d52234f9-80f7-493f-a469-2efcdb667460",
   "IsCustomNode": false,
   "Description": "Cria uma linha magenta por lote (parcel), perpendicular a rede (pipe network), do eixo do tubo ate 1 m antes do lote, junto a divisa de menor cota pela superficie existente.",
   "Name": "LigacoesPrediais",
@@ -8,21 +8,21 @@
   },
   "Inputs": [
     {
-      "Id": "2b2721c34a554bc39c67619d22b365d2",
+      "Id": "1a2289f73243492b94865952de3a0ca1",
       "Name": "Executar",
       "Type": "boolean",
       "Value": "false",
       "Description": "Ative para rodar a rotina."
     },
     {
-      "Id": "b0a97705f5b647b3a1a84925a85ec98b",
+      "Id": "bfeb491cc94a4cb9bfc8f3d3fb42cf18",
       "Name": "Nome da superficie",
       "Type": "string",
       "Value": "",
       "Description": "Superficie existente. Vazio = clicar na superficie no desenho."
     },
     {
-      "Id": "e679e0f1df4949df8c6d836f3652fbd3",
+      "Id": "0f340b263c564352a95cc092162cee77",
       "Name": "Recuo do lote (m)",
       "Type": "number",
       "Value": "1.0",
@@ -30,15 +30,15 @@
       "NumberType": "Double"
     },
     {
-      "Id": "9b8a5b1c43914e6b90f20957a3065d42",
+      "Id": "cd3b7453b24f4fafa093d129b875498c",
       "Name": "Afastamento da divisa (m)",
       "Type": "number",
-      "Value": "1.5",
-      "Description": "Distancia entre a linha e a divisa lateral escolhida.",
+      "Value": "1.0",
+      "Description": "Distancia (perpendicular) entre a linha e a divisa mais baixa.",
       "NumberType": "Double"
     },
     {
-      "Id": "d9687bbabfca429bb1412b313939312c",
+      "Id": "b5ed455bf4574289a5c77f624a04390a",
       "Name": "Distancia maxima rede-lote (m)",
       "Type": "number",
       "Value": "30.0",
@@ -46,21 +46,21 @@
       "NumberType": "Double"
     },
     {
-      "Id": "38c8af379b8d41febd1a99c62383f1a4",
+      "Id": "e74caf87b1d44782ad8c15015c1f5920",
       "Name": "Layer",
       "Type": "string",
       "Value": "LIGACOES",
       "Description": "Layer das linhas (criado em magenta se nao existir)."
     },
     {
-      "Id": "985e793ac3ad49adaa44ffe384f5242e",
+      "Id": "8bcd314636884e3cafe779af80269a44",
       "Name": "Usar LINE",
       "Type": "boolean",
       "Value": "false",
       "Description": "True = LINE; False = polilinha (LWPOLYLINE)."
     },
     {
-      "Id": "9649d3d75a3a4a079d6bf714b7a61723",
+      "Id": "f87e5a3bca214666ace3b2c4b65b9e28",
       "Name": "Apagar linhas anteriores do layer",
       "Type": "boolean",
       "Value": "false",
@@ -73,11 +73,11 @@
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
       "InputValue": false,
-      "Id": "2b2721c34a554bc39c67619d22b365d2",
+      "Id": "1a2289f73243492b94865952de3a0ca1",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "e64e74146be74924962617192f79a4fd",
+          "Id": "88e1542d4a314ea1849bd359f07e030f",
           "Name": "",
           "Description": "Boolean",
           "UsingDefaultValue": false,
@@ -93,11 +93,11 @@
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "",
-      "Id": "b0a97705f5b647b3a1a84925a85ec98b",
+      "Id": "bfeb491cc94a4cb9bfc8f3d3fb42cf18",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "7a6c3fbfbda8404da28d679e23ce25c4",
+          "Id": "6e24824c395d421e8f5262f19677cdc1",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -114,11 +114,11 @@
       "NodeType": "NumberInputNode",
       "NumberType": "Double",
       "InputValue": 1.0,
-      "Id": "e679e0f1df4949df8c6d836f3652fbd3",
+      "Id": "0f340b263c564352a95cc092162cee77",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "9344fce1948f4f2bb47b832528cd73a6",
+          "Id": "17ccae2259b54c7f90bddfad7002f386",
           "Name": "",
           "Description": "Double",
           "UsingDefaultValue": false,
@@ -134,12 +134,12 @@
       "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Double",
-      "InputValue": 1.5,
-      "Id": "9b8a5b1c43914e6b90f20957a3065d42",
+      "InputValue": 1.0,
+      "Id": "cd3b7453b24f4fafa093d129b875498c",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "b5bba74138ee4a20803c73f5430a6778",
+          "Id": "958c98714bb94beba56d0a69a0514a69",
           "Name": "",
           "Description": "Double",
           "UsingDefaultValue": false,
@@ -156,11 +156,11 @@
       "NodeType": "NumberInputNode",
       "NumberType": "Double",
       "InputValue": 30.0,
-      "Id": "d9687bbabfca429bb1412b313939312c",
+      "Id": "b5ed455bf4574289a5c77f624a04390a",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "1af3923953774232b418361e0715c896",
+          "Id": "641587fc2cb64e30be69ebb3004ec58c",
           "Name": "",
           "Description": "Double",
           "UsingDefaultValue": false,
@@ -176,11 +176,11 @@
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "LIGACOES",
-      "Id": "38c8af379b8d41febd1a99c62383f1a4",
+      "Id": "e74caf87b1d44782ad8c15015c1f5920",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "469a932feef04030a5feb3e52ee5fb35",
+          "Id": "773fa49717b044139f7849825be169bf",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -196,11 +196,11 @@
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
       "InputValue": false,
-      "Id": "985e793ac3ad49adaa44ffe384f5242e",
+      "Id": "8bcd314636884e3cafe779af80269a44",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "9eea9f2b818f4411bd51f7f4b9245b9e",
+          "Id": "0fb8c7c3003d413ca14c14b83bb3164c",
           "Name": "",
           "Description": "Boolean",
           "UsingDefaultValue": false,
@@ -216,11 +216,11 @@
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
       "InputValue": false,
-      "Id": "9649d3d75a3a4a079d6bf714b7a61723",
+      "Id": "f87e5a3bca214666ace3b2c4b65b9e28",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "1e936ed35a5344a3bbbdf20a6129ce72",
+          "Id": "1da2d318b622487595ceb8af5f1d84e8",
           "Name": "",
           "Description": "Boolean",
           "UsingDefaultValue": false,
@@ -235,12 +235,12 @@
     {
       "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
       "NodeType": "PythonScriptNode",
-      "Code": "# ============================================================\n# ligacoes_prediais.py - codigo do no Python de LigacoesPrediais.dyn\n#\n# Civil 3D 2021 / Dynamo 2.5-2.6 / IronPython 2.7\n#\n# Cria uma linha (ramal / ligacao predial) por lote (parcel):\n#   - perpendicular a rede (pipe network) selecionada;\n#   - partindo do eixo do tubo e terminando RECUO metros antes do lote;\n#   - posicionada a AFASTAMENTO metros da divisa com o lote vizinho;\n#   - sempre na divisa de MENOR COTA, pela superficie escolhida.\n# As linhas sao criadas na cor magenta (ACI 6).\n#\n# Entradas (IN):\n#   IN[0] Executar (bool)\n#   IN[1] Nome da superficie      - vazio = clicar na superficie\n#   IN[2] Recuo do lote (m)       - padrao 1.0\n#   IN[3] Afastamento da divisa (m) - padrao 1.5\n#   IN[4] Distancia maxima rede-lote (m) - padrao 30\n#   IN[5] Layer                   - padrao \"LIGACOES\"\n#   IN[6] Usar LINE (bool)        - False = polilinha (LWPOLYLINE)\n#   IN[7] Apagar linhas anteriores do layer (bool)\n#\n# Este arquivo e a fonte; o .dyn e gerado por dynamo/build_dyn.py.\n# (Strings sem acento para evitar problemas de codificacao.)\n# ============================================================\n\nimport clr\nimport math\nimport traceback\n\nclr.AddReference('AcMgd')\nclr.AddReference('AcCoreMgd')\nclr.AddReference('AcDbMgd')\nclr.AddReference('AecBaseMgd')\nclr.AddReference('AeccDbMgd')\n\nfrom Autodesk.AutoCAD.ApplicationServices import Application\nfrom Autodesk.AutoCAD.Colors import Color, ColorMethod\nfrom Autodesk.AutoCAD.DatabaseServices import (Curve, DBObjectCollection,\n                                               LayerTableRecord, Line,\n                                               OpenMode, Polyline)\nfrom Autodesk.AutoCAD.EditorInput import PromptEntityOptions, PromptStatus\nfrom Autodesk.AutoCAD.Geometry import Point2d, Point3d\nfrom Autodesk.Civil.ApplicationServices import CivilApplication\nfrom Autodesk.Civil.DatabaseServices import Pipe, Surface\n\nCOR_MAGENTA = 6\nPASSO_TESTADA = 0.25    # espacamento (m) dos raios que medem a testada\nAMOSTRAS_DIVISA = 6     # pontos de cota ao longo de cada divisa\n\n\n# ------------------------------------------------------------\n# Geometria pura (pontos como tuplas (x, y)) - independe do AutoCAD\n# ------------------------------------------------------------\ndef sub(a, b):\n    return (a[0] - b[0], a[1] - b[1])\n\n\ndef soma(a, b, k=1.0):\n    return (a[0] + b[0] * k, a[1] + b[1] * k)\n\n\ndef cruz(a, b):\n    return a[0] * b[1] - a[1] * b[0]\n\n\ndef dist(a, b):\n    return math.hypot(b[0] - a[0], b[1] - a[1])\n\n\ndef arestas(poli):\n    n = len(poli)\n    for i in range(n):\n        yield poli[i], poli[(i + 1) % n]\n\n\ndef caixa(poli, folga=0.0):\n    xs = [p[0] for p in poli]\n    ys = [p[1] for p in poli]\n    return (min(xs) - folga, min(ys) - folga, max(xs) + folga, max(ys) + folga)\n\n\ndef caixas_cruzam(c1, c2):\n    return not (c1[2] < c2[0] or c2[2] < c1[0] or c1[3] < c2[1] or c2[3] < c1[1])\n\n\ndef centroide(poli):\n    a = cx = cy = 0.0\n    for p, q in arestas(poli):\n        k = cruz(p, q)\n        a += k\n        cx += (p[0] + q[0]) * k\n        cy += (p[1] + q[1]) * k\n    if abs(a) < 1e-12:\n        n = float(len(poli))\n        return (sum(p[0] for p in poli) / n, sum(p[1] for p in poli) / n)\n    return (cx / (3.0 * a), cy / (3.0 * a))\n\n\ndef dentro(p, poli):\n    \"\"\"Ponto dentro do poligono (ray casting).\"\"\"\n    x, y = p\n    res = False\n    for a, b in arestas(poli):\n        if (a[1] > y) != (b[1] > y):\n            xi = a[0] + (y - a[1]) * (b[0] - a[0]) / (b[1] - a[1])\n            if xi > x:\n                res = not res\n    return res\n\n\ndef inter_segmentos(p, p2, q, q2):\n    \"\"\"Parametros (t, u) da intersecao de p-p2 com q-q2, ou None.\"\"\"\n    r = sub(p2, p)\n    s = sub(q2, q)\n    den = cruz(r, s)\n    if abs(den) < 1e-12:\n        return None\n    qp = sub(q, p)\n    t = cruz(qp, s) / den\n    u = cruz(qp, r) / den\n    if -1e-9 <= t <= 1 + 1e-9 and -1e-9 <= u <= 1 + 1e-9:\n        return t, u\n    return None\n\n\ndef raio_poligono(o, d, poli, alcance):\n    \"\"\"Distancias (ordenadas) em que o raio o + t*d corta o poligono.\"\"\"\n    fim = soma(o, d, alcance)\n    ts = []\n    for a, b in arestas(poli):\n        r = inter_segmentos(o, fim, a, b)\n        if r is not None:\n            ts.append(r[0] * alcance)\n    ts.sort()\n    return ts\n\n\ndef dist_ponto_seg(p, a, b):\n    ab = sub(b, a)\n    l2 = ab[0] ** 2 + ab[1] ** 2\n    if l2 < 1e-18:\n        return dist(p, a)\n    t = max(0.0, min(1.0, ((p[0] - a[0]) * ab[0] + (p[1] - a[1]) * ab[1]) / l2))\n    return dist(p, soma(a, ab, t))\n\n\ndef seg_corta_poligono(a, b, poli):\n    if dentro(a, poli) or dentro(b, poli):\n        return True\n    for p, q in arestas(poli):\n        if inter_segmentos(a, b, p, q) is not None:\n            return True\n    return False\n\n\ndef dist_seg_poligono(a, b, poli):\n    if seg_corta_poligono(a, b, poli):\n        return 0.0\n    d = min(dist_ponto_seg(p, a, b) for p in poli)\n    for p, q in arestas(poli):\n        d = min(d, dist_ponto_seg(a, p, q), dist_ponto_seg(b, p, q))\n    return d\n\n\nclass Lote(object):\n    def __init__(self, nome, poli):\n        self.nome = nome\n        self.poli = poli\n        self.caixa = caixa(poli)\n        self.centro = centroide(poli)\n\n\ndef bloqueado(a, b, lote, lotes):\n    \"\"\"True se o segmento a-b atravessa outro lote antes de chegar.\"\"\"\n    cx = caixa([a, b])\n    for outro in lotes:\n        if outro is lote or not caixas_cruzam(cx, outro.caixa):\n            continue\n        for p, q in arestas(outro.poli):\n            r = inter_segmentos(a, b, p, q)\n            if r is not None and r[0] < 1.0 - 1e-6:\n                return True\n    return False\n\n\ndef lote_em(p, lote, lotes):\n    for outro in lotes:\n        if outro is lote:\n            continue\n        c = outro.caixa\n        if c[0] <= p[0] <= c[2] and c[1] <= p[1] <= c[3] and dentro(p, outro.poli):\n            return outro\n    return None\n\n\ndef testada(lote, a, b, lotes, dmax):\n    \"\"\"Trecho do tubo a-b de onde raios perpendiculares atingem o lote.\n\n    Retorna (s1, s2, u, n, profundidades) ou None; u = direcao do tubo,\n    n = normal apontando para o lote, profundidades = {s: distancia}.\n    \"\"\"\n    L = dist(a, b)\n    if L < 1e-6:\n        return None\n    u = ((b[0] - a[0]) / L, (b[1] - a[1]) / L)\n    if cruz(u, sub(lote.centro, a)) >= 0:\n        n = (-u[1], u[0])\n    else:\n        n = (u[1], -u[0])\n    projs = [(p[0] - a[0]) * u[0] + (p[1] - a[1]) * u[1] for p in lote.poli]\n    smin, smax = max(0.0, min(projs)), min(L, max(projs))\n    if smax <= smin:\n        return None\n\n    # so os lotes proximos podem bloquear os raios (desempenho)\n    area = caixa(lote.poli + [a, b], 1.0)\n    perto = [o for o in lotes if caixas_cruzam(area, o.caixa)]\n\n    validos = []\n    s = smin\n    while s <= smax + 1e-9:\n        o = soma(a, u, s)\n        ts = raio_poligono(o, n, lote.poli, dmax)\n        if ts and ts[0] > 1e-6:\n            fim = soma(o, n, ts[0])\n            if not bloqueado(o, fim, lote, perto):\n                validos.append((s, ts[0]))\n        s += PASSO_TESTADA\n    if not validos:\n        return None\n\n    # maior trecho continuo\n    melhor, atual = [], [validos[0]]\n    for v in validos[1:]:\n        if v[0] - atual[-1][0] <= PASSO_TESTADA * 1.5:\n            atual.append(v)\n        else:\n            if len(atual) > len(melhor):\n                melhor = atual\n            atual = [v]\n    if len(atual) > len(melhor):\n        melhor = atual\n    prof = dict(melhor)\n    return melhor[0][0], melhor[-1][0], u, n, prof\n\n\ndef cota_divisa(lote, a, u, n, s, dmax, cota):\n    \"\"\"Cota media ao longo da divisa: raio logo para dentro do lote.\"\"\"\n    o = soma(a, u, s)\n    ts = raio_poligono(o, n, lote.poli, dmax * 3 + 1000.0)\n    if not ts:\n        return None\n    entra = ts[0]\n    sai = ts[1] if len(ts) > 1 else entra\n    zs = []\n    for k in range(AMOSTRAS_DIVISA):\n        t = entra + (sai - entra) * (k + 0.5) / AMOSTRAS_DIVISA\n        z = cota(soma(o, n, t))\n        if z is not None:\n            zs.append(z)\n    if not zs:\n        return None\n    return sum(zs) / len(zs)\n\n\ndef planejar(lote, lotes, tubos, cota, recuo, afast, dmax):\n    \"\"\"Ligacao de um lote: dict com inicio, fim, lado, cotas... ou motivo.\"\"\"\n    candidatos = []\n    for a, b in tubos:\n        if dist_seg_poligono(a, b, lote.poli) > dmax:\n            continue\n        r = testada(lote, a, b, lotes, dmax)\n        if r is not None:\n            s1, s2, u, n, prof = r\n            candidatos.append((s2 - s1, -min(prof.values()), a, b, r))\n    if not candidatos:\n        return {'lote': lote.nome, 'motivo': 'sem testada voltada para a rede'}\n    candidatos.sort(key=lambda c: (c[0], c[1]), reverse=True)\n    a, b, (s1, s2, u, n, prof) = candidatos[0][2], candidatos[0][3], candidatos[0][4]\n\n    lados = []\n    if s2 - s1 < 2.0 * afast:\n        lados.append({'lado': 'meio', 's': (s1 + s2) / 2.0, 'vizinho': None,\n                      'cota': None})\n    else:\n        for nome, sd, sinal in (('inicio', s1, -1.0), ('fim', s2, 1.0)):\n            prof_d = prof[sd]\n            vizinho = None\n            for extra in (2.0, 5.0, 10.0):\n                p = soma(soma(a, u, sd + sinal * min(afast, 1.0)), n,\n                         prof_d + extra)\n                vizinho = lote_em(p, lote, lotes)\n                if vizinho is not None:\n                    break\n            z = cota_divisa(lote, a, u, n, sd - sinal * 0.5, dmax, cota)\n            lados.append({'lado': nome, 's': sd - sinal * afast,\n                          'vizinho': vizinho.nome if vizinho else None,\n                          'cota': z})\n        com_vizinho = [l for l in lados if l['vizinho'] is not None]\n        if com_vizinho:\n            lados = com_vizinho\n        lados.sort(key=lambda l: (l['cota'] is None,\n                                  l['cota'] if l['cota'] is not None else 0.0))\n\n    escolhido = lados[0]\n    o = soma(a, u, escolhido['s'])\n    ts = raio_poligono(o, n, lote.poli, dmax)\n    if not ts:\n        return {'lote': lote.nome, 'motivo': 'raio nao atinge o lote'}\n    comp = ts[0] - recuo\n    if comp <= 0.05:\n        return {'lote': lote.nome, 'motivo': 'lote a menos de %.2f m da rede'\n                % recuo}\n    return {'lote': lote.nome, 'inicio': o, 'fim': soma(o, n, comp),\n            'lado': escolhido['lado'], 'vizinho': escolhido['vizinho'],\n            'cota': escolhido['cota'],\n            'cotas': [(l['lado'], l['cota']) for l in lados]}\n\n\n# ------------------------------------------------------------\n# Adaptadores AutoCAD / Civil 3D\n# ------------------------------------------------------------\ndef texto(v):\n    if v is None:\n        return ''\n    return str(v).strip()\n\n\ndef numero(v, padrao):\n    try:\n        v = float(v)\n        return v if v > 0 else padrao\n    except Exception:\n        return padrao\n\n\ndef pontos_curva(c):\n    \"\"\"Pontos (x, y) ao longo de uma curva (arcos discretizados).\"\"\"\n    pts = []\n    if isinstance(c, Polyline):\n        nv = c.NumberOfVertices\n        nseg = nv if c.Closed else nv - 1\n        for i in range(nseg):\n            p = c.GetPoint2dAt(i)\n            pts.append((p.X, p.Y))\n            if abs(c.GetBulgeAt(i)) > 1e-9:\n                for k in range(1, 12):\n                    q = c.GetPointAtParameter(i + k / 12.0)\n                    pts.append((q.X, q.Y))\n        if not c.Closed:\n            p = c.GetPoint2dAt(nv - 1)\n            pts.append((p.X, p.Y))\n    else:\n        d0 = c.GetDistanceAtParameter(c.StartParam)\n        L = c.GetDistanceAtParameter(c.EndParam) - d0\n        n = max(int(L / 0.5), 16)\n        for k in range(n + 1):\n            q = c.GetPointAtDist(d0 + L * k / n)\n            pts.append((q.X, q.Y))\n    return pts\n\n\ndef encadear(trechos):\n    \"\"\"Une listas de pontos pelas pontas e devolve um poligono.\"\"\"\n    trechos = [t for t in trechos if len(t) >= 2]\n    if not trechos:\n        return []\n    poli = list(trechos.pop(0))\n    while trechos:\n        fim = poli[-1]\n        melhor = None\n        for i, t in enumerate(trechos):\n            for inv in (False, True):\n                d = dist(fim, t[-1] if inv else t[0])\n                if melhor is None or d < melhor[0]:\n                    melhor = (d, i, inv)\n        t = trechos.pop(melhor[1])\n        if melhor[2]:\n            t = list(reversed(t))\n        poli.extend(t[1:])\n    return poli\n\n\ndef limpar_poligono(pts):\n    res = []\n    for p in pts:\n        if not res or dist(res[-1], p) > 1e-6:\n            res.append(p)\n    if len(res) > 1 and dist(res[0], res[-1]) < 1e-6:\n        res.pop()\n    return res\n\n\ndef poligono_lote(parcel, t):\n    \"\"\"Contorno do parcel como lista de pontos.\"\"\"\n    try:\n        c = parcel.BaseCurve\n        if c is not None:\n            return limpar_poligono(pontos_curva(c))\n    except Exception:\n        pass\n    # alternativa: explodir o parcel e unir as curvas resultantes\n    objs = DBObjectCollection()\n    parcel.Explode(objs)\n    trechos = []\n    for o in objs:\n        if isinstance(o, Curve):\n            trechos.append(pontos_curva(o))\n        o.Dispose()\n    return limpar_poligono(encadear(trechos))\n\n\ndef pedir_entidade(ed, msg, rejeicao, classe):\n    opt = PromptEntityOptions(msg)\n    opt.SetRejectMessage(rejeicao)\n    opt.AddAllowedClass(clr.GetClrType(classe), False)\n    res = ed.GetEntity(opt)\n    if res.Status != PromptStatus.OK:\n        return None\n    return res.ObjectId\n\n\ndef superficie_por_nome(civdoc, t, nome):\n    for i in civdoc.GetSurfaceIds():\n        if t.GetObject(i, OpenMode.ForRead).Name == nome:\n            return i\n    return None\n\n\ndef garantir_layer(db, t, nome):\n    lt = t.GetObject(db.LayerTableId, OpenMode.ForRead)\n    if lt.Has(nome):\n        return\n    lt.UpgradeOpen()\n    ltr = LayerTableRecord()\n    ltr.Name = nome\n    ltr.Color = Color.FromColorIndex(ColorMethod.ByAci, COR_MAGENTA)\n    lt.Add(ltr)\n    t.AddNewlyCreatedDBObject(ltr, True)\n\n\ndef executar(executa, nome_sup, recuo, afast, dmax, layer, usar_line, apagar):\n    if not executa:\n        return 'Defina \"Executar\" = True e rode o grafico.'\n\n    adoc = Application.DocumentManager.MdiActiveDocument\n    ed = adoc.Editor\n    db = adoc.Database\n    civdoc = CivilApplication.ActiveDocument\n\n    try:\n        from Autodesk.AutoCAD.Internal import Utils\n        Utils.SetFocusToDwgView()\n    except Exception:\n        pass\n\n    tubo_id = pedir_entidade(ed, '\\nSelecione um TUBO da rede: ',\n                             '\\nObjeto invalido: selecione um tubo (pipe).',\n                             Pipe)\n    if tubo_id is None:\n        return 'Cancelado: rede nao selecionada.'\n    sup_id = None\n    if not nome_sup:\n        sup_id = pedir_entidade(ed, '\\nSelecione a SUPERFICIE existente: ',\n                                '\\nObjeto invalido: selecione uma superficie.',\n                                Surface)\n        if sup_id is None:\n            return 'Cancelado: superficie nao selecionada.'\n\n    with adoc.LockDocument():\n        t = db.TransactionManager.StartTransaction()\n        try:\n            if nome_sup:\n                sup_id = superficie_por_nome(civdoc, t, nome_sup)\n                if sup_id is None:\n                    t.Abort()\n                    return 'Erro: superficie \"%s\" nao encontrada.' % nome_sup\n            sup = t.GetObject(sup_id, OpenMode.ForRead)\n\n            def cota(p):\n                try:\n                    return sup.FindElevationAtXY(p[0], p[1])\n                except Exception:\n                    return None\n\n            # ---- tubos da rede ----\n            tubo = t.GetObject(tubo_id, OpenMode.ForRead)\n            rede = t.GetObject(tubo.NetworkId, OpenMode.ForRead)\n            tubos = []\n            for i in rede.GetPipeIds():\n                p = t.GetObject(i, OpenMode.ForRead)\n                tubos.append(((p.StartPoint.X, p.StartPoint.Y),\n                              (p.EndPoint.X, p.EndPoint.Y)))\n\n            # ---- lotes (parcels de todos os sites) ----\n            lotes, ignorados = [], []\n            for site_id in civdoc.GetSiteIds():\n                site = t.GetObject(site_id, OpenMode.ForRead)\n                for pid in site.GetParcelIds():\n                    parcel = t.GetObject(pid, OpenMode.ForRead)\n                    poli = poligono_lote(parcel, t)\n                    if len(poli) < 3:\n                        ignorados.append('%s: contorno invalido' % parcel.Name)\n                        continue\n                    # lotes cortados pela rede (rua / faixa de dominio) ficam de fora\n                    if any(seg_corta_poligono(a, b, poli) for a, b in tubos):\n                        ignorados.append('%s: atravessado pela rede' % parcel.Name)\n                        continue\n                    lotes.append(Lote(parcel.Name, poli))\n            if not lotes:\n                t.Abort()\n                return 'Erro: nenhum lote (parcel) encontrado no desenho.'\n\n            # ---- layer e limpeza ----\n            garantir_layer(db, t, layer)\n            espaco = t.GetObject(db.CurrentSpaceId, OpenMode.ForWrite)\n            apagadas = 0\n            if apagar:\n                for eid in espaco:\n                    ent = t.GetObject(eid, OpenMode.ForRead)\n                    if ent.Layer == layer and isinstance(ent, (Line, Polyline)):\n                        ent.UpgradeOpen()\n                        ent.Erase()\n                        apagadas += 1\n\n            # ---- ligacoes ----\n            criadas, relatorio = 0, []\n            for lote in lotes:\n                r = planejar(lote, lotes, tubos, cota, recuo, afast, dmax)\n                if 'motivo' in r:\n                    ignorados.append('%s: %s' % (r['lote'], r['motivo']))\n                    continue\n                a, b = r['inicio'], r['fim']\n                if usar_line:\n                    ent = Line(Point3d(a[0], a[1], 0.0), Point3d(b[0], b[1], 0.0))\n                else:\n                    ent = Polyline()\n                    ent.AddVertexAt(0, Point2d(a[0], a[1]), 0.0, 0.0, 0.0)\n                    ent.AddVertexAt(1, Point2d(b[0], b[1]), 0.0, 0.0, 0.0)\n                ent.SetDatabaseDefaults()\n                ent.Layer = layer\n                ent.ColorIndex = COR_MAGENTA\n                espaco.AppendEntity(ent)\n                t.AddNewlyCreatedDBObject(ent, True)\n                criadas += 1\n                cotas = ', '.join('%s=%s' % (l, '%.3f' % z if z is not None\n                                             else 's/ cota')\n                                  for l, z in r['cotas'])\n                relatorio.append('%s: %.2f m | divisa %s%s | %s'\n                                 % (r['lote'], dist(a, b), r['lado'],\n                                    ' (vizinho %s)' % r['vizinho']\n                                    if r['vizinho'] else '', cotas))\n\n            t.Commit()\n        except Exception:\n            t.Abort()\n            raise\n        finally:\n            t.Dispose()\n\n    ed.WriteMessage('\\n%d ligacoes criadas no layer \"%s\".\\n' % (criadas, layer))\n    res = ['Ligacoes criadas: %d (layer %s)' % (criadas, layer)]\n    if apagadas:\n        res.append('Linhas anteriores apagadas: %d' % apagadas)\n    res.append('--- Ligacoes ---')\n    res += relatorio\n    if ignorados:\n        res.append('--- Lotes ignorados ---')\n        res += ignorados\n    return res\n\n\ntry:\n    OUT = executar(IN[0], texto(IN[1]), numero(IN[2], 1.0),\n                   numero(IN[3], 1.5), numero(IN[4], 30.0),\n                   texto(IN[5]) or 'LIGACOES', bool(IN[6]), bool(IN[7]))\nexcept Exception:\n    OUT = 'ERRO:\\n' + traceback.format_exc()\n",
+      "Code": "# ============================================================\n# ligacoes_prediais.py - codigo do no Python de LigacoesPrediais.dyn\n#\n# Civil 3D 2021 / Dynamo 2.5-2.6 / IronPython 2.7\n#\n# Cria uma linha (ramal / ligacao predial) por lote (parcel):\n#   - perpendicular a rede (pipe network) selecionada;\n#   - partindo do eixo do tubo e terminando RECUO metros antes do lote;\n#   - posicionada a AFASTAMENTO metros da divisa com o lote vizinho;\n#   - sempre na divisa de MENOR COTA, pela superficie escolhida.\n# As linhas sao criadas na cor magenta (ACI 6).\n#\n# Entradas (IN):\n#   IN[0] Executar (bool)\n#   IN[1] Nome da superficie      - vazio = clicar na superficie\n#   IN[2] Recuo do lote (m)       - padrao 1.0\n#   IN[3] Afastamento da divisa (m) - padrao 1.0\n#   IN[4] Distancia maxima rede-lote (m) - padrao 30\n#   IN[5] Layer                   - padrao \"LIGACOES\"\n#   IN[6] Usar LINE (bool)        - False = polilinha (LWPOLYLINE)\n#   IN[7] Apagar linhas anteriores do layer (bool)\n#\n# Este arquivo e a fonte; o .dyn e gerado por dynamo/build_dyn.py.\n# (Strings sem acento para evitar problemas de codificacao.)\n# ============================================================\n\nimport clr\nimport math\nimport traceback\n\nclr.AddReference('AcMgd')\nclr.AddReference('AcCoreMgd')\nclr.AddReference('AcDbMgd')\nclr.AddReference('AecBaseMgd')\nclr.AddReference('AeccDbMgd')\n\nfrom Autodesk.AutoCAD.ApplicationServices import Application\nfrom Autodesk.AutoCAD.Colors import Color, ColorMethod\nfrom Autodesk.AutoCAD.DatabaseServices import (Curve, DBObjectCollection,\n                                               LayerTableRecord, Line,\n                                               OpenMode, Polyline)\nfrom Autodesk.AutoCAD.EditorInput import PromptEntityOptions, PromptStatus\nfrom Autodesk.AutoCAD.Geometry import Point2d, Point3d\nfrom Autodesk.Civil.ApplicationServices import CivilApplication\nfrom Autodesk.Civil.DatabaseServices import Pipe, Surface\n\nCOR_MAGENTA = 6\nPASSO_TESTADA = 0.25    # espacamento (m) dos raios que medem a testada\nAMOSTRAS_DIVISA = 10    # pontos de cota ao longo de cada divisa\n\n\n# ------------------------------------------------------------\n# Geometria pura (pontos como tuplas (x, y)) - independe do AutoCAD\n# ------------------------------------------------------------\ndef sub(a, b):\n    return (a[0] - b[0], a[1] - b[1])\n\n\ndef soma(a, b, k=1.0):\n    return (a[0] + b[0] * k, a[1] + b[1] * k)\n\n\ndef cruz(a, b):\n    return a[0] * b[1] - a[1] * b[0]\n\n\ndef dist(a, b):\n    return math.hypot(b[0] - a[0], b[1] - a[1])\n\n\ndef arestas(poli):\n    n = len(poli)\n    for i in range(n):\n        yield poli[i], poli[(i + 1) % n]\n\n\ndef caixa(poli, folga=0.0):\n    xs = [p[0] for p in poli]\n    ys = [p[1] for p in poli]\n    return (min(xs) - folga, min(ys) - folga, max(xs) + folga, max(ys) + folga)\n\n\ndef caixas_cruzam(c1, c2):\n    return not (c1[2] < c2[0] or c2[2] < c1[0] or c1[3] < c2[1] or c2[3] < c1[1])\n\n\ndef centroide(poli):\n    a = cx = cy = 0.0\n    for p, q in arestas(poli):\n        k = cruz(p, q)\n        a += k\n        cx += (p[0] + q[0]) * k\n        cy += (p[1] + q[1]) * k\n    if abs(a) < 1e-12:\n        n = float(len(poli))\n        return (sum(p[0] for p in poli) / n, sum(p[1] for p in poli) / n)\n    return (cx / (3.0 * a), cy / (3.0 * a))\n\n\ndef dentro(p, poli):\n    \"\"\"Ponto dentro do poligono (ray casting).\"\"\"\n    x, y = p\n    res = False\n    for a, b in arestas(poli):\n        if (a[1] > y) != (b[1] > y):\n            xi = a[0] + (y - a[1]) * (b[0] - a[0]) / (b[1] - a[1])\n            if xi > x:\n                res = not res\n    return res\n\n\ndef inter_segmentos(p, p2, q, q2):\n    \"\"\"Parametros (t, u) da intersecao de p-p2 com q-q2, ou None.\"\"\"\n    r = sub(p2, p)\n    s = sub(q2, q)\n    den = cruz(r, s)\n    if abs(den) < 1e-12:\n        return None\n    qp = sub(q, p)\n    t = cruz(qp, s) / den\n    u = cruz(qp, r) / den\n    if -1e-9 <= t <= 1 + 1e-9 and -1e-9 <= u <= 1 + 1e-9:\n        return t, u\n    return None\n\n\ndef raio_poligono(o, d, poli, alcance):\n    \"\"\"Distancias (ordenadas) em que o raio o + t*d corta o poligono.\"\"\"\n    fim = soma(o, d, alcance)\n    ts = []\n    for a, b in arestas(poli):\n        r = inter_segmentos(o, fim, a, b)\n        if r is not None:\n            ts.append(r[0] * alcance)\n    ts.sort()\n    return ts\n\n\ndef dist_ponto_seg(p, a, b):\n    ab = sub(b, a)\n    l2 = ab[0] ** 2 + ab[1] ** 2\n    if l2 < 1e-18:\n        return dist(p, a)\n    t = max(0.0, min(1.0, ((p[0] - a[0]) * ab[0] + (p[1] - a[1]) * ab[1]) / l2))\n    return dist(p, soma(a, ab, t))\n\n\ndef seg_corta_poligono(a, b, poli):\n    if dentro(a, poli) or dentro(b, poli):\n        return True\n    for p, q in arestas(poli):\n        if inter_segmentos(a, b, p, q) is not None:\n            return True\n    return False\n\n\ndef dist_seg_poligono(a, b, poli):\n    if seg_corta_poligono(a, b, poli):\n        return 0.0\n    d = min(dist_ponto_seg(p, a, b) for p in poli)\n    for p, q in arestas(poli):\n        d = min(d, dist_ponto_seg(a, p, q), dist_ponto_seg(b, p, q))\n    return d\n\n\nclass Lote(object):\n    def __init__(self, nome, poli):\n        self.nome = nome\n        self.poli = poli\n        self.caixa = caixa(poli)\n        self.centro = centroide(poli)\n\n\ndef bloqueado(a, b, lote, lotes):\n    \"\"\"True se o segmento a-b atravessa outro lote antes de chegar.\"\"\"\n    cx = caixa([a, b])\n    for outro in lotes:\n        if outro is lote or not caixas_cruzam(cx, outro.caixa):\n            continue\n        for p, q in arestas(outro.poli):\n            r = inter_segmentos(a, b, p, q)\n            if r is not None and r[0] < 1.0 - 1e-6:\n                return True\n    return False\n\n\ndef lote_em(p, lote, lotes):\n    for outro in lotes:\n        if outro is lote:\n            continue\n        c = outro.caixa\n        if c[0] <= p[0] <= c[2] and c[1] <= p[1] <= c[3] and dentro(p, outro.poli):\n            return outro\n    return None\n\n\ndef unit(v):\n    L = math.hypot(v[0], v[1])\n    return (v[0] / L, v[1] / L)\n\n\ndef escalar(a, b):\n    return a[0] * b[0] + a[1] * b[1]\n\n\ndef dist_reta(p, a, b):\n    \"\"\"Distancia de p a reta infinita que passa por a e b.\"\"\"\n    return abs(cruz(sub(b, a), sub(p, a))) / dist(a, b)\n\n\ndef bissecao(f, ok, ruim, iteracoes=40):\n    \"\"\"Ultimo valor entre ok (f verdadeiro) e ruim (f falso).\"\"\"\n    for _ in range(iteracoes):\n        m = (ok + ruim) / 2.0\n        if f(m):\n            ok = m\n        else:\n            ruim = m\n    return ok\n\n\nclass Frente(object):\n    \"\"\"Testada de um lote vista a partir da reta de um tubo (prolongada).\n\n    A reta do tubo e prolongada alem das pontas, para que os PVs (fim dos\n    tubos) no meio de um lote nao cortem a testada.\n    \"\"\"\n\n    def __init__(self, lote, a, b, lotes, dmax):\n        self.ok = False\n        L = dist(a, b)\n        if L < 1e-6:\n            return\n        self.lote, self.a, self.dmax = lote, a, dmax\n        self.u = u = ((b[0] - a[0]) / L, (b[1] - a[1]) / L)\n        if cruz(u, sub(lote.centro, a)) >= 0:\n            self.n = (-u[1], u[0])\n        else:\n            self.n = (u[1], -u[0])\n        projs = [escalar(sub(p, a), u) for p in lote.poli]\n        smin, smax = min(projs), max(projs)\n        area = caixa(lote.poli + [a, b, soma(a, u, smin), soma(a, u, smax)],\n                     1.0)\n        self.perto = [o for o in lotes if caixas_cruzam(area, o.caixa)]\n\n        validos = []\n        s = smin\n        while s <= smax + 1e-9:\n            if self.prof(s) is not None:\n                validos.append(s)\n            s += PASSO_TESTADA\n        if not validos:\n            return\n        melhor, atual = [], [validos[0]]\n        for v in validos[1:]:\n            if v - atual[-1] <= PASSO_TESTADA * 1.5:\n                atual.append(v)\n            else:\n                if len(atual) > len(melhor):\n                    melhor = atual\n                atual = [v]\n        if len(atual) > len(melhor):\n            melhor = atual\n        valido = lambda x: self.prof(x) is not None\n        # cantos exatos da testada (onde o raio deixa de atingir o lote)\n        self.s1 = bissecao(valido, melhor[0], melhor[0] - PASSO_TESTADA)\n        self.s2 = bissecao(valido, melhor[-1], melhor[-1] + PASSO_TESTADA)\n        self.ok = True\n\n    def origem(self, s):\n        return soma(self.a, self.u, s)\n\n    def prof(self, s):\n        \"\"\"Distancia da reta do tubo ao lote no raio da estacao s.\"\"\"\n        o = self.origem(s)\n        ts = raio_poligono(o, self.n, self.lote.poli, self.dmax)\n        if not ts or ts[0] <= 1e-6:\n            return None\n        if bloqueado(o, soma(o, self.n, ts[0]), self.lote, self.perto):\n            return None\n        return ts[0]\n\n    def ponto(self, s):\n        \"\"\"Ponto da frente do lote atingido pelo raio da estacao s.\"\"\"\n        d = self.prof(s)\n        if d is None:\n            return None\n        return soma(self.origem(s), self.n, d)\n\n\ndef caminho_divisa(lote, canto, n):\n    \"\"\"Vertices da divisa lateral que sai do canto da testada.\n\n    Parte do vertice do lote mais proximo do canto e segue o contorno no\n    sentido que se afasta da rede, enquanto as arestas continuarem indo\n    para o fundo do lote.\n    \"\"\"\n    poli = lote.poli\n    N = len(poli)\n    i = min(range(N), key=lambda k: dist(poli[k], canto))\n    passos = []\n    for passo in (1, -1):\n        e = sub(poli[(i + passo) % N], poli[i])\n        if math.hypot(e[0], e[1]) > 1e-9:\n            passos.append((escalar(unit(e), n), passo))\n    passo = max(passos)[1]\n    caminho = [poli[i]]\n    j = i\n    for _ in range(N - 1):\n        k = (j + passo) % N\n        e = sub(poli[k], poli[j])\n        if math.hypot(e[0], e[1]) < 1e-9:\n            j = k\n            continue\n        if len(caminho) > 1 and escalar(unit(e), n) < 0.5:\n            break\n        caminho.append(poli[k])\n        j = k\n    return caminho\n\n\ndef cota_divisa(lote, caminho, cota):\n    \"\"\"Cota media da superficie ao longo da divisa, 0,5 m para dentro do lote.\"\"\"\n    trechos = list(zip(caminho, caminho[1:]))\n    total = sum(dist(p, q) for p, q in trechos)\n    if total < 1e-6:\n        return None\n    zs = []\n    for k in range(AMOSTRAS_DIVISA):\n        alvo = total * (k + 0.5) / AMOSTRAS_DIVISA\n        for p, q in trechos:\n            L = dist(p, q)\n            if alvo <= L or (p, q) == trechos[-1]:\n                e = unit(sub(q, p))\n                base = soma(p, e, min(alvo, L))\n                for perp in ((-e[1], e[0]), (e[1], -e[0])):\n                    x = soma(base, perp, 0.5)\n                    if dentro(x, lote.poli):\n                        z = cota(x)\n                        if z is not None:\n                            zs.append(z)\n                        break\n                break\n            alvo -= L\n    if not zs:\n        return None\n    return sum(zs) / len(zs)\n\n\ndef pe_na_rede(q, tubos, lote, perto):\n    \"\"\"Pe da perpendicular de q no tubo mais proximo que esta em frente.\n\n    Retorna (ponto, perpendicular?). Se nenhum tubo tem q a sua frente\n    (ex.: lado externo de uma deflexao), usa o PV (ponta) mais proximo.\n    \"\"\"\n    melhor = None\n    for a, b in tubos:\n        L = dist(a, b)\n        if L < 1e-6:\n            continue\n        u = ((b[0] - a[0]) / L, (b[1] - a[1]) / L)\n        t = escalar(sub(q, a), u)\n        if -1e-6 <= t <= L + 1e-6:\n            f = soma(a, u, t)\n            d = dist(f, q)\n            if (melhor is None or d < melhor[0]) and \\\n                    not bloqueado(f, q, lote, perto):\n                melhor = (d, f)\n    if melhor is not None:\n        return melhor[1], True\n    pontas = [p for ab in tubos for p in ab]\n    return min(pontas, key=lambda p: dist(p, q)), False\n\n\ndef planejar(lote, lotes, tubos, cota, recuo, afast, dmax):\n    \"\"\"Ligacao de um lote: dict com inicio, fim, lado, cotas... ou motivo.\"\"\"\n    candidatos = []\n    for a, b in tubos:\n        d = dist_seg_poligono(a, b, lote.poli)\n        if d > dmax:\n            continue\n        fr = Frente(lote, a, b, lotes, dmax)\n        if fr.ok:\n            candidatos.append((round(d, 3), -(fr.s2 - fr.s1), fr))\n    if not candidatos:\n        return {'lote': lote.nome, 'motivo': 'sem testada voltada para a rede'}\n    candidatos.sort(key=lambda c: (c[0], c[1]))\n    fr = candidatos[0][2]\n    s1, s2, u, n = fr.s1, fr.s2, fr.u, fr.n\n    meio = (s1 + s2) / 2.0\n\n    lados = []\n    for nome, sd, sinal in (('inicio', s1, -1.0), ('fim', s2, 1.0)):\n        canto = fr.ponto(sd)\n        if canto is None:\n            continue\n        cam = caminho_divisa(lote, canto, n)\n        if len(cam) < 2:\n            continue\n        vizinho = None\n        for extra in (2.0, 5.0, 10.0):\n            p = soma(soma(canto, u, sinal * min(afast, 1.0)), n, extra)\n            vizinho = lote_em(p, lote, lotes)\n            if vizinho is not None:\n                break\n        lados.append({'lado': nome, 'sd': sd, 'divisa': (cam[0], cam[1]),\n                      'vizinho': vizinho.nome if vizinho else None,\n                      'cota': cota_divisa(lote, cam, cota)})\n    if not lados:\n        return {'lote': lote.nome, 'motivo': 'divisas nao identificadas'}\n    todos = list(lados)\n    com_vizinho = [l for l in lados if l['vizinho'] is not None]\n    if com_vizinho:\n        lados = com_vizinho\n    lados.sort(key=lambda l: (l['cota'] is None,\n                              l['cota'] if l['cota'] is not None else 0.0))\n    esc = lados[0]\n\n    # estacao onde a frente do lote fica a 'afast' metros da divisa\n    da, db_ = esc['divisa']\n\n    def longe(s):\n        q = fr.ponto(s)\n        return q is not None and dist_reta(q, da, db_) >= afast\n\n    if longe(meio):\n        # longe() e falso no canto e verdadeiro no meio: busca a transicao\n        s_lig = bissecao(longe, meio, esc['sd'])\n        dist_div = afast\n    else:\n        s_lig = meio     # testada estreita: ligacao no meio\n        q = fr.ponto(meio)\n        dist_div = dist_reta(q, da, db_) if q is not None else 0.0\n    q = fr.ponto(s_lig)\n    if q is None:\n        return {'lote': lote.nome, 'motivo': 'frente do lote nao encontrada'}\n\n    # inicio no eixo do tubo em frente, perpendicular a ele\n    ini, perpendicular = pe_na_rede(q, tubos, lote, fr.perto)\n    if dist(ini, q) < 1e-6:\n        return {'lote': lote.nome, 'motivo': 'rede encostada no lote'}\n    d = unit(sub(q, ini))\n    ts = raio_poligono(ini, d, lote.poli, dist(ini, q) + 1.0)\n    alcance = ts[0] if ts else dist(ini, q)\n    comp = alcance - recuo\n    if comp <= 0.05:\n        return {'lote': lote.nome, 'motivo': 'lote a menos de %.2f m da rede'\n                % recuo}\n    return {'lote': lote.nome, 'inicio': ini, 'fim': soma(ini, d, comp),\n            'frente': q, 'lado': esc['lado'], 'vizinho': esc['vizinho'],\n            'cota': esc['cota'], 'dist_divisa': dist_div,\n            'perpendicular': perpendicular,\n            'cotas': [(l['lado'], l['cota']) for l in todos]}\n\n\n# ------------------------------------------------------------\n# Adaptadores AutoCAD / Civil 3D\n# ------------------------------------------------------------\ndef texto(v):\n    if v is None:\n        return ''\n    return str(v).strip()\n\n\ndef numero(v, padrao):\n    try:\n        v = float(v)\n        return v if v > 0 else padrao\n    except Exception:\n        return padrao\n\n\ndef pontos_curva(c):\n    \"\"\"Pontos (x, y) ao longo de uma curva (arcos discretizados).\"\"\"\n    pts = []\n    if isinstance(c, Polyline):\n        nv = c.NumberOfVertices\n        nseg = nv if c.Closed else nv - 1\n        for i in range(nseg):\n            p = c.GetPoint2dAt(i)\n            pts.append((p.X, p.Y))\n            if abs(c.GetBulgeAt(i)) > 1e-9:\n                for k in range(1, 12):\n                    q = c.GetPointAtParameter(i + k / 12.0)\n                    pts.append((q.X, q.Y))\n        if not c.Closed:\n            p = c.GetPoint2dAt(nv - 1)\n            pts.append((p.X, p.Y))\n    else:\n        d0 = c.GetDistanceAtParameter(c.StartParam)\n        L = c.GetDistanceAtParameter(c.EndParam) - d0\n        n = max(int(L / 0.5), 16)\n        for k in range(n + 1):\n            q = c.GetPointAtDist(d0 + L * k / n)\n            pts.append((q.X, q.Y))\n    return pts\n\n\ndef encadear(trechos):\n    \"\"\"Une listas de pontos pelas pontas e devolve um poligono.\"\"\"\n    trechos = [t for t in trechos if len(t) >= 2]\n    if not trechos:\n        return []\n    poli = list(trechos.pop(0))\n    while trechos:\n        fim = poli[-1]\n        melhor = None\n        for i, t in enumerate(trechos):\n            for inv in (False, True):\n                d = dist(fim, t[-1] if inv else t[0])\n                if melhor is None or d < melhor[0]:\n                    melhor = (d, i, inv)\n        t = trechos.pop(melhor[1])\n        if melhor[2]:\n            t = list(reversed(t))\n        poli.extend(t[1:])\n    return poli\n\n\ndef limpar_poligono(pts):\n    res = []\n    for p in pts:\n        if not res or dist(res[-1], p) > 1e-6:\n            res.append(p)\n    if len(res) > 1 and dist(res[0], res[-1]) < 1e-6:\n        res.pop()\n    return res\n\n\ndef poligono_lote(parcel, t):\n    \"\"\"Contorno do parcel como lista de pontos.\"\"\"\n    try:\n        c = parcel.BaseCurve\n        if c is not None:\n            return limpar_poligono(pontos_curva(c))\n    except Exception:\n        pass\n    # alternativa: explodir o parcel e unir as curvas resultantes\n    objs = DBObjectCollection()\n    parcel.Explode(objs)\n    trechos = []\n    for o in objs:\n        if isinstance(o, Curve):\n            trechos.append(pontos_curva(o))\n        o.Dispose()\n    return limpar_poligono(encadear(trechos))\n\n\ndef pedir_entidade(ed, msg, rejeicao, classe):\n    opt = PromptEntityOptions(msg)\n    opt.SetRejectMessage(rejeicao)\n    opt.AddAllowedClass(clr.GetClrType(classe), False)\n    res = ed.GetEntity(opt)\n    if res.Status != PromptStatus.OK:\n        return None\n    return res.ObjectId\n\n\ndef superficie_por_nome(civdoc, t, nome):\n    for i in civdoc.GetSurfaceIds():\n        if t.GetObject(i, OpenMode.ForRead).Name == nome:\n            return i\n    return None\n\n\ndef garantir_layer(db, t, nome):\n    lt = t.GetObject(db.LayerTableId, OpenMode.ForRead)\n    if lt.Has(nome):\n        return\n    lt.UpgradeOpen()\n    ltr = LayerTableRecord()\n    ltr.Name = nome\n    ltr.Color = Color.FromColorIndex(ColorMethod.ByAci, COR_MAGENTA)\n    lt.Add(ltr)\n    t.AddNewlyCreatedDBObject(ltr, True)\n\n\ndef executar(executa, nome_sup, recuo, afast, dmax, layer, usar_line, apagar):\n    if not executa:\n        return 'Defina \"Executar\" = True e rode o grafico.'\n\n    adoc = Application.DocumentManager.MdiActiveDocument\n    ed = adoc.Editor\n    db = adoc.Database\n    civdoc = CivilApplication.ActiveDocument\n\n    try:\n        from Autodesk.AutoCAD.Internal import Utils\n        Utils.SetFocusToDwgView()\n    except Exception:\n        pass\n\n    tubo_id = pedir_entidade(ed, '\\nSelecione um TUBO da rede: ',\n                             '\\nObjeto invalido: selecione um tubo (pipe).',\n                             Pipe)\n    if tubo_id is None:\n        return 'Cancelado: rede nao selecionada.'\n    sup_id = None\n    if not nome_sup:\n        sup_id = pedir_entidade(ed, '\\nSelecione a SUPERFICIE existente: ',\n                                '\\nObjeto invalido: selecione uma superficie.',\n                                Surface)\n        if sup_id is None:\n            return 'Cancelado: superficie nao selecionada.'\n\n    with adoc.LockDocument():\n        t = db.TransactionManager.StartTransaction()\n        try:\n            if nome_sup:\n                sup_id = superficie_por_nome(civdoc, t, nome_sup)\n                if sup_id is None:\n                    t.Abort()\n                    return 'Erro: superficie \"%s\" nao encontrada.' % nome_sup\n            sup = t.GetObject(sup_id, OpenMode.ForRead)\n\n            def cota(p):\n                try:\n                    return sup.FindElevationAtXY(p[0], p[1])\n                except Exception:\n                    return None\n\n            # ---- tubos da rede ----\n            tubo = t.GetObject(tubo_id, OpenMode.ForRead)\n            rede = t.GetObject(tubo.NetworkId, OpenMode.ForRead)\n            tubos = []\n            for i in rede.GetPipeIds():\n                p = t.GetObject(i, OpenMode.ForRead)\n                tubos.append(((p.StartPoint.X, p.StartPoint.Y),\n                              (p.EndPoint.X, p.EndPoint.Y)))\n\n            # ---- lotes (parcels de todos os sites) ----\n            lotes, ignorados = [], []\n            for site_id in civdoc.GetSiteIds():\n                site = t.GetObject(site_id, OpenMode.ForRead)\n                for pid in site.GetParcelIds():\n                    parcel = t.GetObject(pid, OpenMode.ForRead)\n                    poli = poligono_lote(parcel, t)\n                    if len(poli) < 3:\n                        ignorados.append('%s: contorno invalido' % parcel.Name)\n                        continue\n                    # lotes cortados pela rede (rua / faixa de dominio) ficam de fora\n                    if any(seg_corta_poligono(a, b, poli) for a, b in tubos):\n                        ignorados.append('%s: atravessado pela rede' % parcel.Name)\n                        continue\n                    lotes.append(Lote(parcel.Name, poli))\n            if not lotes:\n                t.Abort()\n                return 'Erro: nenhum lote (parcel) encontrado no desenho.'\n\n            # ---- layer e limpeza ----\n            garantir_layer(db, t, layer)\n            espaco = t.GetObject(db.CurrentSpaceId, OpenMode.ForWrite)\n            apagadas = 0\n            if apagar:\n                for eid in espaco:\n                    ent = t.GetObject(eid, OpenMode.ForRead)\n                    if ent.Layer == layer and isinstance(ent, (Line, Polyline)):\n                        ent.UpgradeOpen()\n                        ent.Erase()\n                        apagadas += 1\n\n            # ---- ligacoes ----\n            criadas, relatorio = 0, []\n            for lote in lotes:\n                r = planejar(lote, lotes, tubos, cota, recuo, afast, dmax)\n                if 'motivo' in r:\n                    ignorados.append('%s: %s' % (r['lote'], r['motivo']))\n                    continue\n                a, b = r['inicio'], r['fim']\n                if usar_line:\n                    ent = Line(Point3d(a[0], a[1], 0.0), Point3d(b[0], b[1], 0.0))\n                else:\n                    ent = Polyline()\n                    ent.AddVertexAt(0, Point2d(a[0], a[1]), 0.0, 0.0, 0.0)\n                    ent.AddVertexAt(1, Point2d(b[0], b[1]), 0.0, 0.0, 0.0)\n                ent.SetDatabaseDefaults()\n                ent.Layer = layer\n                ent.ColorIndex = COR_MAGENTA\n                espaco.AppendEntity(ent)\n                t.AddNewlyCreatedDBObject(ent, True)\n                criadas += 1\n                cotas = ', '.join('%s=%s' % (l, '%.3f' % z if z is not None\n                                             else 's/ cota')\n                                  for l, z in r['cotas'])\n                relatorio.append('%s: %.2f m | divisa %s%s a %.2f m | %s%s'\n                                 % (r['lote'], dist(a, b), r['lado'],\n                                    ' (vizinho %s)' % r['vizinho']\n                                    if r['vizinho'] else '',\n                                    r['dist_divisa'], cotas,\n                                    '' if r['perpendicular'] else\n                                    ' | sai do PV (nenhum tubo em frente)'))\n\n            t.Commit()\n        except Exception:\n            t.Abort()\n            raise\n        finally:\n            t.Dispose()\n\n    ed.WriteMessage('\\n%d ligacoes criadas no layer \"%s\".\\n' % (criadas, layer))\n    res = ['Ligacoes criadas: %d (layer %s)' % (criadas, layer)]\n    if apagadas:\n        res.append('Linhas anteriores apagadas: %d' % apagadas)\n    res.append('--- Ligacoes ---')\n    res += relatorio\n    if ignorados:\n        res.append('--- Lotes ignorados ---')\n        res += ignorados\n    return res\n\n\ntry:\n    OUT = executar(IN[0], texto(IN[1]), numero(IN[2], 1.0),\n                   numero(IN[3], 1.0), numero(IN[4], 30.0),\n                   texto(IN[5]) or 'LIGACOES', bool(IN[6]), bool(IN[7]))\nexcept Exception:\n    OUT = 'ERRO:\\n' + traceback.format_exc()\n",
       "VariableInputPorts": true,
-      "Id": "77a148384a294e7cb4b8b821d97bc199",
+      "Id": "e27d27a786804dc49cabb1b50be4d7fc",
       "Inputs": [
         {
-          "Id": "57e14d9b5051466fb0ae40b451fca88c",
+          "Id": "5fb661fe17344b18837b432abd3eaa46",
           "Name": "IN[0]",
           "Description": "Input #0",
           "UsingDefaultValue": false,
@@ -249,7 +249,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "bad3d43b15fe4d6185c52050658a7b85",
+          "Id": "c57833e82268498cad50790f67435146",
           "Name": "IN[1]",
           "Description": "Input #1",
           "UsingDefaultValue": false,
@@ -258,7 +258,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "b59495076e534318bcbcb0c2030f75d7",
+          "Id": "bdb3d1b7e44b49588aff1f2c9923d882",
           "Name": "IN[2]",
           "Description": "Input #2",
           "UsingDefaultValue": false,
@@ -267,7 +267,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "2546d07279264997bfe4cb4908add190",
+          "Id": "acac7dc8b6e7457198a0f5e26a2e1992",
           "Name": "IN[3]",
           "Description": "Input #3",
           "UsingDefaultValue": false,
@@ -276,7 +276,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "e9d290c117f9492f8f5df0e63c44b738",
+          "Id": "0160419e84c14ce39aef0e4c68c0a323",
           "Name": "IN[4]",
           "Description": "Input #4",
           "UsingDefaultValue": false,
@@ -285,7 +285,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "0e7c912477314f61a1901fe1312fee86",
+          "Id": "71c1568546f64df4b5f4f55bf9e7cb12",
           "Name": "IN[5]",
           "Description": "Input #5",
           "UsingDefaultValue": false,
@@ -294,7 +294,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "daf9178b66374b5697aa56ceb3efbae5",
+          "Id": "4e3590dcdc9d42729846e85a24c1c5c7",
           "Name": "IN[6]",
           "Description": "Input #6",
           "UsingDefaultValue": false,
@@ -303,7 +303,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "5613675ffb9543438d46636beed7f41d",
+          "Id": "0c52d5cf9ea347d1952acf5df5f87a6b",
           "Name": "IN[7]",
           "Description": "Input #7",
           "UsingDefaultValue": false,
@@ -314,7 +314,7 @@
       ],
       "Outputs": [
         {
-          "Id": "e6558b98b7ed4f84a358255bfb733b9d",
+          "Id": "9ef4a60d69e2418ca05ebc3167dc74a4",
           "Name": "OUT",
           "Description": "Result of the python script",
           "UsingDefaultValue": false,
@@ -329,10 +329,10 @@
     {
       "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
       "NodeType": "ExtensionNode",
-      "Id": "f56576bc360d4e269f1416c30ac55621",
+      "Id": "3a26147080954fbca6adb19c2f36f919",
       "Inputs": [
         {
-          "Id": "ec39370033344c759f7304f687dd7623",
+          "Id": "dc5df1956b57473f9374ca201da28d77",
           "Name": "",
           "Description": "Node to show output from",
           "UsingDefaultValue": false,
@@ -343,7 +343,7 @@
       ],
       "Outputs": [
         {
-          "Id": "f770932652be4a3ab437f1d04a5e79c9",
+          "Id": "a910b3473de44432b3f3d1f16efada31",
           "Name": "",
           "Description": "Node output",
           "UsingDefaultValue": false,
@@ -358,49 +358,49 @@
   ],
   "Connectors": [
     {
-      "Start": "e64e74146be74924962617192f79a4fd",
-      "End": "57e14d9b5051466fb0ae40b451fca88c",
-      "Id": "38cc84a6e791430bbad8ba59df3ec1af"
+      "Start": "88e1542d4a314ea1849bd359f07e030f",
+      "End": "5fb661fe17344b18837b432abd3eaa46",
+      "Id": "d347ff6ea09643269763769418eaa03e"
     },
     {
-      "Start": "7a6c3fbfbda8404da28d679e23ce25c4",
-      "End": "bad3d43b15fe4d6185c52050658a7b85",
-      "Id": "3006df09191f4037b80c6ed73cf95b8a"
+      "Start": "6e24824c395d421e8f5262f19677cdc1",
+      "End": "c57833e82268498cad50790f67435146",
+      "Id": "a304ae39e74e4a1bbfc2dce499fa068d"
     },
     {
-      "Start": "9344fce1948f4f2bb47b832528cd73a6",
-      "End": "b59495076e534318bcbcb0c2030f75d7",
-      "Id": "5fc4721119c2430d9d85bd1431dda3af"
+      "Start": "17ccae2259b54c7f90bddfad7002f386",
+      "End": "bdb3d1b7e44b49588aff1f2c9923d882",
+      "Id": "2567a9cefbdd4baf99770c4f1033d5e1"
     },
     {
-      "Start": "b5bba74138ee4a20803c73f5430a6778",
-      "End": "2546d07279264997bfe4cb4908add190",
-      "Id": "def3c8fd5a9b4682ba977c5099c88ec0"
+      "Start": "958c98714bb94beba56d0a69a0514a69",
+      "End": "acac7dc8b6e7457198a0f5e26a2e1992",
+      "Id": "583c37625f8b49a8a90162e93d11e3d2"
     },
     {
-      "Start": "1af3923953774232b418361e0715c896",
-      "End": "e9d290c117f9492f8f5df0e63c44b738",
-      "Id": "849a51bd5a4d4cfb87611ff80351145d"
+      "Start": "641587fc2cb64e30be69ebb3004ec58c",
+      "End": "0160419e84c14ce39aef0e4c68c0a323",
+      "Id": "3ea2c638c570467a974b4c01980a9290"
     },
     {
-      "Start": "469a932feef04030a5feb3e52ee5fb35",
-      "End": "0e7c912477314f61a1901fe1312fee86",
-      "Id": "cb823cf16faa416eb6dc91dad98141c7"
+      "Start": "773fa49717b044139f7849825be169bf",
+      "End": "71c1568546f64df4b5f4f55bf9e7cb12",
+      "Id": "5b0f4c970d0444c9b9c792119758a883"
     },
     {
-      "Start": "9eea9f2b818f4411bd51f7f4b9245b9e",
-      "End": "daf9178b66374b5697aa56ceb3efbae5",
-      "Id": "a2e70f9e46584de987f6ad637abb6a02"
+      "Start": "0fb8c7c3003d413ca14c14b83bb3164c",
+      "End": "4e3590dcdc9d42729846e85a24c1c5c7",
+      "Id": "c8f7a2d3906c4c60b0e4a88f4218c517"
     },
     {
-      "Start": "1e936ed35a5344a3bbbdf20a6129ce72",
-      "End": "5613675ffb9543438d46636beed7f41d",
-      "Id": "b64dcf6ec939480ba22e45d786a5b5bd"
+      "Start": "1da2d318b622487595ceb8af5f1d84e8",
+      "End": "0c52d5cf9ea347d1952acf5df5f87a6b",
+      "Id": "5dcf27ed9b2f47ca8cc99a709f56777e"
     },
     {
-      "Start": "e6558b98b7ed4f84a358255bfb733b9d",
-      "End": "ec39370033344c759f7304f687dd7623",
-      "Id": "120c1367783e4db7afc3799e4ca97315"
+      "Start": "9ef4a60d69e2418ca05ebc3167dc74a4",
+      "End": "dc5df1956b57473f9374ca201da28d77",
+      "Id": "52c3e52eb7d04ccaaf33dbc0ed1b9c0b"
     }
   ],
   "Dependencies": [],
@@ -429,7 +429,7 @@
     },
     "NodeViews": [
       {
-        "Id": "2b2721c34a554bc39c67619d22b365d2",
+        "Id": "1a2289f73243492b94865952de3a0ca1",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Executar",
@@ -439,7 +439,7 @@
         "Y": 0.0
       },
       {
-        "Id": "b0a97705f5b647b3a1a84925a85ec98b",
+        "Id": "bfeb491cc94a4cb9bfc8f3d3fb42cf18",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Nome da superficie",
@@ -449,7 +449,7 @@
         "Y": 110.0
       },
       {
-        "Id": "e679e0f1df4949df8c6d836f3652fbd3",
+        "Id": "0f340b263c564352a95cc092162cee77",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Recuo do lote (m)",
@@ -459,7 +459,7 @@
         "Y": 220.0
       },
       {
-        "Id": "9b8a5b1c43914e6b90f20957a3065d42",
+        "Id": "cd3b7453b24f4fafa093d129b875498c",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Afastamento da divisa (m)",
@@ -469,7 +469,7 @@
         "Y": 330.0
       },
       {
-        "Id": "d9687bbabfca429bb1412b313939312c",
+        "Id": "b5ed455bf4574289a5c77f624a04390a",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Distancia maxima rede-lote (m)",
@@ -479,7 +479,7 @@
         "Y": 440.0
       },
       {
-        "Id": "38c8af379b8d41febd1a99c62383f1a4",
+        "Id": "e74caf87b1d44782ad8c15015c1f5920",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Layer",
@@ -489,7 +489,7 @@
         "Y": 550.0
       },
       {
-        "Id": "985e793ac3ad49adaa44ffe384f5242e",
+        "Id": "8bcd314636884e3cafe779af80269a44",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Usar LINE",
@@ -499,7 +499,7 @@
         "Y": 660.0
       },
       {
-        "Id": "9649d3d75a3a4a079d6bf714b7a61723",
+        "Id": "f87e5a3bca214666ace3b2c4b65b9e28",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "Apagar linhas anteriores do layer",
@@ -509,7 +509,7 @@
         "Y": 770.0
       },
       {
-        "Id": "77a148384a294e7cb4b8b821d97bc199",
+        "Id": "e27d27a786804dc49cabb1b50be4d7fc",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Name": "LigacoesPrediais",
@@ -519,7 +519,7 @@
         "Y": 385.0
       },
       {
-        "Id": "f56576bc360d4e269f1416c30ac55621",
+        "Id": "3a26147080954fbca6adb19c2f36f919",
         "IsSetAsInput": false,
         "IsSetAsOutput": true,
         "Name": "Resultado",

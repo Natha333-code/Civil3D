@@ -14,7 +14,7 @@
 #   IN[0] Executar (bool)
 #   IN[1] Nome da superficie      - vazio = clicar na superficie
 #   IN[2] Recuo do lote (m)       - padrao 1.0
-#   IN[3] Afastamento da divisa (m) - padrao 1.5
+#   IN[3] Afastamento da divisa (m) - padrao 1.0
 #   IN[4] Distancia maxima rede-lote (m) - padrao 30
 #   IN[5] Layer                   - padrao "LIGACOES"
 #   IN[6] Usar LINE (bool)        - False = polilinha (LWPOLYLINE)
@@ -46,7 +46,7 @@ from Autodesk.Civil.DatabaseServices import Pipe, Surface
 
 COR_MAGENTA = 6
 PASSO_TESTADA = 0.25    # espacamento (m) dos raios que medem a testada
-AMOSTRAS_DIVISA = 6     # pontos de cota ao longo de cada divisa
+AMOSTRAS_DIVISA = 10    # pontos de cota ao longo de cada divisa
 
 
 # ------------------------------------------------------------
@@ -194,128 +194,263 @@ def lote_em(p, lote, lotes):
     return None
 
 
-def testada(lote, a, b, lotes, dmax):
-    """Trecho do tubo a-b de onde raios perpendiculares atingem o lote.
+def unit(v):
+    L = math.hypot(v[0], v[1])
+    return (v[0] / L, v[1] / L)
 
-    Retorna (s1, s2, u, n, profundidades) ou None; u = direcao do tubo,
-    n = normal apontando para o lote, profundidades = {s: distancia}.
-    """
-    L = dist(a, b)
-    if L < 1e-6:
-        return None
-    u = ((b[0] - a[0]) / L, (b[1] - a[1]) / L)
-    if cruz(u, sub(lote.centro, a)) >= 0:
-        n = (-u[1], u[0])
-    else:
-        n = (u[1], -u[0])
-    projs = [(p[0] - a[0]) * u[0] + (p[1] - a[1]) * u[1] for p in lote.poli]
-    smin, smax = max(0.0, min(projs)), min(L, max(projs))
-    if smax <= smin:
-        return None
 
-    # so os lotes proximos podem bloquear os raios (desempenho)
-    area = caixa(lote.poli + [a, b], 1.0)
-    perto = [o for o in lotes if caixas_cruzam(area, o.caixa)]
+def escalar(a, b):
+    return a[0] * b[0] + a[1] * b[1]
 
-    validos = []
-    s = smin
-    while s <= smax + 1e-9:
-        o = soma(a, u, s)
-        ts = raio_poligono(o, n, lote.poli, dmax)
-        if ts and ts[0] > 1e-6:
-            fim = soma(o, n, ts[0])
-            if not bloqueado(o, fim, lote, perto):
-                validos.append((s, ts[0]))
-        s += PASSO_TESTADA
-    if not validos:
-        return None
 
-    # maior trecho continuo
-    melhor, atual = [], [validos[0]]
-    for v in validos[1:]:
-        if v[0] - atual[-1][0] <= PASSO_TESTADA * 1.5:
-            atual.append(v)
+def dist_reta(p, a, b):
+    """Distancia de p a reta infinita que passa por a e b."""
+    return abs(cruz(sub(b, a), sub(p, a))) / dist(a, b)
+
+
+def bissecao(f, ok, ruim, iteracoes=40):
+    """Ultimo valor entre ok (f verdadeiro) e ruim (f falso)."""
+    for _ in range(iteracoes):
+        m = (ok + ruim) / 2.0
+        if f(m):
+            ok = m
         else:
-            if len(atual) > len(melhor):
-                melhor = atual
-            atual = [v]
-    if len(atual) > len(melhor):
-        melhor = atual
-    prof = dict(melhor)
-    return melhor[0][0], melhor[-1][0], u, n, prof
+            ruim = m
+    return ok
 
 
-def cota_divisa(lote, a, u, n, s, dmax, cota):
-    """Cota media ao longo da divisa: raio logo para dentro do lote."""
-    o = soma(a, u, s)
-    ts = raio_poligono(o, n, lote.poli, dmax * 3 + 1000.0)
-    if not ts:
+class Frente(object):
+    """Testada de um lote vista a partir da reta de um tubo (prolongada).
+
+    A reta do tubo e prolongada alem das pontas, para que os PVs (fim dos
+    tubos) no meio de um lote nao cortem a testada.
+    """
+
+    def __init__(self, lote, a, b, lotes, dmax):
+        self.ok = False
+        L = dist(a, b)
+        if L < 1e-6:
+            return
+        self.lote, self.a, self.dmax = lote, a, dmax
+        self.u = u = ((b[0] - a[0]) / L, (b[1] - a[1]) / L)
+        if cruz(u, sub(lote.centro, a)) >= 0:
+            self.n = (-u[1], u[0])
+        else:
+            self.n = (u[1], -u[0])
+        projs = [escalar(sub(p, a), u) for p in lote.poli]
+        smin, smax = min(projs), max(projs)
+        area = caixa(lote.poli + [a, b, soma(a, u, smin), soma(a, u, smax)],
+                     1.0)
+        self.perto = [o for o in lotes if caixas_cruzam(area, o.caixa)]
+
+        validos = []
+        s = smin
+        while s <= smax + 1e-9:
+            if self.prof(s) is not None:
+                validos.append(s)
+            s += PASSO_TESTADA
+        if not validos:
+            return
+        melhor, atual = [], [validos[0]]
+        for v in validos[1:]:
+            if v - atual[-1] <= PASSO_TESTADA * 1.5:
+                atual.append(v)
+            else:
+                if len(atual) > len(melhor):
+                    melhor = atual
+                atual = [v]
+        if len(atual) > len(melhor):
+            melhor = atual
+        valido = lambda x: self.prof(x) is not None
+        # cantos exatos da testada (onde o raio deixa de atingir o lote)
+        self.s1 = bissecao(valido, melhor[0], melhor[0] - PASSO_TESTADA)
+        self.s2 = bissecao(valido, melhor[-1], melhor[-1] + PASSO_TESTADA)
+        self.ok = True
+
+    def origem(self, s):
+        return soma(self.a, self.u, s)
+
+    def prof(self, s):
+        """Distancia da reta do tubo ao lote no raio da estacao s."""
+        o = self.origem(s)
+        ts = raio_poligono(o, self.n, self.lote.poli, self.dmax)
+        if not ts or ts[0] <= 1e-6:
+            return None
+        if bloqueado(o, soma(o, self.n, ts[0]), self.lote, self.perto):
+            return None
+        return ts[0]
+
+    def ponto(self, s):
+        """Ponto da frente do lote atingido pelo raio da estacao s."""
+        d = self.prof(s)
+        if d is None:
+            return None
+        return soma(self.origem(s), self.n, d)
+
+
+def caminho_divisa(lote, canto, n):
+    """Vertices da divisa lateral que sai do canto da testada.
+
+    Parte do vertice do lote mais proximo do canto e segue o contorno no
+    sentido que se afasta da rede, enquanto as arestas continuarem indo
+    para o fundo do lote.
+    """
+    poli = lote.poli
+    N = len(poli)
+    i = min(range(N), key=lambda k: dist(poli[k], canto))
+    passos = []
+    for passo in (1, -1):
+        e = sub(poli[(i + passo) % N], poli[i])
+        if math.hypot(e[0], e[1]) > 1e-9:
+            passos.append((escalar(unit(e), n), passo))
+    passo = max(passos)[1]
+    caminho = [poli[i]]
+    j = i
+    for _ in range(N - 1):
+        k = (j + passo) % N
+        e = sub(poli[k], poli[j])
+        if math.hypot(e[0], e[1]) < 1e-9:
+            j = k
+            continue
+        if len(caminho) > 1 and escalar(unit(e), n) < 0.5:
+            break
+        caminho.append(poli[k])
+        j = k
+    return caminho
+
+
+def cota_divisa(lote, caminho, cota):
+    """Cota media da superficie ao longo da divisa, 0,5 m para dentro do lote."""
+    trechos = list(zip(caminho, caminho[1:]))
+    total = sum(dist(p, q) for p, q in trechos)
+    if total < 1e-6:
         return None
-    entra = ts[0]
-    sai = ts[1] if len(ts) > 1 else entra
     zs = []
     for k in range(AMOSTRAS_DIVISA):
-        t = entra + (sai - entra) * (k + 0.5) / AMOSTRAS_DIVISA
-        z = cota(soma(o, n, t))
-        if z is not None:
-            zs.append(z)
+        alvo = total * (k + 0.5) / AMOSTRAS_DIVISA
+        for p, q in trechos:
+            L = dist(p, q)
+            if alvo <= L or (p, q) == trechos[-1]:
+                e = unit(sub(q, p))
+                base = soma(p, e, min(alvo, L))
+                for perp in ((-e[1], e[0]), (e[1], -e[0])):
+                    x = soma(base, perp, 0.5)
+                    if dentro(x, lote.poli):
+                        z = cota(x)
+                        if z is not None:
+                            zs.append(z)
+                        break
+                break
+            alvo -= L
     if not zs:
         return None
     return sum(zs) / len(zs)
+
+
+def pe_na_rede(q, tubos, lote, perto):
+    """Pe da perpendicular de q no tubo mais proximo que esta em frente.
+
+    Retorna (ponto, perpendicular?). Se nenhum tubo tem q a sua frente
+    (ex.: lado externo de uma deflexao), usa o PV (ponta) mais proximo.
+    """
+    melhor = None
+    for a, b in tubos:
+        L = dist(a, b)
+        if L < 1e-6:
+            continue
+        u = ((b[0] - a[0]) / L, (b[1] - a[1]) / L)
+        t = escalar(sub(q, a), u)
+        if -1e-6 <= t <= L + 1e-6:
+            f = soma(a, u, t)
+            d = dist(f, q)
+            if (melhor is None or d < melhor[0]) and \
+                    not bloqueado(f, q, lote, perto):
+                melhor = (d, f)
+    if melhor is not None:
+        return melhor[1], True
+    pontas = [p for ab in tubos for p in ab]
+    return min(pontas, key=lambda p: dist(p, q)), False
 
 
 def planejar(lote, lotes, tubos, cota, recuo, afast, dmax):
     """Ligacao de um lote: dict com inicio, fim, lado, cotas... ou motivo."""
     candidatos = []
     for a, b in tubos:
-        if dist_seg_poligono(a, b, lote.poli) > dmax:
+        d = dist_seg_poligono(a, b, lote.poli)
+        if d > dmax:
             continue
-        r = testada(lote, a, b, lotes, dmax)
-        if r is not None:
-            s1, s2, u, n, prof = r
-            candidatos.append((s2 - s1, -min(prof.values()), a, b, r))
+        fr = Frente(lote, a, b, lotes, dmax)
+        if fr.ok:
+            candidatos.append((round(d, 3), -(fr.s2 - fr.s1), fr))
     if not candidatos:
         return {'lote': lote.nome, 'motivo': 'sem testada voltada para a rede'}
-    candidatos.sort(key=lambda c: (c[0], c[1]), reverse=True)
-    a, b, (s1, s2, u, n, prof) = candidatos[0][2], candidatos[0][3], candidatos[0][4]
+    candidatos.sort(key=lambda c: (c[0], c[1]))
+    fr = candidatos[0][2]
+    s1, s2, u, n = fr.s1, fr.s2, fr.u, fr.n
+    meio = (s1 + s2) / 2.0
 
     lados = []
-    if s2 - s1 < 2.0 * afast:
-        lados.append({'lado': 'meio', 's': (s1 + s2) / 2.0, 'vizinho': None,
-                      'cota': None})
-    else:
-        for nome, sd, sinal in (('inicio', s1, -1.0), ('fim', s2, 1.0)):
-            prof_d = prof[sd]
-            vizinho = None
-            for extra in (2.0, 5.0, 10.0):
-                p = soma(soma(a, u, sd + sinal * min(afast, 1.0)), n,
-                         prof_d + extra)
-                vizinho = lote_em(p, lote, lotes)
-                if vizinho is not None:
-                    break
-            z = cota_divisa(lote, a, u, n, sd - sinal * 0.5, dmax, cota)
-            lados.append({'lado': nome, 's': sd - sinal * afast,
-                          'vizinho': vizinho.nome if vizinho else None,
-                          'cota': z})
-        com_vizinho = [l for l in lados if l['vizinho'] is not None]
-        if com_vizinho:
-            lados = com_vizinho
-        lados.sort(key=lambda l: (l['cota'] is None,
-                                  l['cota'] if l['cota'] is not None else 0.0))
+    for nome, sd, sinal in (('inicio', s1, -1.0), ('fim', s2, 1.0)):
+        canto = fr.ponto(sd)
+        if canto is None:
+            continue
+        cam = caminho_divisa(lote, canto, n)
+        if len(cam) < 2:
+            continue
+        vizinho = None
+        for extra in (2.0, 5.0, 10.0):
+            p = soma(soma(canto, u, sinal * min(afast, 1.0)), n, extra)
+            vizinho = lote_em(p, lote, lotes)
+            if vizinho is not None:
+                break
+        lados.append({'lado': nome, 'sd': sd, 'divisa': (cam[0], cam[1]),
+                      'vizinho': vizinho.nome if vizinho else None,
+                      'cota': cota_divisa(lote, cam, cota)})
+    if not lados:
+        return {'lote': lote.nome, 'motivo': 'divisas nao identificadas'}
+    todos = list(lados)
+    com_vizinho = [l for l in lados if l['vizinho'] is not None]
+    if com_vizinho:
+        lados = com_vizinho
+    lados.sort(key=lambda l: (l['cota'] is None,
+                              l['cota'] if l['cota'] is not None else 0.0))
+    esc = lados[0]
 
-    escolhido = lados[0]
-    o = soma(a, u, escolhido['s'])
-    ts = raio_poligono(o, n, lote.poli, dmax)
-    if not ts:
-        return {'lote': lote.nome, 'motivo': 'raio nao atinge o lote'}
-    comp = ts[0] - recuo
+    # estacao onde a frente do lote fica a 'afast' metros da divisa
+    da, db_ = esc['divisa']
+
+    def longe(s):
+        q = fr.ponto(s)
+        return q is not None and dist_reta(q, da, db_) >= afast
+
+    if longe(meio):
+        # longe() e falso no canto e verdadeiro no meio: busca a transicao
+        s_lig = bissecao(longe, meio, esc['sd'])
+        dist_div = afast
+    else:
+        s_lig = meio     # testada estreita: ligacao no meio
+        q = fr.ponto(meio)
+        dist_div = dist_reta(q, da, db_) if q is not None else 0.0
+    q = fr.ponto(s_lig)
+    if q is None:
+        return {'lote': lote.nome, 'motivo': 'frente do lote nao encontrada'}
+
+    # inicio no eixo do tubo em frente, perpendicular a ele
+    ini, perpendicular = pe_na_rede(q, tubos, lote, fr.perto)
+    if dist(ini, q) < 1e-6:
+        return {'lote': lote.nome, 'motivo': 'rede encostada no lote'}
+    d = unit(sub(q, ini))
+    ts = raio_poligono(ini, d, lote.poli, dist(ini, q) + 1.0)
+    alcance = ts[0] if ts else dist(ini, q)
+    comp = alcance - recuo
     if comp <= 0.05:
         return {'lote': lote.nome, 'motivo': 'lote a menos de %.2f m da rede'
                 % recuo}
-    return {'lote': lote.nome, 'inicio': o, 'fim': soma(o, n, comp),
-            'lado': escolhido['lado'], 'vizinho': escolhido['vizinho'],
-            'cota': escolhido['cota'],
-            'cotas': [(l['lado'], l['cota']) for l in lados]}
+    return {'lote': lote.nome, 'inicio': ini, 'fim': soma(ini, d, comp),
+            'frente': q, 'lado': esc['lado'], 'vizinho': esc['vizinho'],
+            'cota': esc['cota'], 'dist_divisa': dist_div,
+            'perpendicular': perpendicular,
+            'cotas': [(l['lado'], l['cota']) for l in todos]}
 
 
 # ------------------------------------------------------------
@@ -547,10 +682,13 @@ def executar(executa, nome_sup, recuo, afast, dmax, layer, usar_line, apagar):
                 cotas = ', '.join('%s=%s' % (l, '%.3f' % z if z is not None
                                              else 's/ cota')
                                   for l, z in r['cotas'])
-                relatorio.append('%s: %.2f m | divisa %s%s | %s'
+                relatorio.append('%s: %.2f m | divisa %s%s a %.2f m | %s%s'
                                  % (r['lote'], dist(a, b), r['lado'],
                                     ' (vizinho %s)' % r['vizinho']
-                                    if r['vizinho'] else '', cotas))
+                                    if r['vizinho'] else '',
+                                    r['dist_divisa'], cotas,
+                                    '' if r['perpendicular'] else
+                                    ' | sai do PV (nenhum tubo em frente)'))
 
             t.Commit()
         except Exception:
@@ -573,7 +711,7 @@ def executar(executa, nome_sup, recuo, afast, dmax, layer, usar_line, apagar):
 
 try:
     OUT = executar(IN[0], texto(IN[1]), numero(IN[2], 1.0),
-                   numero(IN[3], 1.5), numero(IN[4], 30.0),
+                   numero(IN[3], 1.0), numero(IN[4], 30.0),
                    texto(IN[5]) or 'LIGACOES', bool(IN[6]), bool(IN[7]))
 except Exception:
     OUT = 'ERRO:\n' + traceback.format_exc()
