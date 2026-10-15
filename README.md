@@ -14,6 +14,7 @@ Rotinas AutoLISP para uso no AutoCAD Civil 3D.
 |--------------|-----------|
 | `SOMACOMP`   | Soma o comprimento de linhas, polilinhas (2D/3D), arcos, circulos, splines e elipses selecionados. |
 | `ANOTACOORD` | Clique em pontos e insere um MTEXT com as coordenadas E, N e Z (em WCS). |
+| `DIFCOTA`    | (`lisp/diferenca_cotas.lsp`) Clique em pontos e cria labels com a diferenca de cotas entre uma superficie e a superficie de referencia. |
 | `IMGSAT`     | (`lisp/imagem_satelite.lsp`) Insere imagem de satelite georreferenciada nas coordenadas do desenho, recortada por pontos, polilinha ou cliques. |
 | `VOLXLS`     | (`lisp/volumes_csv.lsp`) Igual ao `VOLCSV`, mas gera uma planilha formatada (`.xml`, abre no Excel). |
 | `VOLCSV`     | (`lisp/volumes_csv.lsp`) Selecione superficies de volume (TIN Volume Surface) e exporte um `.csv` com Corte, Aterro e Liquido de cada uma, mais o TOTAL. |
@@ -60,3 +61,19 @@ e escala corretas, recorta pelo poligono, manda para tras e adiciona o credito d
 - Limite de 4096 pixels por lado: em areas grandes a resolucao e ajustada automaticamente.
 - A imagem fica **vinculada**: mantenha o `.jpg` junto com o `.dwg`.
 - Verifique os termos de uso da Esri para o seu caso (uso comercial pode exigir conta ArcGIS).
+
+### `DIFCOTA` - diferenca de cotas entre superficies
+
+Arquivo `lisp/diferenca_cotas.lsp`.
+
+1. Escolha a superficie a medir e a superficie de referencia (pelo numero na lista ou
+   clicando na tela). As ultimas escolhas ficam como padrao.
+2. Informe a altura do texto.
+3. Clique nos pontos; para cada um, clique a posicao da label (ou Enter para colocar ao lado).
+
+Cada label (multileader na camada `DIF-COTAS`) mostra `Dh = superficie - referencia`
+(positivo = acima da referencia, em verde; negativo em vermelho) e as duas cotas.
+Configuracoes no topo do arquivo: casas decimais, separador decimal, mostrar cotas, cores.
+
+- A label e **estatica**: se as superficies mudarem, rode o comando de novo.
+- Pontos fora de alguma das superficies sao avisados e ignorados.
