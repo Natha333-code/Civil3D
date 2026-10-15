@@ -14,7 +14,7 @@ Rotinas AutoLISP para uso no AutoCAD Civil 3D.
 |--------------|-----------|
 | `SOMACOMP`   | Soma o comprimento de linhas, polilinhas (2D/3D), arcos, circulos, splines e elipses selecionados. |
 | `ANOTACOORD` | Clique em pontos e insere um MTEXT com as coordenadas E, N e Z (em WCS). |
-| `DIFCOTA`    | (`lisp/diferenca_cotas.lsp`) Clique em pontos e cria labels com a diferenca de cotas entre uma superficie e a superficie de referencia. |
+| `MAXCA`      | (`lisp/max_corte_aterro.lsp`) Localiza o ponto de maior corte e de maior aterro e cria labels com as cotas. |
 | `IMGSAT`     | (`lisp/imagem_satelite.lsp`) Insere imagem de satelite georreferenciada nas coordenadas do desenho, recortada por pontos, polilinha ou cliques. |
 | `VOLXLS`     | (`lisp/volumes_csv.lsp`) Igual ao `VOLCSV`, mas gera uma planilha formatada (`.xml`, abre no Excel). |
 | `VOLCSV`     | (`lisp/volumes_csv.lsp`) Selecione superficies de volume (TIN Volume Surface) e exporte um `.csv` com Corte, Aterro e Liquido de cada uma, mais o TOTAL. |
@@ -62,18 +62,21 @@ e escala corretas, recorta pelo poligono, manda para tras e adiciona o credito d
 - A imagem fica **vinculada**: mantenha o `.jpg` junto com o `.dwg`.
 - Verifique os termos de uso da Esri para o seu caso (uso comercial pode exigir conta ArcGIS).
 
-### `DIFCOTA` - diferenca de cotas entre superficies
+### `MAXCA` - ponto de maior corte e de maior aterro
 
-Arquivo `lisp/diferenca_cotas.lsp`.
+Arquivo `lisp/max_corte_aterro.lsp`.
 
-1. Escolha a superficie a medir e a superficie de referencia (pelo numero na lista ou
-   clicando na tela). As ultimas escolhas ficam como padrao.
+1. Escolha a superficie na lista (as de volume aparecem com `[volume]`) ou clique nela.
+   - **Superficie de volume**: resultado exato, lido dos vertices da superficie
+     (corte/aterro = comparacao - base).
+   - **Superficie TIN de projeto**: a LISP pede o terreno de referencia e compara as cotas
+     nos vertices das duas superficies.
 2. Informe a altura do texto.
-3. Clique nos pontos; para cada um, clique a posicao da label (ou Enter para colocar ao lado).
 
-Cada label (multileader na camada `DIF-COTAS`) mostra `Dh = superficie - referencia`
-(positivo = acima da referencia, em verde; negativo em vermelho) e as duas cotas.
-Configuracoes no topo do arquivo: casas decimais, separador decimal, mostrar cotas, cores.
+Sao criadas duas labels (multileader na camada `CORTE-ATERRO`): **MAIOR CORTE** (vermelho)
+e **MAIOR ATERRO** (azul), com o valor do corte/aterro e as cotas de projeto e terreno.
+As coordenadas tambem aparecem na linha de comando.
 
-- A label e **estatica**: se as superficies mudarem, rode o comando de novo.
-- Pontos fora de alguma das superficies sao avisados e ignorados.
+- As labels sao **estaticas**: se as superficies mudarem, apague-as e rode de novo.
+- Com duas superficies TIN, pontos onde arestas das duas se cruzam nao sao avaliados;
+  para o resultado exato, use a superficie de volume.
