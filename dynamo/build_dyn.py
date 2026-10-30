@@ -189,3 +189,33 @@ if __name__ == "__main__":
         ],
         "LigacoesPrediais.dyn",
     )
+    gerar(
+        "AjusteGreide",
+        "Analisa perfis longitudinais e secoes transversais, calcula corte "
+        "e aterro e ajusta o greide para respeitar os valores maximos.",
+        "ajuste_greide.py",
+        [
+            ("Executar", "boolean", False, "Ative para rodar a rotina."),
+            ("Alinhamentos", "string", "",
+             "Nomes separados por ponto e virgula. Vazio = selecionar no desenho."),
+            ("Nome da superficie existente", "string", "",
+             "Vazio = clicar na superficie no desenho."),
+            ("Nome do perfil de projeto", "string", "",
+             "Perfil de layout (greide). Vazio = primeiro perfil de layout."),
+            ("Corte maximo (m)", "number", 3.0,
+             "Altura maxima de corte em qualquer ponto da secao."),
+            ("Aterro maximo (m)", "number", 3.0,
+             "Altura maxima de aterro em qualquer ponto da secao."),
+            ("Largura da plataforma (m)", "number", 7.0,
+             "Largura total analisada na secao. 0 = so o eixo."),
+            ("Inclinacao transversal (%)", "number", -2.0,
+             "Do eixo para os bordos. Negativo = caindo para os bordos."),
+            ("Intervalo de analise (m)", "number", 10.0,
+             "Espacamento das secoes (alem das sample lines e PVIs)."),
+            ("Espacamento minimo entre PVIs (m)", "number", 20.0,
+             "Mais perto que isso a rotina move o PVI existente em vez de criar outro."),
+            ("Ajustar o perfil original", "boolean", False,
+             "False = cria e ajusta uma copia '<perfil> - AJUSTADO'."),
+        ],
+        "AjusteGreide.dyn",
+    )

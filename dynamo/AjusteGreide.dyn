@@ -1,0 +1,696 @@
+{
+  "Uuid": "d16847c5-5e86-4220-8b90-cb561d23b686",
+  "IsCustomNode": false,
+  "Description": "Analisa perfis longitudinais e secoes transversais, calcula corte e aterro e ajusta o greide para respeitar os valores maximos.",
+  "Name": "AjusteGreide",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "db0fbbe3c6374ebdab149fc2ad64ae11",
+      "Name": "Executar",
+      "Type": "boolean",
+      "Value": "false",
+      "Description": "Ative para rodar a rotina."
+    },
+    {
+      "Id": "c217bd8af38f4c1a82fa300524acdf26",
+      "Name": "Alinhamentos",
+      "Type": "string",
+      "Value": "",
+      "Description": "Nomes separados por ponto e virgula. Vazio = selecionar no desenho."
+    },
+    {
+      "Id": "dac7e68fae8c4182aa9d399ef4eed7d5",
+      "Name": "Nome da superficie existente",
+      "Type": "string",
+      "Value": "",
+      "Description": "Vazio = clicar na superficie no desenho."
+    },
+    {
+      "Id": "1af3f407ad3248d2b8a9a34d66ba191f",
+      "Name": "Nome do perfil de projeto",
+      "Type": "string",
+      "Value": "",
+      "Description": "Perfil de layout (greide). Vazio = primeiro perfil de layout."
+    },
+    {
+      "Id": "700ff5cf95bb4df8b53d3f08012768f9",
+      "Name": "Corte maximo (m)",
+      "Type": "number",
+      "Value": "3.0",
+      "Description": "Altura maxima de corte em qualquer ponto da secao.",
+      "NumberType": "Double"
+    },
+    {
+      "Id": "fab229f363884dd49a8bd727e774f5bc",
+      "Name": "Aterro maximo (m)",
+      "Type": "number",
+      "Value": "3.0",
+      "Description": "Altura maxima de aterro em qualquer ponto da secao.",
+      "NumberType": "Double"
+    },
+    {
+      "Id": "f9dda550e7e6412c8bc70aa25daa9505",
+      "Name": "Largura da plataforma (m)",
+      "Type": "number",
+      "Value": "7.0",
+      "Description": "Largura total analisada na secao. 0 = so o eixo.",
+      "NumberType": "Double"
+    },
+    {
+      "Id": "45812b64e58f4c348ab17f43d2f97686",
+      "Name": "Inclinacao transversal (%)",
+      "Type": "number",
+      "Value": "-2.0",
+      "Description": "Do eixo para os bordos. Negativo = caindo para os bordos.",
+      "NumberType": "Double"
+    },
+    {
+      "Id": "0599cadb26e248c7852f141290b53127",
+      "Name": "Intervalo de analise (m)",
+      "Type": "number",
+      "Value": "10.0",
+      "Description": "Espacamento das secoes (alem das sample lines e PVIs).",
+      "NumberType": "Double"
+    },
+    {
+      "Id": "29bf7ecdac1440808bf523124fdf14fe",
+      "Name": "Espacamento minimo entre PVIs (m)",
+      "Type": "number",
+      "Value": "20.0",
+      "Description": "Mais perto que isso a rotina move o PVI existente em vez de criar outro.",
+      "NumberType": "Double"
+    },
+    {
+      "Id": "12a45e58cfac4a6893521e486d0c428a",
+      "Name": "Ajustar o perfil original",
+      "Type": "boolean",
+      "Value": "false",
+      "Description": "False = cria e ajusta uma copia '<perfil> - AJUSTADO'."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "db0fbbe3c6374ebdab149fc2ad64ae11",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "97b2f907811f482a8cd0b72e771ef4bb",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "c217bd8af38f4c1a82fa300524acdf26",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5dde759c838f4a4b97b823f17a88c3f9",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "dac7e68fae8c4182aa9d399ef4eed7d5",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "19ae89f9988b4a3fa54956496e71bcc0",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "1af3f407ad3248d2b8a9a34d66ba191f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "453cbd128b5f4e6088446d9998a3e008",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 3.0,
+      "Id": "700ff5cf95bb4df8b53d3f08012768f9",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "bdcac8b39c454b35a2eea24dc7ca1600",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 3.0,
+      "Id": "fab229f363884dd49a8bd727e774f5bc",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8378daaf4ae848d4a5873c74e9b02f54",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 7.0,
+      "Id": "f9dda550e7e6412c8bc70aa25daa9505",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "83da74a5d20248858f6abdab564688ad",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": -2.0,
+      "Id": "45812b64e58f4c348ab17f43d2f97686",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "28c8b2e9183b4b1e98fdccc58aa389a5",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 10.0,
+      "Id": "0599cadb26e248c7852f141290b53127",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d444814068bd4ec184041a65aa06ecc9",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "InputValue": 20.0,
+      "Id": "29bf7ecdac1440808bf523124fdf14fe",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "adf0c7ce05684dca99a3668a3a03b08d",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a number."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "12a45e58cfac4a6893521e486d0c428a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "769e1fb4297f44b08b904d674dc5ab4a",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# ============================================================\n# ajuste_greide.py - codigo do no Python de AjusteGreide.dyn\n#\n# Civil 3D 2021 / Dynamo 2.5-2.6 / IronPython 2.7\n#\n# Para cada alinhamento escolhido:\n#   1. Le as secoes transversais do terreno (superficie existente) em cada\n#      estaca: intervalo fixo + estacas das sample lines existentes.\n#   2. Calcula, com o perfil de projeto (greide) e a plataforma (largura +\n#      inclinacao transversal), as alturas de CORTE e ATERRO.\n#   3. Ajusta o perfil de projeto (move PVIs proximos ou insere PVIs) ate\n#      que corte <= Corte maximo e aterro <= Aterro maximo em toda a secao.\n#   Por padrao o ajuste e feito numa COPIA do perfil (\"<nome> - AJUSTADO\").\n#\n# Entradas (IN):\n#   IN[0]  Executar (bool)\n#   IN[1]  Alinhamentos (nomes separados por ;)  - vazio = selecionar\n#   IN[2]  Nome da superficie existente           - vazio = clicar\n#   IN[3]  Nome do perfil de projeto              - vazio = 1o perfil de layout\n#   IN[4]  Corte maximo (m)                       - padrao 3.0\n#   IN[5]  Aterro maximo (m)                      - padrao 3.0\n#   IN[6]  Largura da plataforma (m)              - padrao 7.0 (0 = so o eixo)\n#   IN[7]  Inclinacao transversal (%)             - padrao -2.0 (caindo p/ bordos)\n#   IN[8]  Intervalo de analise (m)               - padrao 10\n#   IN[9]  Espacamento minimo entre PVIs (m)      - padrao 20\n#   IN[10] Ajustar o perfil original (bool)       - False = cria copia\n#\n# Este arquivo e a fonte; o .dyn e gerado por dynamo/build_dyn.py.\n# (Strings sem acento para evitar problemas de codificacao.)\n# ============================================================\n\nimport clr\nimport traceback\n\nclr.AddReference('AcMgd')\nclr.AddReference('AcCoreMgd')\nclr.AddReference('AcDbMgd')\nclr.AddReference('AecBaseMgd')\nclr.AddReference('AeccDbMgd')\n\nfrom Autodesk.AutoCAD.ApplicationServices import Application\nfrom Autodesk.AutoCAD.DatabaseServices import (OpenMode, TypedValue)\nfrom Autodesk.AutoCAD.EditorInput import (PromptEntityOptions,\n                                          PromptSelectionOptions,\n                                          PromptStatus, SelectionFilter)\nfrom Autodesk.Civil.ApplicationServices import CivilApplication\nfrom Autodesk.Civil.DatabaseServices import (Profile, ProfileType, Surface)\n\nTOLERANCIA = 0.005   # m - violacao menor que isso e ignorada\nMARGEM = 0.02        # m - folga deixada dentro dos limites ao ajustar\nMAX_ITERACOES = 500\nPASSO_SECAO = 1.0    # m - espacamento dos pontos na secao transversal\n\n\n# ------------------------------------------------------------\n# Calculo puro - independe do AutoCAD\n# ------------------------------------------------------------\ndef offsets_secao(largura):\n    \"\"\"Afastamentos (m) dos pontos da secao: eixo, bordos e intermediarios.\"\"\"\n    meia = largura / 2.0\n    if meia <= 1e-9:\n        return [0.0]\n    n = max(1, int(meia / PASSO_SECAO + 0.5))\n    lado = [meia * k / n for k in range(1, n + 1)]\n    return [-o for o in reversed(lado)] + [0.0] + lado\n\n\ndef faixa_greide(secao, corte_max, aterro_max, inc):\n    \"\"\"Faixa (minimo, maximo) da cota do eixo que respeita os limites.\n\n    secao: lista (offset, cota do terreno ou None); inc: inclinacao\n    transversal em m/m (negativa = plataforma cai do eixo para os bordos).\n    Cota da plataforma no offset o = cota do eixo + inc * |o|.\n    \"\"\"\n    base = [z - inc * abs(o) for o, z in secao if z is not None]\n    if not base:\n        return None\n    return max(base) - corte_max, min(base) + aterro_max\n\n\ndef corte_aterro(z_eixo, secao, inc):\n    \"\"\"(corte maximo, aterro maximo) da secao para a cota do eixo dada.\"\"\"\n    corte = aterro = 0.0\n    for o, z in secao:\n        if z is None:\n            continue\n        h = z_eixo + inc * abs(o) - z\n        if h > aterro:\n            aterro = h\n        if -h > corte:\n            corte = -h\n    return corte, aterro\n\n\ndef resumo(perfil, estacoes, secoes, faixas, inc):\n    \"\"\"Estatisticas de corte/aterro e estacas fora dos limites.\"\"\"\n    r = {'corte': 0.0, 'est_corte': None, 'aterro': 0.0, 'est_aterro': None,\n         'violacoes': []}\n    for s in estacoes:\n        z = perfil.cota(s)\n        c, a = corte_aterro(z, secoes[s], inc)\n        if c > r['corte']:\n            r['corte'], r['est_corte'] = c, s\n        if a > r['aterro']:\n            r['aterro'], r['est_aterro'] = a, s\n        f = faixas.get(s)\n        if f is not None and f[0] <= f[1] and \\\n                (z < f[0] - TOLERANCIA or z > f[1] + TOLERANCIA):\n            r['violacoes'].append(s)\n    return r\n\n\ndef ajustar(perfil, estacoes, faixas, esp_min):\n    \"\"\"Ajusta o perfil ate respeitar as faixas. Retorna log de alteracoes.\n\n    perfil precisa oferecer: cota(s), pvis() -> [(estaca, cota)] ordenados,\n    mover_pvi(indice, delta) -> bool, adicionar_pvi(estaca, cota) -> bool.\n    Retorna (log, convergiu, estacas_travadas).\n    \"\"\"\n    log = {}            # estaca do PVI -> ['movido'|'novo', delta acumulado]\n    movimentos = {}     # quantas vezes cada PVI foi movido\n    travadas = set()    # estacas em que o Civil recusou mover e inserir PVI\n    for _ in range(MAX_ITERACOES):\n        pior = None\n        for s in estacoes:\n            f = faixas.get(s)\n            if f is None or f[0] > f[1] or s in travadas:\n                continue           # sem terreno, inviavel ou travada\n            z = perfil.cota(s)\n            if z < f[0] - TOLERANCIA:\n                d = f[0] - z\n            elif z > f[1] + TOLERANCIA:\n                d = f[1] - z\n            else:\n                continue\n            if pior is None or abs(d) > abs(pior[1]):\n                pior = (s, d)\n        if pior is None:\n            return log, True, sorted(travadas)\n\n        s, _ = pior\n        lo, hi = faixas[s]\n        z = perfil.cota(s)\n        if hi - lo > 2 * MARGEM:\n            alvo = min(max(z, lo + MARGEM), hi - MARGEM)\n        else:\n            alvo = (lo + hi) / 2.0\n        d = alvo - z\n\n        pvis = perfil.pvis()\n        i = min(range(len(pvis)), key=lambda k: abs(pvis[k][0] - s))\n        sp = pvis[i][0]\n        # PVI movido muitas vezes sem resolver: a cada 6 movimentos o\n        # espacamento exigido cai pela metade, permitindo inserir um PVI novo\n        limite = esp_min / (2.0 ** (movimentos.get(sp, 0) // 6))\n        if abs(sp - s) >= max(limite, 1.0) and perfil.adicionar_pvi(s, alvo):\n            log[s] = ['novo', alvo]\n            continue\n\n        # peso do PVI na estaca s (funcao \"chapeu\" entre os vizinhos)\n        if abs(sp - s) < 1e-6:\n            peso = 1.0\n        else:\n            viz = pvis[i + 1][0] if s > sp and i + 1 < len(pvis) else \\\n                pvis[i - 1][0] if s < sp and i > 0 else None\n            peso = 1.0 - abs(s - sp) / abs(viz - sp) if viz is not None else 1.0\n        delta = d / max(peso, 0.3)\n        if not perfil.mover_pvi(i, delta):\n            if abs(sp - s) > 1.0 and perfil.adicionar_pvi(s, alvo):\n                log[s] = ['novo', alvo]\n            else:\n                travadas.add(s)\n            continue\n        movimentos[sp] = movimentos.get(sp, 0) + 1\n        if sp in log:\n            log[sp][1] += delta   # 'novo': cota final; 'movido': delta total\n        else:\n            log[sp] = ['movido', delta]\n    return log, False, sorted(travadas)\n\n\ndef rampa_maxima(pvis):\n    r = 0.0\n    for (s1, z1), (s2, z2) in zip(pvis, pvis[1:]):\n        if s2 - s1 > 1e-6:\n            r = max(r, abs(z2 - z1) / (s2 - s1) * 100.0)\n    return r\n\n\ndef fmt_estaca(s):\n    \"\"\"Estaca no formato 0+000.00.\"\"\"\n    km = int(s // 1000)\n    return '%d+%06.2f' % (km, s - km * 1000)\n\n\n# ------------------------------------------------------------\n# Adaptadores AutoCAD / Civil 3D\n# ------------------------------------------------------------\nclass PerfilCivil(object):\n    def __init__(self, prof):\n        self.prof = prof\n\n    def cota(self, s):\n        return self.prof.ElevationAt(s)\n\n    def _lista(self):\n        return sorted([p for p in self.prof.PVIs], key=lambda p: p.Station)\n\n    def pvis(self):\n        return [(p.Station, p.Elevation) for p in self._lista()]\n\n    def mover_pvi(self, i, delta):\n        try:\n            p = self._lista()[i]\n            p.Elevation = p.Elevation + delta\n            return True\n        except Exception:\n            return False\n\n    def adicionar_pvi(self, s, z):\n        try:\n            self.prof.PVIs.AddPVI(s, z)\n            return True\n        except Exception:\n            return False\n\n\ndef texto(v):\n    if v is None:\n        return ''\n    return str(v).strip()\n\n\ndef numero(v, padrao, minimo=None):\n    try:\n        v = float(v)\n    except Exception:\n        return padrao\n    if minimo is not None and v < minimo:\n        return padrao\n    return v\n\n\ndef pedir_superficie(ed):\n    opt = PromptEntityOptions('\\nSelecione a SUPERFICIE existente: ')\n    opt.SetRejectMessage('\\nObjeto invalido: selecione uma superficie.')\n    opt.AddAllowedClass(clr.GetClrType(Surface), False)\n    res = ed.GetEntity(opt)\n    return res.ObjectId if res.Status == PromptStatus.OK else None\n\n\ndef pedir_alinhamentos(ed):\n    opt = PromptSelectionOptions()\n    opt.MessageForAdding = '\\nSelecione os ALINHAMENTOS: '\n    filtro = SelectionFilter([TypedValue(0, 'AECC_ALIGNMENT')])\n    res = ed.GetSelection(opt, filtro)\n    if res.Status != PromptStatus.OK:\n        return []\n    return list(res.Value.GetObjectIds())\n\n\ndef alinhamentos_por_nome(civdoc, t, nomes):\n    ids = list(civdoc.GetAlignmentIds())\n    try:\n        ids += list(civdoc.GetSitelessAlignmentIds())\n    except Exception:\n        pass\n    achados, vistos = [], set()\n    for i in ids:\n        a = t.GetObject(i, OpenMode.ForRead)\n        if a.Name in nomes and a.Name not in vistos:\n            achados.append(i)\n            vistos.add(a.Name)\n    return achados, [n for n in nomes if n not in vistos]\n\n\ndef superficie_por_nome(civdoc, t, nome):\n    for i in civdoc.GetSurfaceIds():\n        if t.GetObject(i, OpenMode.ForRead).Name == nome:\n            return i\n    return None\n\n\ndef perfil_projeto(alin, t, nome):\n    layouts = []\n    for pid in alin.GetProfileIds():\n        p = t.GetObject(pid, OpenMode.ForRead)\n        if p.ProfileType == ProfileType.FG:\n            if nome and p.Name == nome:\n                return p\n            layouts.append(p)\n    if nome:\n        return None\n    return layouts[0] if layouts else None\n\n\ndef nome_livre(alin, t, base):\n    nomes = set(t.GetObject(p, OpenMode.ForRead).Name\n                for p in alin.GetProfileIds())\n    if base not in nomes:\n        return base\n    k = 2\n    while '%s (%d)' % (base, k) in nomes:\n        k += 1\n    return '%s (%d)' % (base, k)\n\n\ndef copiar_perfil(orig, alin, t, avisos):\n    \"\"\"Cria '<nome> - AJUSTADO' com os mesmos PVIs e curvas verticais.\"\"\"\n    nome = nome_livre(alin, t, '%s - AJUSTADO' % orig.Name)\n    novo_id = Profile.CreateByLayout(nome, alin.ObjectId, orig.LayerId,\n                                     orig.StyleId, orig.LabelSetId)\n    novo = t.GetObject(novo_id, OpenMode.ForWrite)\n    curvas = []\n    for p in sorted([p for p in orig.PVIs], key=lambda p: p.Station):\n        npvi = novo.PVIs.AddPVI(p.Station, p.Elevation)\n        try:\n            vc = p.VerticalCurve\n            if vc is not None and vc.Length > 1e-6:\n                curvas.append((npvi, vc.Length))\n        except Exception:\n            pass\n    for npvi, L in curvas:\n        try:\n            novo.Entities.AddFreeSymmetricParabolaByPVIAndLength(npvi, L)\n        except Exception:\n            avisos.append('curva vertical na estaca %s nao copiada'\n                          % fmt_estaca(npvi.Station))\n    return novo\n\n\ndef pontos_secao(alin, s, offsets, cota):\n    secao = []\n    e = clr.Reference[float]()\n    n = clr.Reference[float]()\n    for o in offsets:\n        try:\n            alin.PointLocation(s, o, e, n)\n            secao.append((o, cota(e.Value, n.Value)))\n        except Exception:\n            secao.append((o, None))\n    return secao\n\n\ndef estacas_analise(alin, t, ini, fim, intervalo, pvis):\n    est = set()\n    s = ini\n    while s < fim - 1e-6:\n        est.add(round(s, 3))\n        s += intervalo\n    est.add(round(fim, 3))\n    for sp, _ in pvis:\n        est.add(round(sp, 3))\n    n_sl = 0\n    try:\n        for gid in alin.GetSampleLineGroupIds():\n            g = t.GetObject(gid, OpenMode.ForRead)\n            for sid in g.GetSampleLineIds():\n                st = t.GetObject(sid, OpenMode.ForRead).Station\n                if ini - 1e-6 <= st <= fim + 1e-6:\n                    est.add(round(st, 3))\n                    n_sl += 1\n    except Exception:\n        pass\n    return sorted(est), n_sl\n\n\ndef processar(alin, t, sup, nome_perfil, cmax, amax, largura, inc,\n              intervalo, esp_min, original):\n    linhas = ['=== %s ===' % alin.Name]\n    orig = perfil_projeto(alin, t, nome_perfil)\n    if orig is None:\n        linhas.append('  Perfil de projeto %snao encontrado.'\n                      % ('\"%s\" ' % nome_perfil if nome_perfil else ''))\n        return linhas\n\n    def cota(x, y):\n        try:\n            return sup.FindElevationAtXY(x, y)\n        except Exception:\n            return None\n\n    pvis0 = PerfilCivil(orig).pvis()\n    if len(pvis0) < 2:\n        linhas.append('  Perfil \"%s\" sem PVIs suficientes.' % orig.Name)\n        return linhas\n    ini = max(pvis0[0][0], alin.StartingStation)\n    fim = min(pvis0[-1][0], alin.EndingStation)\n    estacoes, n_sl = estacas_analise(alin, t, ini, fim, intervalo, pvis0)\n    offs = offsets_secao(largura)\n    secoes = dict((s, pontos_secao(alin, s, offs, cota)) for s in estacoes)\n    faixas = dict((s, faixa_greide(secoes[s], cmax, amax, inc))\n                  for s in estacoes)\n    estacoes = [s for s in estacoes if faixas[s] is not None]\n    if not estacoes:\n        linhas.append('  Alinhamento fora da superficie.')\n        return linhas\n    inviaveis = [s for s in estacoes if faixas[s][0] > faixas[s][1]]\n\n    antes = resumo(PerfilCivil(orig), estacoes, secoes, faixas, inc)\n    linhas.append('  Perfil: %s | %d secoes (%d de sample lines) | largura %.2f m'\n                  % (orig.Name, len(estacoes), n_sl, largura))\n    linhas.append('  ANTES : corte max %.2f m (est. %s) | aterro max %.2f m '\n                  '(est. %s) | %d estacas fora dos limites'\n                  % (antes['corte'], fmt_estaca(antes['est_corte'] or 0),\n                     antes['aterro'], fmt_estaca(antes['est_aterro'] or 0),\n                     len(antes['violacoes'])))\n\n    if not antes['violacoes']:\n        linhas.append('  Perfil ja atende aos limites - nada alterado.')\n    else:\n        avisos = []\n        if original:\n            orig.UpgradeOpen()\n            alvo_prof = orig\n        else:\n            alvo_prof = copiar_perfil(orig, alin, t, avisos)\n        perfil = PerfilCivil(alvo_prof)\n        log, ok, travadas = ajustar(perfil, estacoes, faixas, esp_min)\n        depois = resumo(perfil, estacoes, secoes, faixas, inc)\n        linhas.append('  DEPOIS: corte max %.2f m (est. %s) | aterro max %.2f m '\n                      '(est. %s) | %d estacas fora dos limites'\n                      % (depois['corte'], fmt_estaca(depois['est_corte'] or 0),\n                         depois['aterro'],\n                         fmt_estaca(depois['est_aterro'] or 0),\n                         len(depois['violacoes'])))\n        linhas.append('  Perfil ajustado: %s | rampa maxima %.2f%%'\n                      % (alvo_prof.Name, rampa_maxima(perfil.pvis())))\n        novos = sorted(s for s, v in log.items() if v[0] == 'novo')\n        movidos = sorted(s for s, v in log.items() if v[0] == 'movido')\n        if novos:\n            linhas.append('  PVIs inseridos (%d): %s' % (len(novos), ', '.join(\n                '%s (%.3f)' % (fmt_estaca(s), log[s][1]) for s in novos)))\n        if movidos:\n            linhas.append('  PVIs movidos (%d): %s' % (len(movidos), ', '.join(\n                '%s (%+.3f m)' % (fmt_estaca(s), log[s][1]) for s in movidos)))\n        if not ok or depois['violacoes']:\n            linhas.append('  ATENCAO: ainda fora dos limites em: %s'\n                          % ', '.join(fmt_estaca(s)\n                                      for s in depois['violacoes'][:30]))\n        if travadas:\n            linhas.append('  Civil recusou ajustar (curva vertical?) em: %s'\n                          % ', '.join(fmt_estaca(s) for s in travadas[:30]))\n        for a in avisos:\n            linhas.append('  Aviso: %s' % a)\n    if inviaveis:\n        linhas.append('  INVIAVEIS (terreno transversal inclinado demais para a '\n                      'largura e os limites; nao ajustadas): %s'\n                      % ', '.join(fmt_estaca(s) for s in inviaveis[:30]))\n    return linhas\n\n\ndef executar(executa, nomes_alin, nome_sup, nome_perfil, cmax, amax, largura,\n             inc_pct, intervalo, esp_min, original):\n    if not executa:\n        return 'Defina \"Executar\" = True e rode o grafico.'\n\n    adoc = Application.DocumentManager.MdiActiveDocument\n    ed = adoc.Editor\n    db = adoc.Database\n    civdoc = CivilApplication.ActiveDocument\n\n    try:\n        from Autodesk.AutoCAD.Internal import Utils\n        Utils.SetFocusToDwgView()\n    except Exception:\n        pass\n\n    nomes = [n.strip() for n in nomes_alin.split(';') if n.strip()]\n    alin_ids = []\n    if not nomes:\n        alin_ids = pedir_alinhamentos(ed)\n        if not alin_ids:\n            return 'Cancelado: nenhum alinhamento selecionado.'\n    sup_id = None\n    if not nome_sup:\n        sup_id = pedir_superficie(ed)\n        if sup_id is None:\n            return 'Cancelado: superficie nao selecionada.'\n\n    saida = ['Corte max %.2f m | Aterro max %.2f m | Plataforma %.2f m a %.2f%%'\n             % (cmax, amax, largura, inc_pct)]\n    with adoc.LockDocument():\n        t = db.TransactionManager.StartTransaction()\n        try:\n            if nomes:\n                alin_ids, faltando = alinhamentos_por_nome(civdoc, t, nomes)\n                for n in faltando:\n                    saida.append('Alinhamento \"%s\" nao encontrado.' % n)\n            if nome_sup:\n                sup_id = superficie_por_nome(civdoc, t, nome_sup)\n                if sup_id is None:\n                    t.Abort()\n                    return 'Erro: superficie \"%s\" nao encontrada.' % nome_sup\n            sup = t.GetObject(sup_id, OpenMode.ForRead)\n            saida.append('Superficie: %s' % sup.Name)\n            for aid in alin_ids:\n                alin = t.GetObject(aid, OpenMode.ForRead)\n                saida += processar(alin, t, sup, nome_perfil, cmax, amax,\n                                   largura, inc_pct / 100.0, intervalo,\n                                   esp_min, original)\n            t.Commit()\n        except Exception:\n            t.Abort()\n            raise\n        finally:\n            t.Dispose()\n    ed.WriteMessage('\\nAjuste de greide concluido. Veja o no Resultado.\\n')\n    return saida\n\n\ntry:\n    OUT = executar(IN[0], texto(IN[1]), texto(IN[2]), texto(IN[3]),\n                   numero(IN[4], 3.0, 0.0), numero(IN[5], 3.0, 0.0),\n                   numero(IN[6], 7.0, 0.0), numero(IN[7], -2.0),\n                   numero(IN[8], 10.0, 0.5), numero(IN[9], 20.0, 0.0),\n                   bool(IN[10]))\nexcept Exception:\n    OUT = 'ERRO:\\n' + traceback.format_exc()\n",
+      "VariableInputPorts": true,
+      "Id": "073a4ae4a298406caf600c6472b3e379",
+      "Inputs": [
+        {
+          "Id": "41f23c3d453c42799589a2b8e2715942",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9eeefc5d92834c05b2553c2598c23bbb",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "64497da5b3f64f648f3c7a659e1ea510",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "546e31913ae8418ca653632b30f607cd",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0955f34c888f4e2986aea6082c3d0ef5",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "19b1d64ff25f40c08e691a78e036262e",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "89f2e537baba479da78558d9c1a102f2",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fd6a4f0e788943b6b75bebb2c595c4d1",
+          "Name": "IN[7]",
+          "Description": "Input #7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3ffdbe744bbb421493e77b8afe933494",
+          "Name": "IN[8]",
+          "Description": "Input #8",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "cd576ec74e854ab5bc6cd0f92a4e63c6",
+          "Name": "IN[9]",
+          "Description": "Input #9",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "37e1ea5a44714a0c9ce74ac1248c953d",
+          "Name": "IN[10]",
+          "Description": "Input #10",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "075c0db6e03140a1b8612d881f68bb0d",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Watch, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "05d050e4e1de4adfb9f37982f02954ed",
+      "Inputs": [
+        {
+          "Id": "35b83ae2c6ff4b1789a2475842b9c492",
+          "Name": "",
+          "Description": "Node to show output from",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8e30c9115b714e88bd00322d42982ca7",
+          "Name": "",
+          "Description": "Node output",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Visualize the output of node."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "97b2f907811f482a8cd0b72e771ef4bb",
+      "End": "41f23c3d453c42799589a2b8e2715942",
+      "Id": "234615af9adc4ca3a9e7c3df1cb4ec9c"
+    },
+    {
+      "Start": "5dde759c838f4a4b97b823f17a88c3f9",
+      "End": "9eeefc5d92834c05b2553c2598c23bbb",
+      "Id": "35d13d5511504adc952b5ce502ebeaf1"
+    },
+    {
+      "Start": "19ae89f9988b4a3fa54956496e71bcc0",
+      "End": "64497da5b3f64f648f3c7a659e1ea510",
+      "Id": "4f9068850c824b0a8cf47147d11da822"
+    },
+    {
+      "Start": "453cbd128b5f4e6088446d9998a3e008",
+      "End": "546e31913ae8418ca653632b30f607cd",
+      "Id": "26d1cbbb6531465b82db88b21081923c"
+    },
+    {
+      "Start": "bdcac8b39c454b35a2eea24dc7ca1600",
+      "End": "0955f34c888f4e2986aea6082c3d0ef5",
+      "Id": "c4a83654189c4cf1bbf24b4ea1635e71"
+    },
+    {
+      "Start": "8378daaf4ae848d4a5873c74e9b02f54",
+      "End": "19b1d64ff25f40c08e691a78e036262e",
+      "Id": "e5d87d3006b840c68178935da4d9ef21"
+    },
+    {
+      "Start": "83da74a5d20248858f6abdab564688ad",
+      "End": "89f2e537baba479da78558d9c1a102f2",
+      "Id": "4f28d398e52a45b79b2c86d93ad919ae"
+    },
+    {
+      "Start": "28c8b2e9183b4b1e98fdccc58aa389a5",
+      "End": "fd6a4f0e788943b6b75bebb2c595c4d1",
+      "Id": "d3ad42bda8454a8aad47d7ccae99f047"
+    },
+    {
+      "Start": "d444814068bd4ec184041a65aa06ecc9",
+      "End": "3ffdbe744bbb421493e77b8afe933494",
+      "Id": "0070626055534e1a8f743894d4907fc4"
+    },
+    {
+      "Start": "adf0c7ce05684dca99a3668a3a03b08d",
+      "End": "cd576ec74e854ab5bc6cd0f92a4e63c6",
+      "Id": "5f88b79c9f634550a7abedd0fa449f34"
+    },
+    {
+      "Start": "769e1fb4297f44b08b904d674dc5ab4a",
+      "End": "37e1ea5a44714a0c9ce74ac1248c953d",
+      "Id": "7a56f66eb7964954aa24cb5c2f43fa2a"
+    },
+    {
+      "Start": "075c0db6e03140a1b8612d881f68bb0d",
+      "End": "35b83ae2c6ff4b1789a2475842b9c492",
+      "Id": "89508ce3d7ca43edaeb7badb6f983561"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.5.0.7460",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "Id": "db0fbbe3c6374ebdab149fc2ad64ae11",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Executar",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 0.0
+      },
+      {
+        "Id": "c217bd8af38f4c1a82fa300524acdf26",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Alinhamentos",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 110.0
+      },
+      {
+        "Id": "dac7e68fae8c4182aa9d399ef4eed7d5",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Nome da superficie existente",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 220.0
+      },
+      {
+        "Id": "1af3f407ad3248d2b8a9a34d66ba191f",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Nome do perfil de projeto",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 330.0
+      },
+      {
+        "Id": "700ff5cf95bb4df8b53d3f08012768f9",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Corte maximo (m)",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 440.0
+      },
+      {
+        "Id": "fab229f363884dd49a8bd727e774f5bc",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Aterro maximo (m)",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 550.0
+      },
+      {
+        "Id": "f9dda550e7e6412c8bc70aa25daa9505",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Largura da plataforma (m)",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 660.0
+      },
+      {
+        "Id": "45812b64e58f4c348ab17f43d2f97686",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Inclinacao transversal (%)",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 770.0
+      },
+      {
+        "Id": "0599cadb26e248c7852f141290b53127",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Intervalo de analise (m)",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 880.0
+      },
+      {
+        "Id": "29bf7ecdac1440808bf523124fdf14fe",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Espacamento minimo entre PVIs (m)",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 990.0
+      },
+      {
+        "Id": "12a45e58cfac4a6893521e486d0c428a",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "Ajustar o perfil original",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 0.0,
+        "Y": 1100.0
+      },
+      {
+        "Id": "073a4ae4a298406caf600c6472b3e379",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "AjusteGreide",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 450.0,
+        "Y": 550.0
+      },
+      {
+        "Id": "05d050e4e1de4adfb9f37982f02954ed",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Name": "Resultado",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 750.0,
+        "Y": 550.0
+      }
+    ],
+    "Annotations": [],
+    "X": 60.0,
+    "Y": 60.0,
+    "Zoom": 0.8
+  }
+}

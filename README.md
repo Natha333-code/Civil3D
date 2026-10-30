@@ -135,3 +135,61 @@ Cria **uma linha magenta por lote** (parcel), perpendicular a rede (pipe network
 - Tubos sao tratados como retos (do ponto inicial ao final). Linhas criadas em Z = 0.
 - O relatorio mostra, para cada lote, a divisa usada, a distancia ate ela e as cotas das duas divisas.
 - Pontos fora da superficie sao desconsiderados no calculo da cota.
+
+### `AjusteGreide.dyn` - analise de corte/aterro e ajuste automatico do perfil longitudinal
+
+Para cada alinhamento escolhido, analisa o **perfil longitudinal de projeto (greide)** contra as
+**secoes transversais do terreno**, identifica as alturas de **corte e aterro** e **ajusta o
+greide automaticamente** para que nenhum ponto da secao passe do corte maximo ou do aterro maximo.
+
+**Como usar**
+
+- Abra `dynamo/AjusteGreide.dyn`, preencha os limites, coloque **Executar = True** e clique em **Run**.
+- Na linha de comando: selecione os **alinhamentos** (ou informe os nomes) e clique na
+  **superficie existente** (ou informe o nome).
+- Por padrao o perfil original **nao e alterado**: e criada uma copia `<perfil> - AJUSTADO`
+  (mesmos PVIs e curvas verticais) e o ajuste e feito nela. Ela aparece automaticamente nos
+  perfis longitudinais (Profile Views) do alinhamento.
+- O no **Resultado** mostra, por alinhamento, o corte e o aterro maximos **antes e depois**
+  (com a estaca), os PVIs inseridos e movidos, a rampa maxima resultante e as estacas que nao
+  puderam ser atendidas.
+
+| Entrada | Padrao | Observacao |
+|---|---|---|
+| Executar | `False` | So roda com `True`. |
+| Alinhamentos | vazio | Nomes separados por `;`. Vazio = selecionar no desenho. |
+| Nome da superficie existente | vazio | Vazio = clicar na superficie. |
+| Nome do perfil de projeto | vazio | Perfil de layout. Vazio = primeiro perfil de layout do alinhamento. |
+| Corte maximo (m) | `3.0` | Em qualquer ponto da secao (eixo e bordos). |
+| Aterro maximo (m) | `3.0` | Idem. |
+| Largura da plataforma (m) | `7.0` | Largura total da secao analisada. `0` = analisa so o eixo. |
+| Inclinacao transversal (%) | `-2.0` | Do eixo para os bordos (negativo = caindo para os bordos). |
+| Intervalo de analise (m) | `10` | Espacamento das secoes. Estacas das sample lines e dos PVIs tambem entram. |
+| Espacamento minimo entre PVIs (m) | `20` | Mais perto que isso, move o PVI existente em vez de criar outro. |
+| Ajustar o perfil original | `False` | `True` = altera o proprio perfil (Ctrl+Z desfaz). |
+
+**Como funciona**
+
+1. **Secoes transversais**: em cada estaca, a cota do terreno e lida na superficie a cada ~1 m na
+   perpendicular ao alinhamento, de bordo a bordo da plataforma (estacas = intervalo + sample
+   lines existentes + PVIs).
+2. **Corte/aterro**: a plataforma e o eixo do greide mais a inclinacao transversal ate os
+   bordos; corte/aterro = diferenca entre a plataforma e o terreno em cada ponto da secao.
+3. **Faixa permitida**: para cada estaca calcula a cota minima e maxima do eixo que mantem
+   **todos** os pontos da secao dentro dos limites.
+4. **Ajuste**: enquanto houver estaca fora da faixa, pega a pior e: se houver PVI a menos do
+   espacamento minimo, **move esse PVI**; senao **insere um PVI** na estaca, deixando 2 cm de folga
+   dentro do limite. As curvas verticais existentes sao mantidas. Se um PVI for movido varias
+   vezes sem resolver, a rotina passa a aceitar PVIs novos mais proximos dele.
+
+**Observacoes**
+
+- Estacas marcadas como **inviaveis** sao aquelas em que o terreno, na transversal, varia mais
+  que `corte max + aterro max` ao longo da largura: nenhuma cota de greide atende. Elas sao
+  listadas e nao sao ajustadas (reduza a largura ou aumente os limites).
+- A rotina nao impoe rampa maxima nem comprimento minimo de curva: confira a **rampa maxima**
+  informada no resultado e, se precisar, acrescente curvas verticais nos PVIs inseridos.
+- A plataforma e simplificada (largura + inclinacao unica); taludes e subleito nao entram no
+  calculo. Pontos fora da superficie sao desconsiderados.
+- Se o Civil recusar mover/inserir um PVI (por exemplo, sobreposicao de curvas verticais), a
+  estaca e informada no resultado.
